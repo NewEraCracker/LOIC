@@ -121,12 +121,6 @@
   <data name="LOIC" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\LOIC.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="PrgDomain" xml:space="preserve">
-    <value>http://tox.awardspace.us/div/</value>
-  </data>
-  <data name="ToxDomain" xml:space="preserve">
-    <value>http://www.praetox.com/</value>
-  </data>
   <data name="WTF" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wtf.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

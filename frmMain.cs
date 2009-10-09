@@ -14,9 +14,9 @@ namespace LOIC
 		private static XXPFlooder[] xxp;
 		private static HTTPFlooder[] http;
 
-		private string sIP, sMethod, sData, sSubsite;
-		private int iPort, iThreads, iProtocol, iDelay, iTimeout;
-		private bool bResp, intShowStats;
+		private static string sIP, sMethod, sData, sSubsite;
+		private static int iPort, iThreads, iProtocol, iDelay, iTimeout;
+		private static bool bResp, intShowStats;
 
 		public frmMain()
 		{
@@ -25,29 +25,7 @@ namespace LOIC
 
 		private void frmMain_Load(object sender, EventArgs e)
 		{
-			//if (!System.IO.Directory.Exists("tmp")) System.IO.Directory.CreateDirectory("tmp");
-			this.Text = String.Format("{0} | When harpoons, air strikes and nukes fail | v. {1}", Application.ProductName, Application.ProductVersion);
-			try
-			{
-				string versionLink = new WebClient().DownloadString(Properties.Resources.PrgDomain + "LOIC_version.php?cv=" + Application.ProductVersion);
-				if (!versionLink.Contains("<VERSION>" + Application.ProductVersion + "</VERSION>"))
-				{
-					bool getUpdate = (DialogResult.Yes == MessageBox.Show("A new version is available. Update?", "so i herd u liek mudkipz", MessageBoxButtons.YesNo));
-					if (getUpdate)
-					{
-						string updateLink = new WebClient().DownloadString(Properties.Resources.ToxDomain + "inf/LOIC_link.html").Split('%')[1];
-						System.Diagnostics.Process.Start(updateLink + "?cv=" + Application.ProductVersion);
-						Application.Exit();
-					}
-				}
-			}
-			catch
-			{
-				var sb = new System.Text.StringBuilder();
-				sb.AppendLine("Couldn't check for updates.");
-				sb.AppendLine("Also, cocks.");
-				MessageBox.Show(sb.ToString(), "A cat is fine too");
-			}
+			this.Text = String.Format("{0} | When harpoons, air strikes and nukes fails | v. {1}", Application.ProductName, Application.ProductVersion);
 		}
 
 		private void cmdTargetURL_Click(object sender, EventArgs e)
@@ -59,7 +37,8 @@ namespace LOIC
 				MessageBox.Show("A URL is fine too...", "What the shit.");
 				return;
 			}
-			if (!url.StartsWith("http://")) url = String.Concat("http://", url);
+			if (url.StartsWith("https://")) url = url.Replace("https://", "http://");
+			else if (!url.StartsWith("http://")) url = String.Concat("http://", url);
 			txtTarget.Text = Dns.GetHostEntry(new Uri(url).Host).AddressList[0].ToString();
 		}
 
