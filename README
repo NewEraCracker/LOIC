@@ -1,0 +1,24 @@
+Low Orbit Ion Cannon - An open source network stress tool for Windows.
+
+Based on Praetox's loic project at https://sourceforge.net/projects/loic/. 
+
+Written in C# - requires the DOT NET framework 3.5.
+http://www.microsoft.com/downloads/en/details.aspx?FamilyID=ab99342f-5d1a-413d-8319-81da479ab0d7&displaylang=en
+
+WARNING
+=======
+
+HIVE MIND mode will connect your client to an IRC server so it can be controlled
+remotely. Think of it like a voluntary botnet. They might even make your client
+do naughty things, so beware.
+
+Note: It does NOT allow remote administration of your machine, or anything shit
+like that, it is literally just control of loic itself.
+
+If you want to start up in hivemind, run like this:
+
+LOIC.exe /hivemind
+
+If you want to start up hidden, run like this:
+
+LOIC.exe /hidden
