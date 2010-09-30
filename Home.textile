@@ -6,7 +6,7 @@
 
 ---
 *Downloads*
-* Source: [[http://github.com/NewEraCracker/LOIC/tree/1.1.1.3]]
+* Source: [[http://github.com/NewEraCracker/LOIC/]]
 * Binaries: [[http://github.com/NewEraCracker/LOIC/downloads]]
 * License: Public Domain
 
