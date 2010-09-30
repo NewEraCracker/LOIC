@@ -100,7 +100,7 @@ namespace LOIC
                     xxp = new XXPFlooder[iThreads];
                     for (int a = 0; a < xxp.Length; a++)
                     {
-                        xxp[a] = new XXPFlooder(sIP, iPort, iProtocol, iDelay, bResp, sData);
+                        xxp[a] = new XXPFlooder(sIP, iPort, iProtocol, iDelay, bResp, sData, chkMsgRandom.Checked);
                         xxp[a].Start();
                     }
                 }
