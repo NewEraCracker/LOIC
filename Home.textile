@@ -18,6 +18,11 @@
 [[http://www.microsoft.com/downloads/en/details.aspx?FamilyID=d0e5dea7-ac26-4ad7-b68c-fe5076bba986&displaylang=en]]
 
 ---
+*Reporting bugs*
+Use this form to report any bugs:
+[[http://github.com/NewEraCracker/LOIC/issues]]
+
+---
 *FAQ*
 Q: There are plans for a linux version?
 A: I don't use Linux. If you could help us I'd appreciate it.
