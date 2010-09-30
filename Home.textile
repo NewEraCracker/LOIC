@@ -19,7 +19,7 @@
 
 ---
 *Reporting bugs*
-Use this form to report any bugs:
+Use this page to report any issues:
 [[http://github.com/NewEraCracker/LOIC/issues]]
 
 ---
