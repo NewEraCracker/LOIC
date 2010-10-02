@@ -480,11 +480,13 @@ namespace LOIC
                         case "random":
                             if (value.ToLower() == "true")
                             {
-                                chkRandom.Checked = true;
+                                chkRandom.Checked = true; //HTTP
+								chkMsgRandom.Checked = true; //TCP_UDP
                             }
                             else if (value.ToLower() == "false")
                             {
-                                chkRandom.Checked = false;
+                                chkRandom.Checked = false; //HTTP
+								chkMsgRandom.Checked = false; //TCP_UDP
                             }
                             break;
                         case "speed":
