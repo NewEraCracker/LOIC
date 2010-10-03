@@ -26,7 +26,7 @@ Use this page to report any issues:
 ---
 *FAQ*
 Q: There are plans for a linux version?
-A: We are working on that and support is scheduled to v1.1.1.5
+A: We are working on that, scheduled to v1.1.1.5
 
 ---
 *Disclaimer*
