@@ -238,7 +238,6 @@ namespace LOIC
             catch
             { }
         }
-
         private void IrcListenThread()
         {
             while (ircenabled)
@@ -265,7 +264,6 @@ namespace LOIC
         {
             label25.Text = "Logging In...";
         }
-
         private delegate void AddListBoxItemDelegate(object sender, ReadLineEventArgs e);
         void OnNames(object sender, NamesEventArgs e)
         {
@@ -537,7 +535,6 @@ namespace LOIC
 		{
 			this.Text = String.Format("{0} | U dun goofed | v. {1}", Application.ProductName, Application.ProductVersion);
 		}
-
         private void frmMain_Closing(object sender, FormClosingEventArgs e)
         {
             try
@@ -553,28 +550,22 @@ namespace LOIC
                 Environment.Exit(0);
             }
         }
-
-
 		private void cmdTargetURL_Click(object sender, EventArgs e)
 		{
             LockOnURL(false);
 		}
-
 		private void cmdTargetIP_Click(object sender, EventArgs e)
 		{
             LockOnIP(false);
 		}
-
 		private void txtTarget_Enter(object sender, EventArgs e)
 		{
 			cmdAttack.Focus();
 		}
-
 		private void cmdAttack_Click(object sender, EventArgs e)
 		{
             Attack(true, false, false);
 		}
-
 		private void tShowStats_Tick(object sender, EventArgs e)
 		{
 			if (intShowStats) return; intShowStats = true;
@@ -638,7 +629,6 @@ namespace LOIC
 
 			intShowStats = false;
 		}
-
 		private void tbSpeed_ValueChanged(object sender, EventArgs e)
 		{
 			iDelay = tbSpeed.Value;
@@ -657,7 +647,6 @@ namespace LOIC
 				}
 			}
 		}
-
         private void enableHive_CheckedChanged(object sender, EventArgs e)
         {
             if (enableHive.Checked)
@@ -665,7 +654,6 @@ namespace LOIC
                 DoHive(true);
             }
         }
-
         private void disableHive_CheckedChanged(object sender, EventArgs e)
         {
             if (disableHive.Checked)
@@ -673,7 +661,6 @@ namespace LOIC
                 DoHive(false);
             }
         }
-
         private void label24_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("http://github.com/NewEraCracker/LOIC");
