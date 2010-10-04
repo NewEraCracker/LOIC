@@ -2,6 +2,7 @@
 
 ---
 *News*
+05 Oct 2010 - Version 1.1.1.6 released
 04 Oct 2010 - Version 1.1.1.5 released
 30 Sep 2010 - Version 1.1.1.4 released
 30 Sep 2010 - We did a restart to this project. Version 1.1.1.3
