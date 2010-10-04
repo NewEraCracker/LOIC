@@ -24,11 +24,12 @@ namespace LOIC
 				if (s.ToLower() == "/hivemind")
 				{
 					hive = true;
-   					ircserver = cmdLine[count + 1];
-					try { ircport = cmdLine[count + 2]; }
-					catch (Exception) { ircport = "6667"; } //default
-					try { ircchannel = cmdLine[count + 3]; }
-					catch (Exception) { ircchannel = "#LOIC"; }	//default
+   					try {ircserver = cmdLine[count + 1];}
+					catch (Exception) {/* NOTE: Needs to output feedback*/}
+					try {ircport = cmdLine[count + 2];}
+					catch (Exception) {ircport = "6667";} //default
+					try {ircchannel = cmdLine[count + 3];}
+					catch (Exception) {ircchannel = "#LOIC";}	//default
 				}
 				
 				/* Lets try this! */
