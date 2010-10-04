@@ -27,7 +27,7 @@ Use this page to report any issues:
 ---
 *FAQ*
 Q: Linux version?
-A: You can try compiling it from source ([[http://github.com/NewEraCracker/LOIC/downloads]])
+A: You can try compiling it from source ([[http://github.com/NewEraCracker/LOIC/downloads]]) or use debug binaries (as some users reported),
 
 ---
 *Disclaimer*
