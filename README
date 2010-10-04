@@ -51,13 +51,13 @@ Note: It does NOT allow remote administration of your machine, or anything shit
 like that, it is literally just control of loic itself.
 
 If you want to start up in hivemind, run like this:
-
-LOIC.exe /hivemind irc.server.address
-
+ LOIC.exe /hivemind irc.server.address
 It will connect to irc://irc.server.adress:6667/LOIC
 
-Or like this:
+You can also specify port and channel
+ LOIC.exe /hivemind irc.server.address 1234 #secret
+It will connect to irc://irc.server.adress:1234/secret
 
-LOIC.exe /hidden /hivemind irc.server.address
-
+In order to do hivemind hidden run like this:
+ LOIC.exe /hidden /hivemind irc.server.address
 It will connect to irc://irc.server.adress:6667/LOIC without any visible GUI
