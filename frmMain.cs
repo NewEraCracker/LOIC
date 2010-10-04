@@ -30,9 +30,9 @@ namespace LOIC
 		{
 			InitializeComponent();
 			/* IRC */
-			txtIRCserver.Text = ircserver;
-			txtIRCport.Text = ircport;
-			txtIRCchannel.Text = ircchannel;
+			if (ircserver != "") {txtIRCserver.Text = ircserver;}
+			if (ircport != "") {txtIRCport.Text = ircport;}
+			if (ircchannel != "") {txtIRCchannel.Text = ircchannel;}
 			/* Lets try this! */
 			if ( hide )
 			{
