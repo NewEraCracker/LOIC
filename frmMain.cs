@@ -169,7 +169,7 @@ namespace LOIC
                 {
                     disableHive.Checked = true;
                 }
-                else
+                else if (enabled)
                 {
                     try { IPHostEntry ipHost = Dns.GetHostEntry(txtIRCserver.Text); }
                     catch (Exception) { disableHive.Checked = true; }
