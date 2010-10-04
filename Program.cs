@@ -23,8 +23,7 @@ namespace LOIC
 				if (s.ToLower() == "/hivemind")
 				{
 					hive = true;
-					try {ircserver = cmdLine[count + 1];}
-					catch (Exception) {} //noobs crashfix
+					ircserver = cmdLine[count + 1]; //if no server entered let it crash
 					try {ircport = cmdLine[count + 2];}
 					catch (Exception) {ircport = "6667";} //default
 					try {ircchannel = cmdLine[count + 3];}
