@@ -51,20 +51,6 @@ namespace LOIC
 			bw.RunWorkerAsync();
 		}
 
-        private string RandomString()
-        {
-            StringBuilder builder = new StringBuilder();
-            Random random = new Random();
-            char ch;
-            int size = random.Next(5) + 5;
-            for (int i = 0; i < size; i++)
-            {
-                ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));
-                builder.Append(ch);
-            }
-            return builder.ToString();
-        }
-
 		void tTimepoll_Tick(object sender, EventArgs e)
 		{
 			if (Tick() > LastAction + Timeout)
@@ -85,7 +71,7 @@ namespace LOIC
                 byte[] buf;
                 if (random == true)
                 {
-                    buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.0{2}{2}{2}", Subsite, RandomString(), Environment.NewLine));
+                    buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.0{2}{2}{2}", Subsite, new Functions().RandomString(), Environment.NewLine));
                 }
                 else
                 {

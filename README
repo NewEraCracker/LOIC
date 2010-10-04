@@ -29,7 +29,7 @@ http://www.microsoft.com/downloads/en/details.aspx?FamilyID=ab99342f-5d1a-413d-8
 
 You'll need mono and log4net:
 
-# apt-get install mono liblog4net-cil-dev
+# sudo apt-get install mono liblog4net-cil-dev
 
 Then, build it:
 
@@ -39,9 +39,9 @@ And run it!
 
 # bin/Debug/LOIC.exe
 
-===================
-|| HIVEMIND MODE ||
-===================
+==========================
+|| HIVEMIND/HIDDEN MODE ||
+==========================
 
 HIVE MIND mode will connect your client to an IRC server so it can be controlled
 remotely. Think of it like a voluntary botnet. They might even make your client
@@ -56,12 +56,8 @@ LOIC.exe /hivemind irc.server.address
 
 It will connect to irc://irc.server.adress:6667/LOIC
 
-=================
-|| HIDDEN MODE ||
-=================
+Or like this:
 
-If you want to start up hidden, run like this:
+LOIC.exe /hidden /hivemind irc.server.address
 
-LOIC.exe /hidden targetip=127.0.0.1 method=tcp random=false
-
-Look in frmMain.cs for void CheckParams(List pars) if you need more info
+It will connect to irc://irc.server.adress:6667/LOIC without any visible GUI

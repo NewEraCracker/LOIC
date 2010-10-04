@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.ComponentModel;
-using System.Text;
 
 namespace LOIC
 {
@@ -44,20 +43,6 @@ namespace LOIC
 			bw.RunWorkerAsync();
 		}
 
-	        private string RandomString()
-	        {
-	            StringBuilder builder = new StringBuilder();
-	            Random random = new Random();
-	            char ch;
-	            int size = random.Next(5) + 5;
-	            for (int i = 0; i < size; i++)
-	            {
-	                ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));
-	                builder.Append(ch);
-	            }
-	            return builder.ToString();
-	        }
-
 		private void bw_DoWork(object sender, DoWorkEventArgs e)
 		{
 			try
@@ -65,7 +50,7 @@ namespace LOIC
         	        	byte[] buf;
 				if (random == true)
 				{
-					buf = System.Text.Encoding.ASCII.GetBytes(String.Format(Data, RandomString()));
+					buf = System.Text.Encoding.ASCII.GetBytes(String.Format(Data, new Functions().RandomString()));
 				}
 				else
 		                {

