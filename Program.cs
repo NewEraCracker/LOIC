@@ -24,14 +24,13 @@ namespace LOIC
 				if (s.ToLower() == "/hivemind")
 				{
 					hive = true;
-   					try {ircserver = cmdLine[count + 1];}
-					catch (Exception) {/* NOTE: Needs to output feedback*/}
+					try {ircserver = cmdLine[count + 1];}
+					catch (Exception) {} //noobs crashfix
 					try {ircport = cmdLine[count + 2];}
 					catch (Exception) {ircport = "6667";} //default
 					try {ircchannel = cmdLine[count + 3];}
 					catch (Exception) {ircchannel = "#LOIC";}	//default
 				}
-				
 				/* Lets try this! */
 				if (s.ToLower() == "/hidden")
 				{ hide = true; }
