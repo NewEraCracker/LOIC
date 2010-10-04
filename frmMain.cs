@@ -513,7 +513,7 @@ namespace LOIC
                          txtThreads.Text = "10";
                          chkResp.Checked = true;
                          chkRandom.Checked = false;
-                         tbSpeed.Value = 20;
+                         tbSpeed.Value = 0;
                     }
                 }
             }
