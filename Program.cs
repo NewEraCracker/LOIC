@@ -41,7 +41,6 @@ namespace LOIC
 			Application.Run(new frmMain(hive, hide, ircserver, ircport, ircchannel));
 		}
 	}
-
     public partial class Functions
     {
 		public string RandomString()
