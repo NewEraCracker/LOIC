@@ -2,6 +2,7 @@
 
 ---
 *News*
+04 Oct 2010 - Version 1.1.1.5 released
 30 Sep 2010 - Version 1.1.1.4 released
 30 Sep 2010 - We did a restart to this project. Version 1.1.1.3
 
@@ -25,8 +26,8 @@ Use this page to report any issues:
 
 ---
 *FAQ*
-Q: There are plans for a linux version?
-A: We are working on that, scheduled to v1.1.1.5
+Q: Linux version?
+A: You can try compiling it from source ([[http://github.com/NewEraCracker/LOIC/downloads]])
 
 ---
 *Disclaimer*
