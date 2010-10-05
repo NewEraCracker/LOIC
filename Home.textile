@@ -30,6 +30,8 @@ Use this page to report any issues:
 Q: Linux version?
 A: You can try compiling it from source ([[http://github.com/NewEraCracker/LOIC/downloads]]) or use debug binaries (some users said it worked).
 
+Q: Linux version: how to install? (couse readme command to install mono cant work couse thares no such mono on Ubuntu)
+
 ---
 *Disclaimer*
 I, NewEraCracker, am not responsible for the use that you give to this tool. You cannot blame me if you use this tool to attack servers you don't own and get caught. *This tool is released for educational purposes only and comes with no warranty at all.*
