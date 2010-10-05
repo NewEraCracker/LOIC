@@ -445,10 +445,7 @@ namespace LOIC
                             break;
                         case "method":
                             int index = cbMethod.FindString(value);
-                            if (index != -1)
-                            {
-                                cbMethod.SelectedIndex = index;
-                            }
+                            if (index != -1) { cbMethod.SelectedIndex = index; }
                             break;
                         case "threads":
                             isnum = int.TryParse(value, out num);
@@ -470,17 +467,17 @@ namespace LOIC
                         case "random":
                             if (value.ToLower() == "true")
                             {
-                                chkRandom.Checked = true; //HTTP
+								chkRandom.Checked = true; //HTTP
 								chkMsgRandom.Checked = true; //TCP_UDP
                             }
                             else if (value.ToLower() == "false")
                             {
-                                chkRandom.Checked = false; //HTTP
+								chkRandom.Checked = false; //HTTP
 								chkMsgRandom.Checked = false; //TCP_UDP
                             }
                             break;
-                        case "speed":
-                           isnum = int.TryParse(value, out num);
+                            case "speed":
+                            isnum = int.TryParse(value, out num);
                             if (isnum && num >= 0 && num <= 20) //let's protect them a bit, yeah?
                             {
                                 tbSpeed.Value = num;
@@ -504,13 +501,11 @@ namespace LOIC
                          txtData.Text = "U dun goofed";
                          txtPort.Text = "80";
                          int index = cbMethod.FindString("TCP");
-                         if (index != -1)
-                         {
-                             cbMethod.SelectedIndex = index;
-                         }
+                         if (index != -1) { cbMethod.SelectedIndex = index; }
                          txtThreads.Text = "10";
                          chkResp.Checked = true;
                          chkRandom.Checked = false;
+                         chkMsgRandom.Checked = false;
                          tbSpeed.Value = 0;
                     }
                 }

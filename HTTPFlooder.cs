@@ -90,9 +90,9 @@ namespace LOIC
 					State = ReqState.Downloading; Requested++; // SET STATE TO DOWNLOADING // REQUESTED++
 					if (Resp) socket.Receive(recvBuf, 64, SocketFlags.None);
 					State = ReqState.Completed; Downloaded++; // SET STATE TO COMPLETED // DOWNLOADED++
-                    tTimepoll.Stop();
-                    tTimepoll.Start();
-					System.Threading.Thread.Sleep(Delay+1);
+					tTimepoll.Stop();
+					tTimepoll.Start();
+					if (Delay >= 0) System.Threading.Thread.Sleep(Delay+1);
 				}
 			}
 			catch { }

