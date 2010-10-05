@@ -31,7 +31,8 @@ Use this page to report any issues:
 Q: Linux version?
 A: You can try compiling it from source ([[http://github.com/NewEraCracker/LOIC/downloads]]) or use debug binaries (some users said it worked).
 
-Q: Linux version: how to install? (couse readme command to install mono cant work couse thares no such mono on Ubuntu)
+Q: Linux version: how to install on Ubuntu?
+A: I think you need this: [[http://www.mono-project.com/DistroPackages/Ubuntu]]
 
 ---
 *Disclaimer*
