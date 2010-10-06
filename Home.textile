@@ -19,8 +19,7 @@
 * Windows XP or higher
 * Microsoft .NET Framework 3.5 Service Pack 1:
 [[http://www.microsoft.com/downloads/en/details.aspx?FamilyID=d0e5dea7-ac26-4ad7-b68c-fe5076bba986&displaylang=en]]
-
-*Running on none m$ system also possible, see FAQ.
+* Running on non Windows OS is also possible, see FAQ.
 
 ---
 *Reporting bugs*
@@ -30,17 +29,18 @@ Use this page to report any issues:
 ---
 *FAQ*
 
-Q: Running on none mickeysoft OS.
-A: To run it natively, you'll need mono: [[http://www.go-mono.com/mono-downloads/download.html]], and compile the source [[http://github.com/NewEraCracker/LOIC/downloads]] . The windows version also works in wine [[http://www.winehq.org/download/]]. In Linux you can try using debug binaries (some users said it worked).
+Q: How to run on Linux?
+A: To run it natively, you'll need mono: [[http://www.go-mono.com/mono-downloads/download.html]], and compile the source [[http://github.com/NewEraCracker/LOIC/downloads]] . The windows version (debug binaries) also works in wine [[http://www.winehq.org/download/]].
 
 Q:how to install on Ubuntu?
 A:
-1.download latest source [[http://github.com/NewEraCracker/LOIC/downloads]]
-2.install some tools: "sudo apt-get monodevelop liblog4net-cil-dev"
-3.in source directory: "mdtool build"
-4.run: "./bin/Debug/LOIC.exe"
-5.ATTENTION to run with arguments, little difference from m$ version.
-“./bin/Debug/LOIC.exe /hivemind irc.server.address 1234 \#secret”. You must add “\” in front of “#”, or linux will think its a comment and it will ignore the rest of the line beyond it.
+# download latest source [[http://github.com/NewEraCracker/LOIC/downloads]]
+# install some tools: "sudo apt-get monodevelop liblog4net-cil-dev"
+# in source directory: "mdtool build"
+# run: "./bin/Debug/LOIC.exe"
+# Note: ATTENTION to run with arguments, little difference from m$ version.
+ “./bin/Debug/LOIC.exe /hivemind irc.server.address 1234 \#secret”. You must add “\” in front of “#”, or linux will think its a comment and it will ignore the rest of the line beyond it.
+
 
 ---
 *Disclaimer*
