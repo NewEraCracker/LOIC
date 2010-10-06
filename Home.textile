@@ -30,7 +30,7 @@ Use this page to report any issues:
 *FAQ*
 
 Q: How to run on Linux?
-A: To run it natively, you'll need mono: [[http://www.go-mono.com/mono-downloads/download.html]], and compile the source [[http://github.com/NewEraCracker/LOIC/downloads]] . The windows version (debug binaries) also works in wine [[http://www.winehq.org/download/]].
+A: To run it natively, you'll need mono: [[http://www.go-mono.com/mono-downloads/download.html]], and compile the source [[http://github.com/NewEraCracker/LOIC/downloads]] . The official windows executable(at least 1.1.1.8 -1.1.1.7) also works in wine [[http://www.winehq.org/download/]] with .NET 2.0 installed[[http://appdb.winehq.org/objectManager.php?sClass=version&iId=3754]]. In Linux you can try using debug binaries (some users said it worked).
 
 Q: How to install on Ubuntu?
 A:
