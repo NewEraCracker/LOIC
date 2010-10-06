@@ -39,6 +39,7 @@ A:
 2.install some tools: "sudo apt-get monodevelop liblog4net-cil-dev"
 3.in source directory: "mdtool build"
 4.run: "./bin/Debug/LOIC.exe"
+5.ATTENTION to run with arguments "./bin/Debug/LOIC.exe /hivemind irc.server.address 1234 \#secret". You must add "\" in front of "#", or linux will think its a comment and it will ignore it.
 ---
 *Disclaimer*
 I, NewEraCracker, am not responsible for the use that you give to this tool. You cannot blame me if you use this tool to attack servers you don't own and get caught. *This tool is released for educational purposes only and comes with no warranty at all.*
