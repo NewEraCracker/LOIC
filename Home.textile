@@ -35,10 +35,10 @@ A: I think you need this: [[http://www.mono-project.com/DistroPackages/Ubuntu]] 
 
 Q:Ubuntu installation?
 A:
-#download source [[http://github.com/NewEraCracker/LOIC/downloads]]
-# install some tools: "sudo apt-get monodevelop liblog4net-cil-dev"
-#in source directory: "mdtool build"
-#run: "./bin/Debug/LOIC.exe"
+1.download source [[http://github.com/NewEraCracker/LOIC/downloads]]
+2.install some tools: "sudo apt-get monodevelop liblog4net-cil-dev"
+3.in source directory: "mdtool build"
+4.run: "./bin/Debug/LOIC.exe"
 ---
 *Disclaimer*
 I, NewEraCracker, am not responsible for the use that you give to this tool. You cannot blame me if you use this tool to attack servers you don't own and get caught. *This tool is released for educational purposes only and comes with no warranty at all.*
