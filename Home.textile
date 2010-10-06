@@ -1,12 +1,11 @@
 *Welcome to the LOIC wiki!*
 
 ---
-*News*
-05 Oct 2010 - Version 1.1.1.7 released (fixes issues with 1.1.1.6)
-05 Oct 2010 - Version 1.1.1.6 released (no longer available due some issues)
-04 Oct 2010 - Version 1.1.1.5 released
-30 Sep 2010 - Version 1.1.1.4 released
-30 Sep 2010 - We did a restart to this project. Version 1.1.1.3
+*Latest News*
+06 Oct 2010 - Version 1.1.1.8 released (stable)
+05 Oct 2010 - Version 1.1.1.7 released (unstable)
+05 Oct 2010 - Version 1.1.1.6 released (unstable)
+04 Oct 2010 - Version 1.1.1.5 released (stable)
 
 ---
 *Downloads*
