@@ -19,7 +19,7 @@
 * Windows XP or higher
 * Microsoft .NET Framework 3.5 Service Pack 1:
 [[http://www.microsoft.com/downloads/en/details.aspx?FamilyID=d0e5dea7-ac26-4ad7-b68c-fe5076bba986&displaylang=en]]
-* Running on non Windows OS is also possible, see FAQ.
+* Running on non Windows OS is also possible, read FAQ below.
 
 ---
 *Reporting bugs*
@@ -32,7 +32,7 @@ Use this page to report any issues:
 Q: How to run on Linux?
 A: To run it natively, you'll need mono: [[http://www.go-mono.com/mono-downloads/download.html]], and compile the source [[http://github.com/NewEraCracker/LOIC/downloads]] . The windows version (debug binaries) also works in wine [[http://www.winehq.org/download/]].
 
-Q:how to install on Ubuntu?
+Q: How to install on Ubuntu?
 A:
 # download latest source [[http://github.com/NewEraCracker/LOIC/downloads]]
 # install some tools: "sudo apt-get monodevelop liblog4net-cil-dev"
