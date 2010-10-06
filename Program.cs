@@ -27,7 +27,7 @@ namespace LOIC
 					try {ircport = cmdLine[count + 2];}
 					catch (Exception) {ircport = "6667";} //default
 					try {ircchannel = cmdLine[count + 3];}
-					catch (Exception) {ircchannel = "#LOIC";} //default
+					catch (Exception) {ircchannel = "#loic";} //default
 				}
 				/* Lets try this! */
 				if (s.ToLower() == "/hidden") {hide = true;}
