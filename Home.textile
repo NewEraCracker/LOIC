@@ -42,7 +42,7 @@ A:
 # run: "./bin/Debug/LOIC.exe"
 # Note 1: ATTENTION to run with arguments, little difference from m$ version.
  “./bin/Debug/LOIC.exe /hivemind irc.server.address 1234 \#secret”. You must add “\” in front of “#”, or linux will think its a comment and it will ignore the rest of the line beyond it.
-# Note 2: If you can't find the liblog4net package, try to build it anyways. i.e. archlinux works without it.
+# Note 2: If you can't find the liblog4net package, try to build it anyways. archlinux works without it.
 
 ---
 *Linux Packages [MADE BY pirate486743186 - UNOFFICIAL]*
