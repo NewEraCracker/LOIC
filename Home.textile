@@ -44,7 +44,7 @@ A:
  “./bin/Debug/LOIC.exe /hivemind irc.server.address 1234 \#secret”. You must add “\” in front of “#”, or linux will think its a comment and it will ignore the rest of the line beyond it.
 
 ---
-Linux Packages [MADE BY pirate486743186 - UNOFFICIAL]:
+*Linux Packages [MADE BY pirate486743186 - UNOFFICIAL]*
 * for mono: [[http://www.mediafire.com/file/3n9xnbcop5o33bm/loic_1.1.1.8_all.deb]]
 * statically linked(64bit): [[http://www.mediafire.com/file/ac7akmi6cd55705/loic_1.1.1.8_amd64.deb]]
 * the same per above but as rpm packages:
