@@ -2,10 +2,7 @@
 
 ---
 *Latest News*
-06 Oct 2010 - Version 1.1.1.8 released (stable)
-05 Oct 2010 - Version 1.1.1.7 released (unstable)
-05 Oct 2010 - Version 1.1.1.6 released (unstable)
-04 Oct 2010 - Version 1.1.1.5 released (stable)
+13 Oct 2010 - Version 1.1.1.9 released
 
 ---
 *Downloads*
