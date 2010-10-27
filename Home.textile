@@ -17,7 +17,7 @@
 * Microsoft .NET Framework 3.5 Service Pack 1:
 [[http://www.microsoft.com/downloads/en/details.aspx?FamilyID=d0e5dea7-ac26-4ad7-b68c-fe5076bba986&displaylang=en]]
 * Running on non Windows OS is also possible, read FAQ below.
-
+* For Ubuntu/Linux [[http://github.com/NewEraCracker/LOIC/wiki/How-to-run-LOIC-using-WINE]]
 ---
 *Reporting bugs*
 Use this page to report any issues:
