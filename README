@@ -1,0 +1,86 @@
+==========
+|| INFO ||
+==========
+
+Low Orbit Ion Cannon - An open source network stress tool. Written in C#
+Based on Praetox's loic project at https://sourceforge.net/projects/loic/. 
+
+================
+|| DISCLAIMER ||
+================
+
+I, NewEraCracker, am not responsible for the use that you give to this tool.
+You cannot blame me if you use this tool to attack servers you don't own and get caught.
+This tool is released for educational purposes only and comes with no warranty at all.
+
+===========================
+|| HOW TO RUN IN WINDOWS ||
+===========================
+
+GET THE BINARIES!
+
+Requires Microsoft .NET Framework 3.5 Service Pack 1 available at
+http://www.microsoft.com/downloads/en/details.aspx?FamilyID=ab99342f-5d1a-413d-8319-81da479ab0d7&displaylang=en
+
+=========================
+|| HOW TO RUN IN LINUX ||
+=========================
+
+You'll need mono and log4net:
+
+# sudo apt-get install mono liblog4net-cil-dev
+
+Then, build it:
+
+# mdtool build
+
+And run it!
+
+# bin/Debug/LOIC.exe
+
+==========================
+|| HIVEMIND/HIDDEN MODE ||
+==========================
+
+HIVE MIND mode will connect your client to an IRC server so it can be controlled
+remotely. Think of it like a voluntary botnet. They might even make your client
+do naughty things, so beware.
+
+Note: It does NOT allow remote administration of your machine, or anything shit
+like that, it is literally just control of loic itself.
+
+If you want to start up in hivemind, run like this:
+ LOIC.exe /hivemind irc.server.address
+It will connect to irc://irc.server.adress:6667/loic
+
+You can also specify port and channel
+ LOIC.exe /hivemind irc.server.address 1234 #secret
+It will connect to irc://irc.server.adress:1234/secret
+
+In order to do hivemind hidden run like this:
+ LOIC.exe /hidden /hivemind irc.server.address
+It will connect to irc://irc.server.adress:6667/loic without any visible GUI
+
+==============================
+|| CONTROLING LOIC FROM IRC ||
+==============================
+
+As an OP, Admin or Owner set a channel topic or type message with (as an example):
+!lazor targetip=127.0.0.1 message=test_test port=80 method=tcp wait=false random=true
+
+To start attack type
+!lazor start
+
+Or just append "start" in the END of the topic
+!lazor targetip=127.0.0.1 message=test_test port=80 method=tcp wait=false random=true start
+
+To reset options back to default:
+!lazor default
+
+To stop attack:
+!lazor stop
+
+And remove "start" from topic (if exists)
+You can also replace "start" by "stop" in the END of the topic.
+
+Take a look at source for more details.
