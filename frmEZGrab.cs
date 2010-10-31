@@ -26,7 +26,7 @@ namespace LOIC
         {
             if (txtDate.Text != "")
             {
-                txtOverlord.Text = overlord + "&@" + txtDate.Text + "@";
+                txtOverlord.Text = overlord + "&@time=" + txtDate.Text + "@";
             }
         }
           

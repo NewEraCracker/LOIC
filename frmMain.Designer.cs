@@ -256,7 +256,7 @@ namespace LOIC
             this.chkUsegZip.Enabled = false;
             this.chkUsegZip.Location = new System.Drawing.Point(655, 34);
             this.chkUsegZip.Name = "chkUsegZip";
-            this.chkUsegZip.Size = new System.Drawing.Size(68, 18);
+            this.chkUsegZip.Size = new System.Drawing.Size(67, 17);
             this.chkUsegZip.TabIndex = 33;
             this.chkUsegZip.Text = "use gZip";
             this.TTip.SetToolTip(this.chkUsegZip, "If checked it adds gZip compression to the slowLOIC attack");
@@ -268,7 +268,7 @@ namespace LOIC
             this.chkUseGet.Enabled = false;
             this.chkUseGet.Location = new System.Drawing.Point(655, 13);
             this.chkUseGet.Name = "chkUseGet";
-            this.chkUseGet.Size = new System.Drawing.Size(67, 18);
+            this.chkUseGet.Size = new System.Drawing.Size(68, 17);
             this.chkUseGet.TabIndex = 32;
             this.chkUseGet.Text = "use GET";
             this.TTip.SetToolTip(this.chkUseGet, "If checked it uses the GET method instead of POST.");
@@ -311,7 +311,7 @@ namespace LOIC
             this.chkRandom.AutoSize = true;
             this.chkRandom.Location = new System.Drawing.Point(135, 13);
             this.chkRandom.Name = "chkRandom";
-            this.chkRandom.Size = new System.Drawing.Size(187, 18);
+            this.chkRandom.Size = new System.Drawing.Size(185, 17);
             this.chkRandom.TabIndex = 28;
             this.chkRandom.Text = "Append random chars to the URL";
             this.chkRandom.UseVisualStyleBackColor = true;
@@ -393,7 +393,7 @@ namespace LOIC
             this.chkResp.AutoSize = true;
             this.chkResp.Location = new System.Drawing.Point(231, 72);
             this.chkResp.Name = "chkResp";
-            this.chkResp.Size = new System.Drawing.Size(91, 18);
+            this.chkResp.Size = new System.Drawing.Size(88, 17);
             this.chkResp.TabIndex = 7;
             this.chkResp.Text = "Wait for reply";
             this.TTip.SetToolTip(this.chkResp, "Don\'t disconnect before the server\'s started to answer");
@@ -891,7 +891,7 @@ namespace LOIC
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(24)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(948, 486);
+            this.ClientSize = new System.Drawing.Size(984, 486);
             this.Controls.Add(this.chkbOLUp);
             this.Controls.Add(this.textOLTime);
             this.Controls.Add(this.label28);
