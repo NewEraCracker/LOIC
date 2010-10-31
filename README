@@ -84,3 +84,105 @@ And remove "start" from topic (if exists)
 You can also replace "start" by "stop" in the END of the topic.
 
 Take a look at source for more details.
+
+==================================
+|| CONTROLING LOIC OVER THE WEB ||
+==================================
+
+>> Press <F10> for easy copy & paste of HiveMind / OverLord Settings <<
+
+
+The OverLord-Mode is meant as a Fail-Save mechanism to allow easy (de)centralised control in exactly the same way as HiveMind does.
+
+The information is encoded into hyperlinks and allows though an easy and secure distribution way. 
+!!URL-Shortener and Redirectors are fully supported!!
+
+
+-SYNTAX-
+There are 3 Methods:
+---
+
+I. Plain-Text Links: can ONLY specify TARGETS
+"LOIC: {OL-URI}"
+
+---
+
+II: a-href Links: 
+II.a: Back-Up Mirrors - they contain no target information and point to sites, where target are posted.
+'class="LO bu" href="{URI}"' - read diretion top to bottom
+'class="LO bu r" href="{URI}"' - read direcion bottom to top
+
+the read direction depends on the site: e.g. for twitter, where the newest post is on the top, you want to scan the site top-to-bottom for targets.
+On Blogs / Boards where the newest posts are at the bottom, you want to scan in the reverse direction.
+
+In the GUI the checkbox "Up?" scans top-to-bottom if checked and reverse otherwise.
+
+The scan stops at the first encountered target and uses this as the current target - all BackUp Mirrors up to this point are stored. (mirrors above the 1st target are ignored)
+
+II.b: Target-Links
+'class="LO tar" href="{OL-URI}"'
+
+---
+
+III. Plain Text instruction (this is depreciated)
+"[LOIC]
+{command}:{value}
+{command}:{value}
+...
+[/LOIC]"
+
+if there is a "lot" of html-code merged into the text it is best to use the "@"-Delimeter:
+"[LOIC]@{command}:{value}@<html goes here>@{command}:{value}@......[/LOIC]"
+
+---------
+
+The URI-Syntax for Targets:
+{OL-URI} = {URI}@{command}={value}@{single_sign}@{command}={value}@...
+
+IT IS HIGHLY RECOMMENDED TO USE URL-SHORTENER FOR THE TARGET-COMMANDS!!
+
+---
+
+Commands: THESE APPLY ONLY TO TARGET-LINKS as in method II.b or PLAINT Text as in method III!!!!!
+(there are 2 new commands - the others are the same as on IRC)
+
+targetip, targethost, timeout, subsite, message, port, method, threads, wait, random, speed
+
+hivemind - let's you set an Hive-Mind-Server over OverLord: @hivemind=irc.cooldomin.heros:6667#hivemind@
+if this command is used the control is immediately transferred to the HiveMind! (aka: OverLord STOPS working!)
+therefor the hivemind command is best used alone without other commands.
+
+time - you can set a timer for the beginning of the fun: @time=YYYY/MM/DD HH:mm@ (time-zone is UTC for the time - the time-zone-correction is done by the client according to the system-settings and time!)
+if a time command is issued the current attack stops and the Lazor waits until the time is reached. the target-information is updated once again EXACTLY at the beginning of the attack.
+
+Using this it is possible, to set a time for all "connected" lazors WITHOUT revealing the target:
+1. http://hive.mind/go.hp?@time=2010/05/23 15:00@
+at 14:55 (UTC) you just change the Link to: http://hive.mind/go.hp?@time=2010/05/23 15:00@&@targetip=127.0.0.1@
+
+-------------------
+
+... enough with the crap - a real world example:
+On site http://main.com is the command center where you don't want to post target-information:
+put somewhere on your site (in a .php / .txt / .html / .js or whatever file you have) the Back-Up-Mirrors for your OP:
+
+<a class="LO bu" href="http://somefree-hoster.com/url/yourbackup">&nbsp</a>
+<a class="LO bu" href="http://twitter.com/account">&nbsp</a>
+<a class="LO bu r" href="http://xyx.chan.com/b/1234">&nbsp</a>
+<a class="LO bu" href="http://bit.ly">&nbsp</a>
+
+As soon as one mirror fails the next is taken - the mirrors are accumulated at the client - so you can change them or add more atfer the majority of the nodes have read them once! .. Back-Up-Mirrors are only removed from the client, if one seems to be offline. (the effects of the Stress-Test on the client machine is (to some degree) mitigated!)
+
+it might be a good idea, to hide the "LO"-Class with a (inline-) CSS or put it into any hidden container ... or just leave as is :D
+
+ATTENTION: Backup Mirrors + Targets in one Page!
+Pay attention to the scan-direction! If you read top-to-bottom (Up? = checked in the GUI) you HAVE TO PUT your mirrors BEFORE the first target-link!
+if you scan reverse you have to put the mirrors BELOW the target!
+
+e.g. Scanning REVERSE + Mixed-Mode
+<html-code>
+<p>your very long paragraph LOIC: http://bit.ly/abcde your paragraph contniues on for ours</p>
+<more html>
+<a style="display:none" class="LO bu" href="http://bit.ly">&nbsp</a>
+<footer-stuff>
+
+that's pretty much it xD
