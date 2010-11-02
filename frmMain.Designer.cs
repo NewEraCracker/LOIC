@@ -454,6 +454,7 @@ namespace LOIC
             this.txtThreads.Text = "10";
             this.txtThreads.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.TTip.SetToolTip(this.txtThreads, "How many users LOIC should emulate");
+            this.txtThreads.Leave += new System.EventHandler(this.txtThreads_Leave);
             // 
             // cbMethod
             // 

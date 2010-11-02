@@ -31,6 +31,7 @@ namespace LOIC
 		}
 		public override void start()
 		{
+            IsDelayed = false;
 			IsFlooding = true; 
 			var bw = new BackgroundWorker();
 			bw.DoWork += new DoWorkEventHandler(bw_DoWork);

