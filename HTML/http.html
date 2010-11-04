@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>LOIC's NewFag Help</title>
+<link rel="stylesheet" href="loic.css" type="text/css" />
+</head>
+<body>
+<div class="header">HTTP Attack</div>
+<p>The HTTP-Attack can be used as a bandwidth reaper or for massdemanding (dynamic) content.</p>
+<h2>Options</h2>
+<p>In the <b>"subsite"</b> you can specify the page to request.<br />
+If <b>"Append random chars"</b> is checked, 6 random characters are added at the end of the subsite. (usefull with dynamic pages and get-parameters)<br />
+If <b>"Wait for reply"</b> is checked, the complete document will be downloaded.<br />
+If it is unchecked, the page is only requested but not (completely) read. However the server starts to send the document until your receivebuffer is full. This option is especially intereseting for noncached dynamic pages where the processing time is more valuable than the used bandwidth.<br />
+In the <b>"Timeout"</b> field you set the read timeout in seconds. This is only important if "Wait for reply" is checked.</p>
+<h2>Remarks</h2>
+<p>"Failed" counts the unsuccessful connection attempts to the target. If <b>"Wait for reply"</b> is checked, "Failed" is also increased, if the target took longer than the time specified in "Timeout" to deliver the page.<br />
+</p>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>LOIC's NewFag Help</title>
+<link rel="stylesheet" href="loic.css" type="text/css" />
+</head>
+<body>
+<div class="header">ReCoil Attack</div>
+<p>The ReCoil attack focuses on keeping the connections alive as long as possible, but it is <u>not</u> the same as <a href="slowloic.html">SlowLoris</a>. It is more like a "reverse" DOS-attack.</p>
+<p>A fully legimit request is made but the download-speed is slowed down to nearly 0 by reading just enough from the network to keep the socket alive.<br />
+The attack itself produces <u>NO</u> errors - there are just a bunch of HTTP 200 in the access logs. If the server runs out of available ressources and goes down, there might be an system error entry.<br />
+Especially all servers, that are vulnerable to SlowLoris, are vulnerable to this attack. ReCoil however is not as "easy" mitigated as SlowLoris. Think of it as a bunch of mobile devices requesting a page just before driving through a tunnel.</p>
+<h2>Prerequisite</h2>
+<p>Due to the nature of the attack the requested site has to be at least 24kb (better larger).<br />
+The exact minimum filesize depends on the network buffer space of the attacking system. For most 10/100 connections around 24KB should work, while on gigabit connections filesizes beyond 64KB are needed.<br />
+NOTE: Your LOCAL link speed is the essential key not your internet speed! (meaning if you have a 1MBit internet connection and you are have a 1 gigabit link to your modem / router, you are pretty much screwed! --> target pdfs or big stuff like that!)</p>
+<h2>Options</h2>
+<p>In the <b>"subsite"</b> you can specify the page to request. (keep the size in mind and do a bit scouting!)<br />
+If <b>"Append random chars"</b> is checked, 6 random characters are added at the end of the subsite. (usefull with dynamic pages and get-parameters)<br />
+If <b>"Wait for reply"</b> is checked, ReCoil follows Header redirects and discards early documents, which are smaller than 16KB. (Only apply this if needed)<br />
+The <b>"Timeout"</b> field is for the wait time in seconds between reading from each socket. This must be less than the write timeout on the target side.<br />
+The amount of worker <b>"threads"</b> can be changed during the attack at any time. This value should be initially lower than the maximum allowed half-open connections.<br />
+To consume even more memory you can additionaly check the <b>"use gZip"</b> - but remember the resulting document has to be of reasonable size!<br />
+In the <b>"Sockets / Thread"</b> field you can define the number of connections per thread. (this number should <u>not</u> be insanely high - if you go over 100 it might be better to increase the amount of threads!)<br />
+the speed-slider sets just the delay between the creation of sockets.</p>
+<h2>Remarks</h2>
+<p>The "requested" value shows the amount of currently connected sockets. <br />
+If no thread is in the "Connecting" state you should increase the number of threads - if all your threads or most of them are connecting you should lower the amount of threads.<br />
+"Failed" counts the connections which were reset by the server. If "Wait for reply" is checked it also counts the unsuccessful attempts which are early discarded.<br />
+If "failed" goes up too fast you are doing it <b><u>WRONG!</u></b></p>
+<h2>Tip</h2>
+<p>If you target a system which is not vulnerable to this attack you can always go for port-starving!<br />
+Just use up all max possible 64K connections and you are done! (running 16 clients with 5.000 connections each should do the trick!)</p>
+</body>
+</html>
