@@ -894,13 +894,14 @@ namespace LOIC
             this.TrayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("TrayIcon.Icon")));
             this.TrayIcon.Text = "Waiting for target!";
             this.TrayIcon.DoubleClick += new System.EventHandler(this.TrayIcon_DoubleClick);
+            this.TrayIcon.MouseMove += new System.Windows.Forms.MouseEventHandler(this.TrayIcon_MouseMove);
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(24)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(948, 486);
+            this.ClientSize = new System.Drawing.Size(983, 486);
             this.Controls.Add(this.chkbOLUp);
             this.Controls.Add(this.textOLTime);
             this.Controls.Add(this.label28);
