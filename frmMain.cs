@@ -59,12 +59,16 @@ namespace LOIC
                     if (String.IsNullOrEmpty(sIP) || String.Equals(sIP, "N O N E !"))
                         throw new Exception("Select a target.");
 
-                    if ( sHost.Length > 0 )
+                    try
                     {
-                        if (!sHost.Contains("://")) { sHost = "http://" + sHost; }
+                        if ( sHost.Length > 0 )
+                        {
+                            if (!sHost.Contains("://")) { sHost = "http://" + sHost; }
                             sHost = new Uri(sHost).Host;
-                    }
-                    else { sHost = sIP; }
+                        }
+                        else { sHost = sIP; }
+					}
+					catch (Exception) { sHost = sIP; }					
 
                     iProtocol = 0;
                     sMethod = cbMethod.Text;
