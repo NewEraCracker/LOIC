@@ -23,7 +23,7 @@ Use this page to report any issues:
 *FAQ*
 
 Q: How to run on Linux?
-A: Please read "How to Run" at https://github.com/NewEraCracker/LOIC/wiki/_pages
+A: Please read "How to Run" at [[https://github.com/NewEraCracker/LOIC/wiki/_pages]]
 
 Q: How to run on Ubuntu from source?
 A:
