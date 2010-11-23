@@ -23,17 +23,7 @@ Use this page to report any issues:
 *FAQ*
 
 Q: How to run on Linux?
-A: Please read "How to Run" at [[https://github.com/NewEraCracker/LOIC/wiki/_pages]]
-
-Q: How to run on Ubuntu from source?
-A:
-# download latest source [[http://github.com/NewEraCracker/LOIC/downloads]]
-# install some tools: "sudo apt-get monodevelop liblog4net-cil-dev"
-# in source directory: "mdtool build"
-# run: "./bin/Debug/LOIC.exe"
-# Note 1: ATTENTION to run with arguments, little difference from m$ version.
- “./bin/Debug/LOIC.exe /hivemind irc.server.address 1234 \#secret”. You must add “\” in front of “#”, or linux will think its a comment and it will ignore the rest of the line beyond it.
-# Note 2: If you can't find the liblog4net package, try to build it anyways. archlinux works without it.
+A: Please read pages at [[https://github.com/NewEraCracker/LOIC/wiki/_pages]]
 
 ---
 *Linux Packages [MADE BY pirate486743186 - UNOFFICIAL]*
