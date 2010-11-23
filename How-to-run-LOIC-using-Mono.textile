@@ -1,17 +1,13 @@
-*Assuming you use linux or mac os:*
+*Assuming you use Linux or Mac OS X:*
 
 # Download LOIC (with windows binaries) from download page and extract in desktop.
-
 # Download mono from: [[http://www.go-mono.com/mono-downloads/download.html]]
-
 # Install mono.
-
 # Open terminal and type
-mono /path_to_loic/debug/LOIC.exe
-
+_mono /path_to_loic/debug/LOIC.exe_
 # LOIC should open (check tray too)
-
 # Enjoy :)
+
 
 ----
 Tested in Mac OS X with LOIC v1.1.1.11 :)
