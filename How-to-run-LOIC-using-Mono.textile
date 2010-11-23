@@ -7,8 +7,5 @@
 _mono /path_to_loic/debug/LOIC.exe_
 # LOIC should open (check tray too)
 
-
-Enjoy :)
-
-----
 Tested in Mac OS X with LOIC v1.1.1.11
+Enjoy :)
