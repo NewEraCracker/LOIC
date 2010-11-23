@@ -1,0 +1,10 @@
+*Assuming you have Ubuntu/Debian:*
+# Download latest LOIC and extract.
+# Open a terminal and type (without the parenthesis) "sudo apt-get install wine" and wait for it to finish.
+# Type "wget http://www.kegel.com/wine/winetricks".
+# Type "sh winetricks" and from the GUI select dotnet20, and install it.
+# Go to applications on your drop down and under Wine click on "Browse C: drive" then move the extracted LOIC to c:
+# Now, go to the extracted file and right-click LOIC.exe and click properties.
+# Go to permissions tab and check the box "Allow executing this file as program".
+# Right click file again and under open application, select wine.
+# It should work :)
