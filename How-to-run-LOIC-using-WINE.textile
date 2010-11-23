@@ -9,4 +9,4 @@
 # Go to permissions tab and check the box "Allow executing this file as program".
 # Right click file again and under open application, select wine.
 
-Enjoy
+Enjoy ;)
