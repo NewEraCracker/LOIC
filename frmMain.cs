@@ -59,7 +59,7 @@ namespace LOIC
                     if (String.IsNullOrEmpty(sIP) || String.Equals(sIP, "N O N E !"))
                         throw new Exception("Select a target.");
 
-                    try
+                    try //fix sHost
                     {
                         if ( sHost.Length > 0 )
                         {
@@ -67,8 +67,8 @@ namespace LOIC
                             sHost = new Uri(sHost).Host;
                         }
                         else { sHost = sIP; }
-					}
-					catch (Exception) { sHost = sIP; }					
+                    }
+                    catch (Exception) { sHost = sIP; }					
 
                     iProtocol = 0;
                     sMethod = cbMethod.Text;
@@ -149,6 +149,7 @@ namespace LOIC
                 return;
             }
             txtTarget.Text = txtTargetIP.Text;
+            sHost = txtTargetIP.Text;
         }
         private void LockOnURL(bool silent)
         {

@@ -22,21 +22,12 @@ GET THE BINARIES!
 Requires Microsoft .NET Framework 3.5 Service Pack 1 available at
 http://www.microsoft.com/downloads/en/details.aspx?FamilyID=ab99342f-5d1a-413d-8319-81da479ab0d7&displaylang=en
 
-=========================
-|| HOW TO RUN IN LINUX ||
-=========================
+=================================
+|| HOW TO RUN IN LINUX / MACOSX||
+=================================
 
-You'll need mono and log4net:
-
-# sudo apt-get install mono liblog4net-cil-dev
-
-Then, build it:
-
-# mdtool build
-
-And run it!
-
-# bin/Debug/LOIC.exe
+Run debug binaries with mono.
+Read wiki at https://github.com/NewEraCracker/LOIC/wiki/ for updated instructions.
 
 ==========================
 || HIVEMIND/HIDDEN MODE ||
