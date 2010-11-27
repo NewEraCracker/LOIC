@@ -17,7 +17,7 @@
 [[http://support.microsoft.com/kb/959209]]
 * Linux or Mac OS X:
 ** Mono or wine
-** Please read [[https://github.com/NewEraCracker/LOIC/wiki/_pages]]
+Please read [[https://github.com/NewEraCracker/LOIC/wiki/_pages]]
 
 ---
 *Reporting bugs*
