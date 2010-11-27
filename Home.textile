@@ -1,4 +1,7 @@
 *Welcome to the LOIC wiki!*
+---
+*Disclaimer*
+I, NewEraCracker, am not responsible for the use that you give to this tool. You cannot blame me if you use this tool to attack servers you don't own and get caught. *This tool is released for educational purposes only and comes with no warranty at all.*
 
 ---
 *Downloads*
@@ -31,7 +34,3 @@ Use this page to report any issues:
 * the same per above but as rpm packages:
 [[http://www.mediafire.com/file/c4fy4p3phweuspm/loic-1.1.1.8-2.noarch.rpm]]
 [[http://www.mediafire.com/file/v387ek46o76amm8/loic-1.1.1.8-2.x86_64.rpm]]
-
----
-*Disclaimer*
-I, NewEraCracker, am not responsible for the use that you give to this tool. You cannot blame me if you use this tool to attack servers you don't own and get caught. *This tool is released for educational purposes only and comes with no warranty at all.*
