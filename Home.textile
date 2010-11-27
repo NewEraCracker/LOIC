@@ -5,6 +5,7 @@
 * Source: [[https://github.com/NewEraCracker/LOIC/]]
 * Binaries: [[https://github.com/NewEraCracker/LOIC/downloads]]
 * License: Public Domain
+* Notes: Use stable version whenever possible. Beta is outdated at the moment.
 
 ---
 *System requirements*
