@@ -7,7 +7,7 @@ I, NewEraCracker, am not responsible for the use that you give to this tool. You
 ---
 *Downloads*
 * Source: [[https://github.com/NewEraCracker/LOIC/]]
-* Binaries: [[https://github.com/NewEraCracker/LOIC/downloads]]
+* Binaries: [[https://github.com/NewEraCracker/LOIC/downloads/]]
 * License: Public Domain
 * *Use stable version whenever possible. Beta is outdated at the moment.*
 
