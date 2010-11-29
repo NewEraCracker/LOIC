@@ -68,7 +68,7 @@ namespace LOIC
                         }
                         else { sHost = sIP; }
                     }
-                    catch (Exception) { sHost = sIP; }					
+                    catch { sHost = sIP; }					
 
                     iProtocol = 0;
                     sMethod = cbMethod.Text;
@@ -164,7 +164,7 @@ namespace LOIC
             if (sHost.StartsWith("https://")) sHost = sHost.Replace("https://", "http://");
             else if (!sHost.StartsWith("http://")) sHost = String.Concat("http://", sHost);
             try { txtTarget.Text = Dns.GetHostEntry(new Uri(sHost).Host).AddressList[0].ToString(); }
-            catch (Exception)
+            catch
             {
                 if (silent) return;
                 new frmWtf().Show();
@@ -184,7 +184,7 @@ namespace LOIC
                 else if (enabled)
                 {
                     try { IPHostEntry ipHost = Dns.GetHostEntry(txtIRCserver.Text); }
-                    catch (Exception) { disableHive.Checked = true; }
+                    catch { disableHive.Checked = true; }
                 }
                 if (disableHive.Checked && enabled)
                 {
