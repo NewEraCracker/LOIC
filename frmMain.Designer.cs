@@ -84,7 +84,7 @@ namespace LOIC
             this.tShowStats = new System.Windows.Forms.Timer(this.components);
             this.disableHive = new System.Windows.Forms.RadioButton();
             this.enableHive = new System.Windows.Forms.RadioButton();
-            this.label25 = new System.Windows.Forms.Label();
+            this.lblConnectionStatus = new System.Windows.Forms.Label();
             this.txtIRCserver = new System.Windows.Forms.TextBox();
             this.txtIRCport = new System.Windows.Forms.TextBox();
             this.txtIRCchannel = new System.Windows.Forms.TextBox();
@@ -692,13 +692,13 @@ namespace LOIC
             this.enableHive.UseVisualStyleBackColor = true;
             this.enableHive.CheckedChanged += new System.EventHandler(this.enableHive_CheckedChanged);
             // 
-            // label25
+            // lblConnectionStatus
             // 
-            this.label25.Location = new System.Drawing.Point(760, 17);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(210, 16);
-            this.label25.TabIndex = 17;
-            this.label25.Text = "Disconnected.";
+            this.lblConnectionStatus.Location = new System.Drawing.Point(760, 17);
+            this.lblConnectionStatus.Name = "lblConnectionStatus";
+            this.lblConnectionStatus.Size = new System.Drawing.Size(210, 16);
+            this.lblConnectionStatus.TabIndex = 17;
+            this.lblConnectionStatus.Text = "Disconnected.";
             // 
             // txtIRCserver
             // 
@@ -780,7 +780,7 @@ namespace LOIC
             this.Controls.Add(this.txtIRCchannel);
             this.Controls.Add(this.txtIRCport);
             this.Controls.Add(this.txtIRCserver);
-            this.Controls.Add(this.label25);
+            this.Controls.Add(this.lblConnectionStatus);
             this.Controls.Add(this.enableHive);
             this.Controls.Add(this.disableHive);
             this.Controls.Add(this.label24);
@@ -874,7 +874,7 @@ namespace LOIC
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.RadioButton disableHive;
         private System.Windows.Forms.RadioButton enableHive;
-        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.Label lblConnectionStatus;
         private System.Windows.Forms.TextBox txtIRCserver;
         private System.Windows.Forms.TextBox txtIRCport;
         private System.Windows.Forms.TextBox txtIRCchannel;
