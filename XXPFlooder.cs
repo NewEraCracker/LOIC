@@ -14,7 +14,7 @@ namespace LOIC
 		public int Delay { get; set; }
 		public bool Resp { get; set; }
 		public string Data { get; set; }
-		private bool random;
+		private readonly bool random;
 
 		public XXPFlooder(string ip, int port, int proto, int delay, bool resp, string data, bool random)
 		{
@@ -30,7 +30,7 @@ namespace LOIC
 		{
 			IsFlooding = true;
 			var bw = new BackgroundWorker();
-			bw.DoWork += new DoWorkEventHandler(bw_DoWork);
+			bw.DoWork += bw_DoWork;
 			bw.RunWorkerAsync();
 		}
 		private void bw_DoWork(object sender, DoWorkEventArgs e)
@@ -38,7 +38,7 @@ namespace LOIC
 			try
 			{
 				byte[] buf;
-				if (random == true)
+				if (random)
 				{
 					buf = System.Text.Encoding.ASCII.GetBytes(String.Format(Data, Functions.RandomString()));
 				}
@@ -50,7 +50,7 @@ namespace LOIC
 				var RHost = new System.Net.IPEndPoint(System.Net.IPAddress.Parse(IP), Port);
 				while (IsFlooding)
 				{
-					Socket socket = null;
+					Socket socket;
 					if (Protocol == 1)
 					{
 						socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);

