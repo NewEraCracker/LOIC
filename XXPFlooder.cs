@@ -2,6 +2,7 @@
 using System.Text;
 using System.Net.Sockets;
 using System.ComponentModel;
+using System.Threading;
 
 namespace LOIC
 {
@@ -31,10 +32,10 @@ namespace LOIC
 		{
 			IsFlooding = true;
 			var bw = new BackgroundWorker();
-			bw.DoWork += bw_DoWork;
+			bw.DoWork += DoBackgroundWork;
 			bw.RunWorkerAsync();
 		}
-		private void bw_DoWork(object sender, DoWorkEventArgs e)
+		private void DoBackgroundWork(object sender, DoWorkEventArgs e)
 		{
 			try
 			{
@@ -103,7 +104,7 @@ namespace LOIC
 	    {
 	        if (Delay >= 0)
 	        {
-	            System.Threading.Thread.Sleep(Delay+1);
+	            Thread.Sleep(Delay+1);
 	        }
 	    }
 	}

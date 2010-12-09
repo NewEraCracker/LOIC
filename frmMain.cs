@@ -62,15 +62,29 @@ namespace LOIC
             {
                 try
                 {
-                    try { iPort = Convert.ToInt32(txtPort.Text); }
-                    catch { throw new Exception("I don't think ports are supposed to be written like THAT."); }
+                    try
+                    {
+                        iPort = Convert.ToInt32(txtPort.Text);
+                    }
+                    catch
+                    {
+                        throw new Exception("I don't think ports are supposed to be written like THAT.");
+                    }
 
-                    try { iThreads = Convert.ToInt32(txtThreads.Text); }
-                    catch { throw new Exception("What on earth made you put THAT in the threads field?"); }
+                    try
+                    {
+                        iThreads = Convert.ToInt32(txtThreads.Text);
+                    }
+                    catch
+                    {
+                        throw new Exception("What on earth made you put THAT in the threads field?");
+                    }
 
                     sIP = txtTarget.Text;
                     if (String.IsNullOrEmpty(sIP) || String.Equals(sIP, "N O N E !"))
+                    {
                         throw new Exception("Select a target.");
+                    }
 
                     try //Fix sHost
                     {
@@ -79,28 +93,43 @@ namespace LOIC
                             if (!sHost.Contains("://")) { sHost = "http://" + sHost; }
                             sHost = new Uri(sHost).Host;
                         }
-                        else { sHost = sIP; }
+                        else
+                        {
+                            sHost = sIP;
+                        }
                     }
-                    catch { sHost = sIP; }					
+                    catch
+                    {
+                        sHost = sIP;
+                    }					
 
-                    iProtocol = 0;
                     sMethod = cbMethod.Text;
-                    if (String.Equals(sMethod, "TCP")) iProtocol = 1;
-                    if (String.Equals(sMethod, "UDP")) iProtocol = 2;
-                    if (String.Equals(sMethod, "HTTP")) iProtocol = 3;
+                    iProtocol = ReadProtocolIndex(cbMethod.Text);
                     if (iProtocol == 0)
+                    {
                         throw new Exception("Select a proper attack method.");
+                    }
 
                     sData = txtData.Text.Replace("\\r", "\r").Replace("\\n", "\n");
                     if (String.IsNullOrEmpty(sData) && (iProtocol == 1 || iProtocol == 2))
+                    {
                         throw new Exception("Gonna spam with no contents? You're a wise fellow, aren't ya? o.O");
+                    }
 
                     sSubsite = txtSubsite.Text;
                     if (!sSubsite.StartsWith("/") && (iProtocol == 3))
+                    {
                         throw new Exception("You have to enter a subsite (for example \"/\")");
+                    }
 
-                    try { iTimeout = Convert.ToInt32(txtTimeout.Text); }
-                    catch { throw new Exception("What's up with something like that in the timeout box? =S"); }
+                    try
+                    {
+                        iTimeout = Convert.ToInt32(txtTimeout.Text);
+                    }
+                    catch
+                    {
+                        throw new Exception("What's up with something like that in the timeout box? =S");
+                    }
 
                     bResp = chkResp.Checked;
                 }
@@ -152,7 +181,23 @@ namespace LOIC
                 //tShowStats.Stop();
             }
         }
-        private void LockOnIp(bool silent)
+
+        private static int ReadProtocolIndex(string method)
+	    {
+            switch (method)
+            {
+                case "TCP":
+                    return 1;
+                case "UDP":
+                    return 2;
+                case "HTTP":
+                    return 3;                    
+                default:
+                    return 0;
+            }
+	    }
+
+	    private void LockOnIp(bool silent)
         {
             if (txtTargetIP.Text.Length == 0)
             {

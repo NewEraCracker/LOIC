@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 
 namespace LOIC
 {
@@ -47,7 +48,7 @@ namespace LOIC
 			tTimepoll.Start();
 
 			var bw = new BackgroundWorker();
-			bw.DoWork += bw_DoWork;
+			bw.DoWork += DoBackgroundWork;
 			bw.RunWorkerAsync();
 		}
 		private void tTimepoll_Tick(object sender, EventArgs e)
@@ -62,7 +63,7 @@ namespace LOIC
                 }
 			}
 		}
-		private void bw_DoWork(object sender, DoWorkEventArgs e)
+		private void DoBackgroundWork(object sender, DoWorkEventArgs e)
 		{
 			try
 			{
@@ -86,12 +87,19 @@ namespace LOIC
 					socket.Blocking = Resp;
 					State = ReqState.Requesting; // SET STATE TO REQUESTING //
 					socket.Send(buf, SocketFlags.None);
-					State = ReqState.Downloading; Requested++; // SET STATE TO DOWNLOADING // REQUESTED++
-					if (Resp) socket.Receive(recvBuf, 64, SocketFlags.None);
-					State = ReqState.Completed; Downloaded++; // SET STATE TO COMPLETED // DOWNLOADED++
-					tTimepoll.Stop();
+					State = ReqState.Downloading; 
+                    Requested++; // SET STATE TO DOWNLOADING // REQUESTED++
+					
+                    if (Resp)
+                    {
+                        socket.Receive(recvBuf, 64, SocketFlags.None);
+                    }
+					State = ReqState.Completed; 
+                    Downloaded++; // SET STATE TO COMPLETED // DOWNLOADED++
+					
+                    tTimepoll.Stop();
 					tTimepoll.Start();
-					if (Delay >= 0) System.Threading.Thread.Sleep(Delay+1);
+				    SleepDelay();
 				}
 			}
 			catch { }
@@ -111,5 +119,13 @@ namespace LOIC
 		{
 			return DateTime.Now.Ticks / 10000;
 		}
+
+        private void SleepDelay()
+        {
+            if (Delay >= 0)
+            {
+                Thread.Sleep(Delay + 1);
+            }
+        }
 	}
 }
