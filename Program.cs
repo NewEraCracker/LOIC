@@ -23,17 +23,34 @@ namespace LOIC
 				{
 					hive = true;
 					ircserver = cmdLine[count + 1]; //if no server entered let it crash
-					try {ircport = cmdLine[count + 2];}
-					catch (Exception) {ircport = "6667";} //default
-					try {ircchannel = cmdLine[count + 3];}
-					catch (Exception) {ircchannel = "#loic";} //default
+					try
+					{
+					    ircport = cmdLine[count + 2];
+					}
+					catch (Exception)
+					{
+                        //default
+					    ircport = "6667";
+					} 
+					try
+					{
+					    ircchannel = cmdLine[count + 3];
+					}
+					catch (Exception)
+					{
+                        //default
+					    ircchannel = "#loic";
+					} 
 				}
-				/* Lets try this! */
-				if (s.ToLower() == "/hidden") {hide = true;}
+				if (s.ToLower() == "/hidden")
+				{
+				    hide = true;
+				}
 				count++;
 			}
-			//Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
+
+            // Lets try this! 
+            Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run(new frmMain(hive, hide, ircserver, ircport, ircchannel));
 		}
 	}

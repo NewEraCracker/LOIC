@@ -727,6 +727,5 @@ namespace LOIC
         {
             System.Diagnostics.Process.Start("http://github.com/NewEraCracker/LOIC");
         }
-
 	}
 }
