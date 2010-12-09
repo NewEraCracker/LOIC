@@ -70,7 +70,7 @@ namespace LOIC
 				byte[] buf;
 				if (random == true)
 				{
-					buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{2}Host: {3}{2}{2}{2}", Subsite, new Functions().RandomString(), Environment.NewLine, Host));
+					buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{2}Host: {3}{2}{2}{2}", Subsite, Functions.RandomString(), Environment.NewLine, Host));
 				}
 				else
 				{

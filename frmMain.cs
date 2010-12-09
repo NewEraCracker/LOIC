@@ -227,7 +227,7 @@ namespace LOIC
                         channel = txtIRCchannel.Text;
                         // irc.WriteLine(Rfc2812.Nick("loicbot"),Priority.Critical);
                         // irc.WriteLine(Rfc2812.User("loic", 0, "ACSLaw"),Priority.Critical);
-                        irc.Login("LOIC_" + new Functions().RandomString(), "Newfag's remote LOIC", 0, "IRCLOIC");
+                        irc.Login("LOIC_" + Functions.RandomString(), "Newfag's remote LOIC", 0, "IRCLOIC");
 
                         //Spawn a fuckign thread to handle the listen.. why!?!?
                         irclisten = new Thread(new ThreadStart(IrcListenThread));
@@ -266,7 +266,7 @@ namespace LOIC
                     int port;
                     if (!int.TryParse(txtIRCport.Text, out port)) port = 6667;
                     irc.Connect(txtIRCserver.Text, port);
-                    irc.Login("LOIC_" + new Functions().RandomString(), "Newfag's remote LOIC", 0, "IRCLOIC");
+                    irc.Login("LOIC_" + Functions.RandomString(), "Newfag's remote LOIC", 0, "IRCLOIC");
                 }
                 catch
                 { }

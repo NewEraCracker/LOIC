@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Text;
 
 namespace LOIC
 {
@@ -36,21 +35,6 @@ namespace LOIC
 			//Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run(new frmMain(hive, hide, ircserver, ircport, ircchannel));
-		}
-	}
-    public partial class Functions
-    {
-		public string RandomString()
-        {
-            StringBuilder builder = new StringBuilder();
-            Random random = new Random();
-            char ch;
-            for (int i = 0; i < 6; i++)
-            {
-                ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));
-                builder.Append(ch);
-            }
-            return builder.ToString();
 		}
 	}
 }
