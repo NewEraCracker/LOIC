@@ -53,9 +53,9 @@
 		}
 	}
 
-	public partial class Functions
+	public static class Functions
 	{
-		public string RandomString ()
+		public static string RandomString ()
 		{
 			StringBuilder builder = new StringBuilder ();
 			Random random = new Random ();

@@ -8,6 +8,12 @@ namespace LOIC
 	using Meebey.SmartIrc4net;
 	#endregion
 
+	public enum HiveState
+	{
+		Disconnected = 0x0,
+		Connected = 0x1
+	};
+	
 	public class HiveManager
 	{
 		#region Fields
@@ -21,8 +27,24 @@ namespace LOIC
 		#endregion
 
 		#region Constructor
-		public HiveManager (int port, string hostName, string channel)
+		public HiveManager (string hostName, int port, string channel)
 		{
+			// Input validation
+			if (port == default(int))
+			{
+				port = 6667;
+			}
+			
+			if (string.IsNullOrEmpty (channel))
+			{
+				channel = "#LOIC";
+			}
+			else if (channel.StartsWith ("#"))
+			{
+				throw new ArgumentException("Channel name must start with #");
+			}
+			
+			
 			irc = new IrcClient ();
 			/*
 			irc.OnConnected += IrcConnected;
@@ -51,6 +73,7 @@ namespace LOIC
 		#endregion
 
 		#region Properties
+		public HiveState State { get; private set; }
 		#endregion
 
 		#region Methods

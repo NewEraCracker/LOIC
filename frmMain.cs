@@ -9,32 +9,21 @@ namespace LOIC
 	using System;
 	using System.Collections.Generic;
 	using System.Net;
-	using System.Threading;
 	using System.Windows.Forms;
-	using System.Diagnostics;
-	using Meebey.SmartIrc4net;
 	#endregion
 
 	public partial class frmMain : Form
 	{
 		#region Fields
-		private static XXPFlooder[] xxpFlooders;
-		private static HTTPFlooder[] httpFlooders;
-		
 		private static string sHost, sIP, sMethod, sData, sSubsite;
 		private static int iPort, iThreads, iProtocol, iDelay, iTimeout;
 		private static bool bResp, intShowStats;
 
-		private static HiveManager hiveManager;
-		
 		private delegate void CheckParamsDelegate (List<string> pars);
 		#endregion
 
 		#region Properties
-		private bool HiveEnabled
-		{
-			get { return hiveManager != null; }
-		}
+
 		#endregion
 		
 		#region Methods
@@ -73,6 +62,7 @@ namespace LOIC
 		
 		private void Attack (bool toggle, bool @on, bool silent)
 		{
+			/*
 			if ((cmdAttack.Text == "IMMA CHARGIN MAH LAZER" && toggle) || (!toggle && @on)) {
 				try {
 					try {
@@ -167,7 +157,9 @@ namespace LOIC
 				}
 				//tShowStats.Stop();
 			}
+			*/
 		}
+		
 		private void LockOnIP (bool silent)
 		{
 			if (txtTargetIP.Text.Length == 0) {
@@ -204,6 +196,7 @@ namespace LOIC
 		
 		private void DoHive (bool enabled)
 		{
+			/*
 			try {
 				//Is everything ok?
 				if ((txtIRCserver.Text == "" || txtIRCchannel.Text == "") && enabled) {
@@ -245,7 +238,7 @@ namespace LOIC
 					label25.Text = "Disconnected.";
 				}
 			} catch {
-			}
+			}*/
 		}
 		
 		private void frmMain_Load (object sender, EventArgs e)
@@ -255,10 +248,11 @@ namespace LOIC
 
 		private void frmMain_Closing (object sender, FormClosingEventArgs e)
 		{
+			/*
 			if (HiveEnabled)
 			{
 				hiveManager.Disconnect ();
-			}
+			}*/
 			
 			Environment.Exit (0);
 		}
@@ -285,6 +279,7 @@ namespace LOIC
 
 		private void tShowStats_Tick (object sender, EventArgs e)
 		{
+			/*
 			if (intShowStats)
 				return;
 			intShowStats = true;
@@ -355,10 +350,12 @@ namespace LOIC
 			}
 			
 			intShowStats = false;
+			*/
 		}
 
 		private void tbSpeed_ValueChanged (object sender, EventArgs e)
 		{
+			/*
 			iDelay = tbSpeed.Value;
 			if (httpFlooders != null) {
 				for (int a = 0; a < httpFlooders.Length; a++) {
@@ -371,7 +368,7 @@ namespace LOIC
 					if (xxpFlooders[a] != null)
 						xxpFlooders[a].Delay = iDelay;
 				}
-			}
+			}*/
 		}
 
 		private void enableHive_CheckedChanged (object sender, EventArgs e)
