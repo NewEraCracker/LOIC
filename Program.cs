@@ -2,7 +2,6 @@
 {
 	#region using directives
 	using System;
-	using System.Text;
 	using System.Windows.Forms;
 	#endregion
 
@@ -50,22 +49,6 @@
 			
 			Application.SetCompatibleTextRenderingDefault (false);
 			Application.Run (new frmMain (hive, hide, ircServerUri, ircPort, ircChannel));
-		}
-	}
-
-	public static class Functions
-	{
-		public static string RandomString ()
-		{
-			StringBuilder builder = new StringBuilder ();
-			Random random = new Random ();
-			char ch;
-			for (int i = 0; i < 6; i++) {
-				ch = (char)((int)(Math.Floor (26 * random.NextDouble () + 65)));
-				builder.Append (ch);
-			}
-			
-			return builder.ToString ();
 		}
 	}
 }

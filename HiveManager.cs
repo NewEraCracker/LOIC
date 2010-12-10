@@ -1,4 +1,3 @@
-
 namespace LOIC
 {
 	#region using directives
