@@ -1,0 +1,6 @@
+ok, since v1.1.2.x is in beta stage and very unstable I decided to delete download package.
+
+TODO:
+* Review TCP, UDP and HTTP protocols (probably others too) and implement checks to see if connection failed
+* Fix IRC _motd missing, no join_ issue.
+* Fix tray icon issue.
