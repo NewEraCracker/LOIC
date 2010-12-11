@@ -407,11 +407,6 @@ namespace LOIC
                         catch
                         { }
                     }
-                    else
-                    {
-                        //disregard, he sucks cocks
-                        //irc.RfcPrivmsg(e.Data.Channel, "I'm gonna disregard that, you suck cocks");
-                    }
                 }
             }
         }
@@ -532,8 +527,13 @@ namespace LOIC
                 string server = e.Line.Split(' ')[2];
                 irc.WriteLine("PONG " + server, Priority.Critical);
             }
-            else if (command == "376" || command="422") // 376: end of motd || 422: motd missing
+            else if (command="422") // 422: motd missing
             {
+                if (OpList != null) OpList.Clear();
+                irc.RfcJoin(channel);
+            }
+			else if (command == "376") // 376: end of motd
+			{
                 if (OpList != null) OpList.Clear();
                 irc.RfcJoin(channel);
             }
