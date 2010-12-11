@@ -53,6 +53,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IFlooder.cs" />
     <Compile Include="ReqState.cs" />
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
