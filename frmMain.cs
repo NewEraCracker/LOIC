@@ -527,7 +527,7 @@ namespace LOIC
                 string server = e.Line.Split(' ')[2];
                 irc.WriteLine("PONG " + server, Priority.Critical);
             }
-            else if (command="422") // 422: motd missing
+            else if (command == "422") // 422: motd missing
             {
                 if (OpList != null) OpList.Clear();
                 irc.RfcJoin(channel);
