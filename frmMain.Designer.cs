@@ -380,6 +380,7 @@
 			// cbMethod
 			// 
 			this.cbMethod.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(48)))), ((int)(((byte)(64)))));
+			this.cbMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbMethod.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this.cbMethod.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbMethod.ForeColor = System.Drawing.Color.Azure;
@@ -392,7 +393,6 @@
 			this.cbMethod.Name = "cbMethod";
 			this.cbMethod.Size = new System.Drawing.Size(75, 22);
 			this.cbMethod.TabIndex = 5;
-			this.cbMethod.Text = "TCP";
 			this.TTip.SetToolTip(this.cbMethod, "What type of attack to launch");
 			// 
 			// txtPort

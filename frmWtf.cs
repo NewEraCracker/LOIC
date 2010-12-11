@@ -5,19 +5,23 @@ namespace LOIC
 {
 	public partial class frmWtf : Form
 	{
+		#region Constructors
 		public frmWtf()
 		{
 			InitializeComponent();
 		}
+		#endregion
 
+		#region Event handlers
 		private void frmWtf_Click(object sender, EventArgs e)
 		{
-			this.Dispose();
+			Close();
 		}
 
 		private void frmWtf_KeyDown(object sender, KeyEventArgs e)
 		{
-			this.Dispose();
+			Close();
 		}
+		#endregion
 	}
 }
