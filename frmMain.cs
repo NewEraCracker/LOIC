@@ -532,8 +532,8 @@ namespace LOIC
                 if (OpList != null) OpList.Clear();
                 irc.RfcJoin(channel);
             }
-			else if (command == "376") // 376: end of motd
-			{
+            else if (command == "376") // 376: end of motd
+            {
                 if (OpList != null) OpList.Clear();
                 irc.RfcJoin(channel);
             }
