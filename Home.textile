@@ -19,6 +19,8 @@ I, NewEraCracker, am not responsible for the use that you give to this tool. You
 [[http://www.microsoft.com/downloads/en/details.aspx?FamilyID=d0e5dea7-ac26-4ad7-b68c-fe5076bba986&displaylang=en]]
 ** KB959209:
 [[http://support.microsoft.com/kb/959209]]
+** If you are unable to download .NET 3.5 you can download and install Microsoft .NET Framework 2.0 Service Pack 2:
+http://www.microsoft.com/downloads/en/details.aspx?familyid=5b2c0358-915b-4eb5-9b1d-10e506da9d0f
 * Linux or Mac OS X:
 ** Mono or wine
 Please read [[https://github.com/NewEraCracker/LOIC/wiki/_pages]]
