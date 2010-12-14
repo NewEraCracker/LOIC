@@ -4,6 +4,7 @@ TODO:
 * Review TCP, UDP and HTTP protocols (probably others too) and implement checks to see if connection failed
 * Fix IRC _motd missing, no join_ issue.
 * Fix tray icon issue.
+* Look at branches here: [[https://github.com/NewEraCracker/LOIC/network]] and take useful ideas/code :)
 
 Known bugs needing fixes:
 * [[https://github.com/NewEraCracker/LOIC/issues/issue/17/]]
