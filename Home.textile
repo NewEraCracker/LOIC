@@ -16,7 +16,7 @@ I, NewEraCracker, am not responsible for the use that you give to this tool. You
 * Internet connection for "testing" servers outside LAN
 * Windows XP or higher:
 ** Microsoft .NET Framework 3.5 Service Pack 1:
-[[http://www.microsoft.com/downloads/en/details.aspx?FamilyID=d0e5dea7-ac26-4ad7-b68c-fe5076bba986&displaylang=en]]
+[[http://www.microsoft.com/downloads/en/details.aspx?FamilyID=d0e5dea7-ac26-4ad7-b68c-fe5076bba986]]
 ** KB959209:
 [[http://support.microsoft.com/kb/959209]]
 ** If you are unable to download .NET 3.5 you can download and install Microsoft .NET Framework 2.0 Service Pack 2:
