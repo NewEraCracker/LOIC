@@ -99,3 +99,18 @@ update_loic() {
         echo "Error: You are not in a LOIC repository."
     fi
 }
+
+case $1 in
+    install)
+        compile_loic
+        ;;
+    update)
+        update_loic
+        ;;
+    run)
+        run_loic
+        ;;
+    *)
+        echo "Usage: $0 <install|update|run>"
+        ;;
+esac
