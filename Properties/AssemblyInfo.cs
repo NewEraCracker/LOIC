@@ -6,11 +6,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("Low Orbit Ion Cannon")]
 [assembly: AssemblyCopyright("Public domain")]
 
-[assembly: System.Resources.NeutralResourcesLanguage("en-GB")]
+[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
 
 [assembly: System.CLSCompliant(true)]
 [assembly: ComVisible(false)]
-
-[assembly: Guid("312adafc-fdac-484b-84c5-5c5457e47f67")]
 
 [assembly: AssemblyVersion("1.1.1.15")]
