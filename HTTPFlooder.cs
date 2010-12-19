@@ -10,17 +10,17 @@ namespace LOIC
 	{
 		public ReqState State = ReqState.Ready;
 
-		public int Downloaded { get; set; }
-		public int Requested { get; set; }
-		public int Failed { get; set; }
-		public bool IsFlooding { get; set; }
-		public string Host { get; set; }
-		public string IP { get; set; }
-		public int Port { get; set; }
-		public string Subsite { get; set; }
-		public int Delay { get; set; }
-		public int Timeout { get; set; }
-		public bool Resp { get; set; }
+		public int Downloaded;
+		public int Requested;
+		public int Failed;
+		public bool IsFlooding;
+		public string Host;
+		public string IP;
+		public int Port;
+		public string Subsite;
+		public int Delay;
+		public int Timeout;
+		public bool Resp;
 		private System.Windows.Forms.Timer tTimepoll = new System.Windows.Forms.Timer();
 
 		private long LastAction;

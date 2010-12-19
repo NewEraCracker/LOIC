@@ -6,14 +6,14 @@ namespace LOIC
 {
 	public class XXPFlooder
 	{
-		public bool IsFlooding { get; set; }
-		public int FloodCount { get; set; }
-		public string IP { get; set; }
-		public int Port { get; set; }
-		public int Protocol { get; set; }
-		public int Delay { get; set; }
-		public bool Resp { get; set; }
-		public string Data { get; set; }
+		public bool IsFlooding;
+		public int FloodCount;
+		public string IP;
+		public int Port;
+		public int Protocol;
+		public int Delay;
+		public bool Resp;
+		public string Data;
 		private bool random;
 
 		public XXPFlooder(string ip, int port, int proto, int delay, bool resp, string data, bool random)
