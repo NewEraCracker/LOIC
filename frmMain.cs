@@ -522,17 +522,12 @@ namespace LOIC
         void OnReadLine(object sender, ReadLineEventArgs e)
         {
             string command = e.Line.Split(' ')[1];
-            if (command == "PING")
+            if ( command.Equals("PING") )
             {
                 string server = e.Line.Split(' ')[2];
                 irc.WriteLine("PONG " + server, Priority.Critical);
             }
-            else if (command == "422") // 422: motd missing
-            {
-                if (OpList != null) OpList.Clear();
-                irc.RfcJoin(channel);
-            }
-            else if (command == "376") // 376: end of motd
+            else if ( command.Equals("422") | command.Equals("376") ) // 422: motd missing // 376: end of motd
             {
                 if (OpList != null) OpList.Clear();
                 irc.RfcJoin(channel);

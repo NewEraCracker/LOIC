@@ -38,7 +38,7 @@ namespace LOIC
 			try
 			{
 				byte[] buf;
-				if (random == true)
+				if (random)
 				{
 					buf = System.Text.Encoding.ASCII.GetBytes(String.Format(Data, new Functions().RandomString()));
 				}
