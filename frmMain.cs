@@ -527,7 +527,7 @@ namespace LOIC
                          txtThreads.Text = "10";
                          chkWaitReply.Checked = true;
                          chkAllowRandom.Checked = false;
-                         chkAllowGzip.Checked = false;
+                         chkAllowGzip.Checked = true;
                          tbSpeed.Value = 0;
                     }
                 }
