@@ -159,7 +159,7 @@ namespace LOIC
                 MessageBox.Show("A URL is fine too...", "What the shit.");
                 return;
             }
-            if ( !sHost.StartsWith("http://") || !sHost.StartsWith("https://") ) sHost = String.Concat("http://", sHost);
+            if ( !sHost.StartsWith("http://") && !sHost.StartsWith("https://") ) sHost = String.Concat("http://", sHost);
             try { txtTarget.Text = Dns.GetHostEntry(new Uri(sHost).Host).AddressList[0].ToString(); }
             catch
             {
