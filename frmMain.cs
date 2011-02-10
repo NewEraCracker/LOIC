@@ -598,7 +598,7 @@ namespace LOIC
 				}
 				lbRequested.Text = iFloodCount.ToString();
 			}
-			if (iProtocol == 3)
+			if (iProtocol == 3 && http != null)
 			{
 				int iIdle = 0;
 				int iConnecting = 0;
