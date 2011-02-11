@@ -239,10 +239,11 @@ namespace LOIC
             this.chkAllowGzip.Size = new System.Drawing.Size(114, 18);
             this.chkAllowGzip.TabIndex = 29;
             this.chkAllowGzip.Text = "Use Gzip (HTTP)";
+            this.TTip.SetToolTip(this.chkAllowGzip, "Enable Gzip support for HTTP method");
             // 
             // label18
             // 
-            this.label18.Location = new System.Drawing.Point(120, 19);
+            this.label18.Location = new System.Drawing.Point(116, 19);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(124, 16);
             this.label18.TabIndex = 25;
@@ -257,6 +258,7 @@ namespace LOIC
             this.chkAllowRandom.Size = new System.Drawing.Size(255, 18);
             this.chkAllowRandom.TabIndex = 28;
             this.chkAllowRandom.Text = "Append random chars to the subsite / message";
+            this.TTip.SetToolTip(this.chkAllowRandom, "Enable appending random chars to the subsite / message every request");
             this.chkAllowRandom.UseVisualStyleBackColor = true;
             // 
             // label17
@@ -421,6 +423,7 @@ namespace LOIC
             this.tbSpeed.Name = "tbSpeed";
             this.tbSpeed.Size = new System.Drawing.Size(374, 45);
             this.tbSpeed.TabIndex = 8;
+            this.TTip.SetToolTip(this.tbSpeed, "Use this to increase or reduce attack speed");
             this.tbSpeed.ValueChanged += new System.EventHandler(this.tbSpeed_ValueChanged);
             // 
             // groupBox4
@@ -648,6 +651,7 @@ namespace LOIC
             this.enableHive.Size = new System.Drawing.Size(124, 18);
             this.enableHive.TabIndex = 16;
             this.enableHive.Text = "IRC Mode (HiveMind)";
+            this.TTip.SetToolTip(this.enableHive, "Fill the IRC options if you wish to use this mode");
             this.enableHive.UseVisualStyleBackColor = true;
             this.enableHive.CheckedChanged += new System.EventHandler(this.enableHive_CheckedChanged);
             // 
