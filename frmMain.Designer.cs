@@ -40,7 +40,6 @@ namespace LOIC
             this.txtTarget = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.chkAllowGzip = new System.Windows.Forms.CheckBox();
-            this.label21 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.chkAllowRandom = new System.Windows.Forms.CheckBox();
             this.label17 = new System.Windows.Forms.Label();
@@ -207,7 +206,6 @@ namespace LOIC
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.chkAllowGzip);
-            this.groupBox3.Controls.Add(this.label21);
             this.groupBox3.Controls.Add(this.label18);
             this.groupBox3.Controls.Add(this.chkAllowRandom);
             this.groupBox3.Controls.Add(this.label17);
@@ -225,9 +223,9 @@ namespace LOIC
             this.groupBox3.Controls.Add(this.txtPort);
             this.groupBox3.Controls.Add(this.tbSpeed);
             this.groupBox3.ForeColor = System.Drawing.Color.LightBlue;
-            this.groupBox3.Location = new System.Drawing.Point(212, 254);
+            this.groupBox3.Location = new System.Drawing.Point(212, 253);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(758, 135);
+            this.groupBox3.Size = new System.Drawing.Size(758, 136);
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "2. Attack options";
@@ -236,24 +234,15 @@ namespace LOIC
             // 
             this.chkAllowGzip.Checked = true;
             this.chkAllowGzip.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAllowGzip.Location = new System.Drawing.Point(281, 104);
+            this.chkAllowGzip.Location = new System.Drawing.Point(640, 101);
             this.chkAllowGzip.Name = "chkAllowGzip";
-            this.chkAllowGzip.Size = new System.Drawing.Size(115, 18);
+            this.chkAllowGzip.Size = new System.Drawing.Size(114, 18);
             this.chkAllowGzip.TabIndex = 29;
             this.chkAllowGzip.Text = "Use Gzip (HTTP)";
             // 
-            // label21
-            // 
-            this.label21.BackColor = System.Drawing.Color.Azure;
-            this.label21.Location = new System.Drawing.Point(6, 72);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(746, 1);
-            this.label21.TabIndex = 27;
-            this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // label18
             // 
-            this.label18.Location = new System.Drawing.Point(514, 22);
+            this.label18.Location = new System.Drawing.Point(120, 19);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(124, 16);
             this.label18.TabIndex = 25;
@@ -263,7 +252,7 @@ namespace LOIC
             // chkAllowRandom
             // 
             this.chkAllowRandom.AutoSize = true;
-            this.chkAllowRandom.Location = new System.Drawing.Point(244, 16);
+            this.chkAllowRandom.Location = new System.Drawing.Point(65, 110);
             this.chkAllowRandom.Name = "chkAllowRandom";
             this.chkAllowRandom.Size = new System.Drawing.Size(255, 18);
             this.chkAllowRandom.TabIndex = 28;
@@ -272,7 +261,7 @@ namespace LOIC
             // 
             // label17
             // 
-            this.label17.Location = new System.Drawing.Point(132, 22);
+            this.label17.Location = new System.Drawing.Point(136, 65);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(89, 17);
             this.label17.TabIndex = 24;
@@ -281,7 +270,7 @@ namespace LOIC
             // 
             // label9
             // 
-            this.label9.Location = new System.Drawing.Point(214, 112);
+            this.label9.Location = new System.Drawing.Point(573, 106);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(50, 15);
             this.label9.TabIndex = 23;
@@ -290,7 +279,7 @@ namespace LOIC
             // 
             // label7
             // 
-            this.label7.Location = new System.Drawing.Point(152, 112);
+            this.label7.Location = new System.Drawing.Point(511, 106);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(56, 15);
             this.label7.TabIndex = 22;
@@ -299,7 +288,7 @@ namespace LOIC
             // 
             // label4
             // 
-            this.label4.Location = new System.Drawing.Point(11, 113);
+            this.label4.Location = new System.Drawing.Point(370, 107);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(75, 15);
             this.label4.TabIndex = 21;
@@ -308,7 +297,7 @@ namespace LOIC
             // 
             // label6
             // 
-            this.label6.Location = new System.Drawing.Point(92, 112);
+            this.label6.Location = new System.Drawing.Point(451, 106);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(54, 15);
             this.label6.TabIndex = 20;
@@ -317,9 +306,9 @@ namespace LOIC
             // 
             // label20
             // 
-            this.label20.Location = new System.Drawing.Point(406, 107);
+            this.label20.Location = new System.Drawing.Point(370, 52);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(342, 15);
+            this.label20.Size = new System.Drawing.Size(374, 15);
             this.label20.TabIndex = 18;
             this.label20.Text = "<= faster     Speed     slower =>";
             this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -329,7 +318,7 @@ namespace LOIC
             this.chkWaitReply.AutoSize = true;
             this.chkWaitReply.Checked = true;
             this.chkWaitReply.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkWaitReply.Location = new System.Drawing.Point(281, 80);
+            this.chkWaitReply.Location = new System.Drawing.Point(640, 77);
             this.chkWaitReply.Name = "chkWaitReply";
             this.chkWaitReply.Size = new System.Drawing.Size(91, 18);
             this.chkWaitReply.TabIndex = 7;
@@ -343,7 +332,7 @@ namespace LOIC
             this.txtData.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtData.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtData.ForeColor = System.Drawing.Color.Azure;
-            this.txtData.Location = new System.Drawing.Point(409, 41);
+            this.txtData.Location = new System.Drawing.Point(11, 37);
             this.txtData.Name = "txtData";
             this.txtData.Size = new System.Drawing.Size(333, 20);
             this.txtData.TabIndex = 3;
@@ -357,7 +346,7 @@ namespace LOIC
             this.txtSubsite.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtSubsite.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtSubsite.ForeColor = System.Drawing.Color.Azure;
-            this.txtSubsite.Location = new System.Drawing.Point(9, 41);
+            this.txtSubsite.Location = new System.Drawing.Point(11, 84);
             this.txtSubsite.Name = "txtSubsite";
             this.txtSubsite.Size = new System.Drawing.Size(333, 20);
             this.txtSubsite.TabIndex = 2;
@@ -371,7 +360,7 @@ namespace LOIC
             this.txtTimeout.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtTimeout.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtTimeout.ForeColor = System.Drawing.Color.Azure;
-            this.txtTimeout.Location = new System.Drawing.Point(214, 89);
+            this.txtTimeout.Location = new System.Drawing.Point(573, 83);
             this.txtTimeout.Name = "txtTimeout";
             this.txtTimeout.Size = new System.Drawing.Size(50, 20);
             this.txtTimeout.TabIndex = 1;
@@ -385,7 +374,7 @@ namespace LOIC
             this.txtThreads.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtThreads.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtThreads.ForeColor = System.Drawing.Color.Azure;
-            this.txtThreads.Location = new System.Drawing.Point(152, 89);
+            this.txtThreads.Location = new System.Drawing.Point(511, 83);
             this.txtThreads.Name = "txtThreads";
             this.txtThreads.Size = new System.Drawing.Size(56, 20);
             this.txtThreads.TabIndex = 6;
@@ -404,7 +393,7 @@ namespace LOIC
             "TCP",
             "UDP",
             "HTTP"});
-            this.cbMethod.Location = new System.Drawing.Point(11, 88);
+            this.cbMethod.Location = new System.Drawing.Point(370, 82);
             this.cbMethod.Name = "cbMethod";
             this.cbMethod.Size = new System.Drawing.Size(75, 22);
             this.cbMethod.TabIndex = 5;
@@ -417,7 +406,7 @@ namespace LOIC
             this.txtPort.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtPort.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtPort.ForeColor = System.Drawing.Color.Azure;
-            this.txtPort.Location = new System.Drawing.Point(92, 89);
+            this.txtPort.Location = new System.Drawing.Point(451, 83);
             this.txtPort.Name = "txtPort";
             this.txtPort.Size = new System.Drawing.Size(54, 20);
             this.txtPort.TabIndex = 4;
@@ -427,10 +416,10 @@ namespace LOIC
             // 
             // tbSpeed
             // 
-            this.tbSpeed.Location = new System.Drawing.Point(398, 79);
+            this.tbSpeed.Location = new System.Drawing.Point(370, 26);
             this.tbSpeed.Maximum = 20;
             this.tbSpeed.Name = "tbSpeed";
-            this.tbSpeed.Size = new System.Drawing.Size(353, 45);
+            this.tbSpeed.Size = new System.Drawing.Size(374, 45);
             this.tbSpeed.TabIndex = 8;
             this.tbSpeed.ValueChanged += new System.EventHandler(this.tbSpeed_ValueChanged);
             // 
@@ -829,7 +818,6 @@ namespace LOIC
 		private System.Windows.Forms.Label label18;
 		private System.Windows.Forms.Label label17;
 		private System.Windows.Forms.Label label9;
-		private System.Windows.Forms.Label label21;
 		private System.Windows.Forms.PictureBox pBanner;
 		private System.Windows.Forms.CheckBox chkAllowGzip;
 		private System.Windows.Forms.CheckBox chkAllowRandom;
