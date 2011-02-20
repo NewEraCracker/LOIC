@@ -4,6 +4,8 @@ TODO:
 * Review TCP, UDP and HTTP protocols (probably others too) and implement checks to see if connection failed and attempt to reconnect.
 * Fix IRC _motd missing, no join_ issue.
 ** Tech Note: _void OnReadLine(object sender, ReadLineEventArgs e)_ // 422: motd missing // 376: end of motd
+* Fix channel case-sensitivity issue.
+** [[https://github.com/NewEraCracker/LOIC/issues/38/]]
 * Fix tray icon issue.
 ** [[https://github.com/NewEraCracker/LOIC/issues/issue/17/]]
 * Look at branches here: [[https://github.com/NewEraCracker/LOIC/network]] and take useful ideas/code :)
