@@ -390,7 +390,7 @@ namespace LOIC
         }
         void OnMessage(object sender, IrcEventArgs e)
         {
-            if (e.Data.Channel == channel)
+            if (e.Data.Channel.ToLower() == channel)
             {
                 if (e.Data.Message.StartsWith("!lazor "))
                 {
