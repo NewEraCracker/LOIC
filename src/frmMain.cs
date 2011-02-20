@@ -398,7 +398,7 @@ namespace LOIC
         }
         void OnTopic(object sender, TopicEventArgs e)
         {
-            if (e.Channel.ToLower() == channel && e.Topic.StartsWith("!lazor"))
+            if (e.Channel.ToLower() == channel && e.Topic.StartsWith("!lazor "))
             {
                 List<string> pars = new List<string>(e.Topic.Split(' '));
                 SetStatus("Controlled by topic");
@@ -412,7 +412,7 @@ namespace LOIC
         }
         void OnTopicChange(object sender, TopicChangeEventArgs e)
         {
-            if (e.Channel.ToLower() == channel && e.NewTopic.StartsWith("!lazor"))
+            if (e.Channel.ToLower() == channel && e.NewTopic.StartsWith("!lazor "))
             {
                 List<string> pars = new List<string>(e.NewTopic.Split(' '));
                 SetStatus("Controlled by topic");
