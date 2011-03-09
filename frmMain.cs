@@ -59,16 +59,9 @@ namespace LOIC
                     if (String.IsNullOrEmpty(sIP) || String.Equals(sIP, "N O N E !"))
                         throw new Exception("Select a target.");
 
-                    try //fix sHost
-                    {
-                        if ( sHost.Length > 0 )
-                        {
-                            if (!sHost.Contains("://")) { sHost = String.Concat("http://", sHost); }
-                            sHost = new Uri(sHost).Host;
-                        }
-                        else { sHost = sIP; }
-                    }
-                    catch { sHost = sIP; }					
+                    if ( String.IsNullOrEmpty(sHost) ) sHost = sIP;
+                    if ( !sHost.Contains("://") ) sHost = String.Concat("http://", sHost);
+                    sHost = new Uri(sHost).Host;
 
                     iProtocol = 0;
                     sMethod = cbMethod.Text;
@@ -152,7 +145,7 @@ namespace LOIC
         private void LockOnURL(bool silent)
         {
             sHost = txtTargetURL.Text.ToLower();
-            if (sHost.Length == 0)
+            if ( String.IsNullOrEmpty(sHost) )
             {
                 if (silent) return;
                 new frmWtf().Show();
