@@ -1,1 +1,39 @@
-!http://www.cheatengine.org/forum/files/trollface.large_426.png(You have been trolled by Julien Savard !!!! The Baka Man!)!
+*Welcome to the LOIC wiki!*
+
+---
+*Disclaimer*
+I, NewEraCracker, am not responsible for the use that you give to this tool. You cannot blame me if you use this tool to attack servers you don't own and get caught. *This tool is released for educational purposes only and comes with no warranty at all.*
+
+---
+*Downloads*
+* Source: [[https://github.com/NewEraCracker/LOIC/]]
+* Binaries: [[https://github.com/NewEraCracker/LOIC/downloads/]]
+* License: Public Domain
+* *You are advised to use latest stable version.*
+
+---
+*System requirements*
+* Internet connection for "testing" servers outside LAN
+* Windows XP or higher:
+** Microsoft .NET Framework 3.5 Service Pack 1:
+[[http://www.microsoft.com/downloads/en/details.aspx?FamilyID=d0e5dea7-ac26-4ad7-b68c-fe5076bba986]]
+** KB959209:
+[[http://support.microsoft.com/kb/959209]]
+** If you are unable to download .NET 3.5 you can download and install Microsoft .NET Framework 2.0 Service Pack 2:
+[[http://www.microsoft.com/downloads/en/details.aspx?familyid=5b2c0358-915b-4eb5-9b1d-10e506da9d0f]]
+* Linux or Mac OS X:
+** Mono or wine
+Please read [[https://github.com/NewEraCracker/LOIC/wiki/_pages]]
+
+---
+*Reporting bugs*
+Use this page to report any issues:
+[[https://github.com/NewEraCracker/LOIC/issues]]
+
+---
+*Linux Packages [MADE BY pirate486743186 - UNOFFICIAL]*
+* for mono: [[http://www.mediafire.com/file/3n9xnbcop5o33bm/loic_1.1.1.8_all.deb]]
+* statically linked(64bit): [[http://www.mediafire.com/file/ac7akmi6cd55705/loic_1.1.1.8_amd64.deb]]
+* the same per above but as rpm packages:
+[[http://www.mediafire.com/file/c4fy4p3phweuspm/loic-1.1.1.8-2.noarch.rpm]]
+[[http://www.mediafire.com/file/v387ek46o76amm8/loic-1.1.1.8-2.x86_64.rpm]]
