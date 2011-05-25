@@ -33,12 +33,12 @@ Read the wiki at https://github.com/NewEraCracker/LOIC/wiki/ for updated instruc
 || HIVEMIND/HIDDEN MODE ||
 ==========================
 
-HIVEMIND mode will connect your client to an IRC server so it can be controlled
-remotely. Think of this as a voluntary botnet (though do beware that your client
-can potentially be made to do naughty things).
+HIVEMIND mode will connect your client to an IRC server so it can be controlled remotely.
+Think of this as a voluntary botnet (though do beware that your client can potentially be
+made to do naughty things).
 
-Note: It does NOT allow remote administration of your machine, or anything shit
-like that; it is literally just control of loic itself.
+Note: It does NOT allow remote administration of your machine, or anything like that; it
+is literally just control of loic itself.
 
 If you want to start up in Hivemind mode, run something like this:
  LOIC.exe /hivemind irc.server.address
@@ -70,7 +70,6 @@ To reset loic's options back to its defaults:
 
 To stop an attack:
 !lazor stop
-
-... and be sure to remove "start" from the END of the topic, if it exists, too.
+and be sure to remove "start" from the END of the topic, if it exists, too.
 
 Take a look at source code for more details.
