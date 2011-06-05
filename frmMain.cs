@@ -44,7 +44,18 @@ namespace LOIC
 			}
 			if (url.StartsWith("https://")) url = url.Replace("https://", "http://");
 			else if (!url.StartsWith("http://")) url = String.Concat("http://", url);
-			txtTarget.Text = Dns.GetHostEntry(new Uri(url).Host).AddressList[0].ToString();
+			try
+			{
+				txtTarget.Text = Dns.GetHostEntry(new Uri(url).Host).AddressList.Single().ToString();
+			}
+			catch
+			{
+				using (var frmWtf = new frmWtf())
+				{
+					frmWtf.Show();
+					MessageBox.Show("Write the complete address", "What the shit.");
+				}
+			}
 		}
 
 		private void cmdTargetIP_Click(object sender, EventArgs e)

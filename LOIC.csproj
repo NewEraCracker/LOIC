@@ -10,9 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LOIC</RootNamespace>
     <AssemblyName>LOIC</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ApplicationIcon>LOIC.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\LOIC.ico</ApplicationIcon>
     <StartupObject>LOIC.Program</StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -45,7 +45,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Properties\key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -90,13 +90,12 @@
     <Compile Include="XXPFlooder.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="LOIC.ico" />
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="key.snk" />
+    <None Include="Properties\key.snk" />
     <None Include="Resources\WTF.jpg" />
     <None Include="Resources\LOIC.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\LOIC.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
