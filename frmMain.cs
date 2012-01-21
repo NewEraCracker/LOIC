@@ -22,7 +22,7 @@ namespace LOIC
 		private static bool intShowStats;
 		private static IrcClient irc;
 		private static Thread irclisten;
-		private string channel;
+		private static string channel;
 		private static bool ircenabled = false;
 		private static Dictionary<string, string> OpList;
 		private delegate void CheckParamsDelegate(List<string> pars);
@@ -32,9 +32,12 @@ namespace LOIC
 			InitializeComponent();
 
 			// IRC
-			if ( !ircserver.Equals("") ) {txtIRCserver.Text = ircserver;}
-			if ( !ircport.Equals("") ) {txtIRCport.Text = ircport;}
-			if ( !ircchannel.Equals("") ) {txtIRCchannel.Text = ircchannel;}
+			if ( !ircserver.Equals("") )
+				txtIRCserver.Text = ircserver;
+			if ( !ircport.Equals("") )
+				txtIRCport.Text = ircport;
+			if ( !ircchannel.Equals("") )
+				txtIRCchannel.Text = ircchannel;
 
 			if ( hide )
 			{
