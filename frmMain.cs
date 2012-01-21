@@ -30,11 +30,12 @@ namespace LOIC
 		public frmMain(bool hive, bool hide, string ircserver, string ircport, string ircchannel)
 		{
 			InitializeComponent();
-			/* IRC */
-			if (ircserver != "") {txtIRCserver.Text = ircserver;}
-			if (ircport != "") {txtIRCport.Text = ircport;}
-			if (ircchannel != "") {txtIRCchannel.Text = ircchannel;}
-			/* Lets try this! */
+
+			// IRC
+			if ( !ircserver.Equals("") ) {txtIRCserver.Text = ircserver;}
+			if ( !ircport.Equals("") ) {txtIRCport.Text = ircport;}
+			if ( !ircchannel.Equals("") ) {txtIRCchannel.Text = ircchannel;}
+
 			if ( hide )
 			{
 				this.WindowState = FormWindowState.Minimized;
@@ -410,14 +411,13 @@ namespace LOIC
 				{
 					string cmd = sp[0];
 
-					// Have fun finding value :)
+					// Find param value
 					string value = "";
 					for (int key = 0; key < sp.Length; ++key)
 					{
 						if (key >= 1)
 							value += sp[key] + ( (key+1 < sp.Length) ? "=" : "");
 					}
-					// ... and we got it :D
 
 					int num;
 					bool isnum;

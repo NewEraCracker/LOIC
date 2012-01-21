@@ -81,12 +81,16 @@ namespace LOIC
 					State = ReqState.Requesting; // SET STATE TO REQUESTING //
 					socket.Send(buf, SocketFlags.None);
 					State = ReqState.Downloading; Requested++; // SET STATE TO DOWNLOADING // REQUESTED++
-					if (Resp) socket.Receive(recvBuf, 64, SocketFlags.None);
+
+					if (Resp)
+						socket.Receive(recvBuf, 64, SocketFlags.None);
+
 					State = ReqState.Completed; Downloaded++; // SET STATE TO COMPLETED // DOWNLOADED++
 					tTimepoll.Stop();
 					tTimepoll.Start();
+
 					if (Delay >= 0)
-					System.Threading.Thread.Sleep(Delay+1);
+						System.Threading.Thread.Sleep(Delay+1);
 				}
 			}
 			catch { }
