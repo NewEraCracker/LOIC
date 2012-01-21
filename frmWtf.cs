@@ -9,12 +9,10 @@ namespace LOIC
 		{
 			InitializeComponent();
 		}
-
 		private void frmWtf_Click(object sender, EventArgs e)
 		{
 			this.Dispose();
 		}
-
 		private void frmWtf_KeyDown(object sender, KeyEventArgs e)
 		{
 			this.Dispose();

