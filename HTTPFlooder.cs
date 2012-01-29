@@ -9,6 +9,7 @@ namespace LOIC
 	class HTTPFlooder : IFlooder
 	{
 		#region Fields
+		private BackgroundWorker bw;
 		private long lastAction;
 		private Random random = new Random();
 		private Timer tTimepoll = new Timer();
@@ -27,27 +28,17 @@ namespace LOIC
 		#endregion
 
 		#region Properties
-		public int Delay { get; set; }
-
-		public int Downloaded { get; set; }
-
-		public int Requested { get; set; }
-
-		public int Failed { get; set; }
-
-		public bool IsFlooding { get; set; }
-
-		public string IP { get; set; }
-
-		public int Port { get; set; }
-
-		public bool Resp { get; set; }
-
-		public ReqState State { get; set; }
-
-		public string Subsite { get; set; }
-
-		public int Timeout { get; set; }
+		public int Delay        { get; set; }
+		public int Downloaded   { get; set; }
+		public int Requested    { get; set; }
+		public int Failed       { get; set; }
+		public bool IsFlooding  { get; set; }
+		public string IP        { get; set; }
+		public int Port         { get; set; }
+    	public bool Resp        { get; set; }
+		public ReqState State   { get; set; }
+		public string Subsite   { get; set; }
+		public int Timeout      { get; set; }
 		#endregion
 
 		#region Methods
@@ -60,10 +51,17 @@ namespace LOIC
 			tTimepoll.Tick += new EventHandler(tTimepoll_Tick);
 			tTimepoll.Start();
 
-			var bw = new BackgroundWorker();
-			bw.DoWork += new DoWorkEventHandler(bw_DoWork);
-			bw.RunWorkerAsync();
+			this.bw = new BackgroundWorker();
+			this.bw.DoWork += new DoWorkEventHandler(bw_DoWork);
+			this.bw.RunWorkerAsync();
+			this.bw.WorkerSupportsCancellation = true;
 		}
+
+        public void Stop()
+        {
+			this.IsFlooding = false;
+            this.bw.CancelAsync();
+        }
 
 		private static long Tick()
 		{

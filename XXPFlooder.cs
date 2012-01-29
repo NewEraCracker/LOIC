@@ -4,9 +4,13 @@ using System.Net.Sockets;
 namespace LOIC
 {
 	class XXPFlooder : IFlooder
-	{
-		#region Constructors
-		public XXPFlooder(string ip, int port, int proto, int delay, bool resp, string data)
+    {
+        #region Fields
+        private BackgroundWorker bw;
+        #endregion
+
+        #region Constructors
+        public XXPFlooder(string ip, int port, int proto, int delay, bool resp, string data)
 		{
 			this.IP = ip;
 			this.Port = port;
@@ -18,31 +22,32 @@ namespace LOIC
 		#endregion
 
 		#region Properties
-		public bool IsFlooding { get; set; }
-
-		public int FloodCount { get; set; }
-
-		public string IP { get; set; }
-
-		public int Port { get; set; }
-
-		public int Protocol { get; set; }
-
-		public int Delay { get; set; }
-
-		public bool Resp { get; set; }
-
-		public string Data { get; set; }
+		public bool IsFlooding  { get; set; }
+		public int FloodCount   { get; set; }
+		public string IP        { get; set; }
+		public int Port         { get; set; }
+		public int Protocol     { get; set; }
+		public int Delay        { get; set; }
+		public bool Resp        { get; set; }
+		public string Data      { get; set; }
 		#endregion
 
 		#region Methods
 		public void Start()
 		{
-			IsFlooding = true;
-			var bw = new BackgroundWorker();
-			bw.DoWork += new DoWorkEventHandler(bw_DoWork);
-			bw.RunWorkerAsync();
+			this.IsFlooding = true;
+			this.bw = new BackgroundWorker();
+			this.bw.DoWork += new DoWorkEventHandler(bw_DoWork);
+			this.bw.RunWorkerAsync();
+            this.bw.WorkerSupportsCancellation = true;
 		}
+
+        public void Stop()
+        {
+            this.IsFlooding = false;
+            this.bw.CancelAsync();
+        }
+
 		#endregion
 
 		#region Event handlers
