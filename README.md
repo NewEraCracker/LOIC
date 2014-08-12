@@ -31,33 +31,50 @@ Note: It does NOT allow remote administration of your machine, or anything like 
 is literally just control of loic itself.
 
 If you want to start up in Hivemind mode, run something like this:
- LOIC.exe /hivemind irc.server.address
+```
+	LOIC.exe /hivemind irc.server.address
+```
 It will connect to irc://irc.server.adress:6667/loic
 
 You can also specify a port and channel:
- LOIC.exe /hivemind irc.server.address 1234 #secret
+```
+	LOIC.exe /hivemind irc.server.address 1234 #secret
+```
 It will connect to irc://irc.server.adress:1234/secret
 
 In order to do Hivemind Hidden mode, run something like this:
- LOIC.exe /hidden /hivemind irc.server.address
+```
+	LOIC.exe /hidden /hivemind irc.server.address
+```
 It will connect to irc://irc.server.adress:6667/loic without any visible GUI.
 
 ## CONTROLLING LOIC FROM IRC
 
 As an OP, Admin or Owner, set the channel topic or send a message like the following:
-!lazor targetip=127.0.0.1 message=test_test port=80 method=tcp wait=false random=true
+```
+	!lazor targetip=127.0.0.1 message=test_test port=80 method=tcp wait=false random=true
+```
 
 To start an attack, type:
-!lazor start
+```
+	!lazor start
+```
 
 Or just append "start" to the END of the topic:
-!lazor targetip=127.0.0.1 message=test_test port=80 method=tcp wait=false random=true start
+```
+	!lazor targetip=127.0.0.1 message=test_test port=80 method=tcp wait=false random=true start
+```
 
 To reset loic's options back to its defaults:
-!lazor default
+```
+	!lazor default
+```
 
 To stop an attack:
-!lazor stop
+```
+	!lazor stop
+```
+
 and be sure to remove "start" from the END of the topic, if it exists, too.
 
 Take a look at source code for more details.
