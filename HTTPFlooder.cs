@@ -52,11 +52,11 @@ namespace LOIC
 		}
 		void tTimepoll_Tick(object sender, EventArgs e)
 		{
-			if (Tick() > LastAction + Timeout)
+			if(Tick() > LastAction + Timeout)
 			{
 				Failed++; State = ReqState.Failed;
 				tTimepoll.Stop();
-				if (IsFlooding)
+				if(IsFlooding)
 					tTimepoll.Start();
 			}
 		}
@@ -82,14 +82,14 @@ namespace LOIC
 					socket.Send(buf, SocketFlags.None);
 					State = ReqState.Downloading; Requested++; // SET STATE TO DOWNLOADING // REQUESTED++
 
-					if (Resp)
+					if(Resp)
 						socket.Receive(recvBuf, 64, SocketFlags.None);
 
 					State = ReqState.Completed; Downloaded++; // SET STATE TO COMPLETED // DOWNLOADED++
 					tTimepoll.Stop();
 					tTimepoll.Start();
 
-					if (Delay >= 0)
+					if(Delay >= 0)
 						System.Threading.Thread.Sleep(Delay+1);
 				}
 			}

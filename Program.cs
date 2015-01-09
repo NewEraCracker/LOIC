@@ -20,7 +20,7 @@ namespace LOIC
 			foreach (string s in cmdLine)
 			{
 				/* IRC */
-				if (s.ToLower() == "/hivemind")
+				if(s.ToLower() == "/hivemind")
 				{
 					hive = true;
 					ircserver = cmdLine[count + 1]; //if no server entered let it crash
@@ -30,7 +30,7 @@ namespace LOIC
 					catch (Exception) {ircchannel = "#loic";} //default
 				}
 				/* Lets try this! */
-				if (s.ToLower() == "/hidden") {hide = true;}
+				if(s.ToLower() == "/hidden") {hide = true;}
 				count++;
 			}
 			//Application.EnableVisualStyles();
