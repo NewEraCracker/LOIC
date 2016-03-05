@@ -5,8 +5,8 @@ Based on Praetox's loic project at https://sourceforge.net/projects/loic/
 
 ## DISCLAIMER
 
-I, NewEraCracker, am not responsible for how you use this tool.
-You cannot blame me if you get caught for attacking servers you don't own.
+I, NewEraCracker, am not responsible for how you use this piece of software.
+I cannot be held responsible if you are guilty of using this software to attack servers that aren't in your possession.
 This tool is released for educational purposes only, and comes with no warranty at all.
 
 ## HOW TO RUN ON WINDOWS
