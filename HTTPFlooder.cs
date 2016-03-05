@@ -71,21 +71,21 @@ namespace LOIC
 					State = ReqState.Ready; // SET STATE TO READY //
 					LastAction = Tick();
 					byte[] recvBuf = new byte[64];
-                    using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
-                    {
-                        State = ReqState.Connecting; // SET STATE TO CONNECTING //
+					using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+					{
+						State = ReqState.Connecting; // SET STATE TO CONNECTING //
 
-                        try { socket.Connect(RHost); }
-                        catch { continue; }
+						try { socket.Connect(RHost); }
+						catch { continue; }
 
-                        socket.Blocking = Resp;
-                        State = ReqState.Requesting; // SET STATE TO REQUESTING //
-                        socket.Send(buf, SocketFlags.None);
-                        State = ReqState.Downloading; Requested++; // SET STATE TO DOWNLOADING // REQUESTED++
+						socket.Blocking = Resp;
+						State = ReqState.Requesting; // SET STATE TO REQUESTING //
+						socket.Send(buf, SocketFlags.None);
+						State = ReqState.Downloading; Requested++; // SET STATE TO DOWNLOADING // REQUESTED++
 
-                        if (Resp)
-                            socket.Receive(recvBuf, 64, SocketFlags.None);
-                    }
+						if (Resp)
+							socket.Receive(recvBuf, 64, SocketFlags.None);
+					}
 					State = ReqState.Completed; Downloaded++; // SET STATE TO COMPLETED // DOWNLOADED++
 					tTimepoll.Stop();
 					tTimepoll.Start();
