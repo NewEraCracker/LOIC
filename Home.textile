@@ -2,7 +2,11 @@
 
 ---
 *Disclaimer*
-I, NewEraCracker, am not responsible for the use that you give to this tool. You cannot blame me if you use this tool to attack servers you don't own and get caught. *This tool is released for educational purposes only and comes with no warranty at all.*
+The project authors and contributors (in quality of programmers) are not responsible for how you use this piece of software.
+
+They cannot be held responsible if you are guilty of using this software to attack servers that aren't in your possession.
+
+This tool is released for educational purposes only, with intent of developing an "Hacker Defense" attitude, and comes without any warranty at all.
 
 ---
 *Downloads*
