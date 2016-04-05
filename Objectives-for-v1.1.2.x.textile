@@ -1,4 +1,4 @@
-ok, since [v1.1.2.x](https://github.com/NewEraCracker/LOIC/tree/BeSquare-tree) is in beta stage and very unstable I decided to delete download package.
+ok, since "v1.1.2.x":https://github.com/NewEraCracker/LOIC/tree/BeSquare-tree is in beta stage and very unstable I decided to delete download package.
 
 TODO:
 * Review TCP, UDP and HTTP protocols (probably others too) and implement checks to see if connection failed and attempt to reconnect.
