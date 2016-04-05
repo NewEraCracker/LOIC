@@ -71,6 +71,7 @@ namespace LOIC
 					{
 						using (socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp))
 						{
+                            socket.NoDelay = true;
 							socket.Blocking = Resp;
 							try
 							{

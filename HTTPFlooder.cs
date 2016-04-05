@@ -73,6 +73,7 @@ namespace LOIC
 					byte[] recvBuf = new byte[64];
 					using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
 					{
+                        socket.NoDelay = true;
 						State = ReqState.Connecting; // SET STATE TO CONNECTING //
 
 						try { socket.Connect(RHost); }
