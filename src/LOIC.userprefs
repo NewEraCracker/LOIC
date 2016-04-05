@@ -1,0 +1,14 @@
+﻿<Properties StartupItem="LOIC.csproj" RefactoringSettings.EnableRefactorings="True">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="IRC\Client\NonRfcChannel.cs">
+    <Files>
+      <File FileName="XXPFlooder.cs" Line="1" Column="1" />
+      <File FileName="IRC\Client\Channel.cs" Line="38" Column="46" />
+      <File FileName="IRC\Client\NonRfcChannel.cs" Line="29" Column="14" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
