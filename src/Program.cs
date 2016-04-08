@@ -30,7 +30,7 @@ namespace LOIC
 					catch (Exception) {ircchannel = "#loic";} //default
 				}
 				/* Lets try this! */
-				if(s.ToLower() == "/hidden") {hide = true;}
+				if (s.ToLower() == "/hidden") {hide = true;}
 				count++;
 			}
 			//Application.EnableVisualStyles();

@@ -412,7 +412,7 @@ namespace Meebey.SmartIrc4net
                 OnConnecting(this, EventArgs.Empty);
             }
             try {
-                System.Net.IPAddress ip = System.Net.Dns.Resolve(Address).AddressList[0];
+				var ip = System.Net.Dns.GetHostEntry (Address).AddressList [0];
                 _TcpClient = new IrcTcpClient();
                 _TcpClient.NoDelay = true;
                 _TcpClient.Socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, 1);
@@ -828,7 +828,7 @@ namespace Meebey.SmartIrc4net
                             Logger.Socket.Debug("received: \""+data+"\"");
 #endif
                         }
-                    } catch (IOException e) {
+                    } catch (IOException) {
 #if LOG4NET
                         Logger.Socket.Warn("IOException: "+e.Message);
 #endif
@@ -910,7 +910,7 @@ namespace Meebey.SmartIrc4net
                             _CheckBuffer();
                             Thread.Sleep(_Connection._SendDelay);
                         }
-                    } catch (IOException e) {
+                    } catch (IOException) {
 #if LOG4NET
                         Logger.Socket.Warn("IOException: "+e.Message);
 #endif
