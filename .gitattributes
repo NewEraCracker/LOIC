@@ -2,11 +2,18 @@
 * text=auto
 
 # Files that will always have CRLF line endings on checkout.
-*.cs       eol=crlf
-*.csproj   eol=crlf
-*.manifest eol=crlf
+*.cs        eol=crlf
+*.config    eol=crlf
+*.csproj    eol=crlf
+*.manifest  eol=crlf
+*.userprefs eol=crlf
+*.xml       eol=crlf
 
 # Denote all files that are truly binary and should not be modified.
-*.dll binary
-*.gif binary
-*.jpg binary
+*.dll   binary
+*.gif   binary
+*.jpg   binary
+*.nupkg binary
+
+# 3rd party packages.
+src/packages/* linguist-vendored

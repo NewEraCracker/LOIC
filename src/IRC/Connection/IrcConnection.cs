@@ -412,7 +412,7 @@ namespace Meebey.SmartIrc4net
                 OnConnecting(this, EventArgs.Empty);
             }
             try {
-				var ip = System.Net.Dns.GetHostEntry (Address).AddressList [0];
+                var ip = System.Net.Dns.GetHostEntry (Address).AddressList [0];
                 _TcpClient = new IrcTcpClient();
                 _TcpClient.NoDelay = true;
                 _TcpClient.Socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, 1);

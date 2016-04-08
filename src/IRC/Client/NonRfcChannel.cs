@@ -38,7 +38,7 @@ namespace Meebey.SmartIrc4net
     /// <threadsafety static="true" instance="true" />
     public class NonRfcChannel : Channel
     {
-		private Hashtable _Halfops = Hashtable.Synchronized(new Hashtable(StringComparer.InvariantCultureIgnoreCase));
+        private Hashtable _Halfops = Hashtable.Synchronized(new Hashtable(StringComparer.InvariantCultureIgnoreCase));
         
         /// <summary>
         /// 

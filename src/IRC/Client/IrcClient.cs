@@ -64,8 +64,8 @@ namespace Meebey.SmartIrc4net
         private bool             _MotdReceived;
         private Array            _ReplyCodes              = Enum.GetValues(typeof(ReplyCode));
         private StringCollection _JoinedChannels          = new StringCollection();
-		private Hashtable        _Channels                = Hashtable.Synchronized(new Hashtable(StringComparer.InvariantCultureIgnoreCase));
-		private Hashtable        _IrcUsers                = Hashtable.Synchronized(new Hashtable(StringComparer.InvariantCultureIgnoreCase));
+        private Hashtable        _Channels                = Hashtable.Synchronized(new Hashtable(StringComparer.InvariantCultureIgnoreCase));
+        private Hashtable        _IrcUsers                = Hashtable.Synchronized(new Hashtable(StringComparer.InvariantCultureIgnoreCase));
         private static Regex     _ReplyCodeRegex          = new Regex("^:[^ ]+? ([0-9]{3}) .+$", RegexOptions.Compiled);
         private static Regex     _PingRegex               = new Regex("^PING :.*", RegexOptions.Compiled);
         private static Regex     _ErrorRegex              = new Regex("^ERROR :.*", RegexOptions.Compiled);
@@ -148,12 +148,11 @@ namespace Meebey.SmartIrc4net
         /// <summary>
         /// Enables/disables the passive channel sync feature. Not implemented yet!
         /// </summary>
-		/*
+        /*
         public bool PassiveChannelSyncing {
             get {
                 return _PassiveChannelSyncing;
             }
-            *//*
             set {
 #if LOG4NET
                 if (value) {
@@ -164,9 +163,8 @@ namespace Meebey.SmartIrc4net
 #endif
                 _PassiveChannelSyncing = value;
             }
-            *//*
         }
-		*/
+        */
         
         /// <summary>
         /// Sets the ctcp version that should be replied on ctcp version request.
@@ -1788,9 +1786,9 @@ namespace Meebey.SmartIrc4net
                 if (ircdata.Message.StartsWith("\x1"+"PING")) {
                     if (ircdata.Message.Length > 7) {
                         SendMessage(SendType.CtcpReply, ircdata.Nick, "PING "+ircdata.Message.Substring(6, (ircdata.Message.Length-7)));
-        		    } else {
+                    } else {
                         SendMessage(SendType.CtcpReply, ircdata.Nick, "PING");
-        		    }
+                    }
                 } else if (ircdata.Message.StartsWith("\x1"+"VERSION")) {
                     string versionstring;
                     if (_CtcpVersion == null) {

@@ -40,9 +40,9 @@ namespace Meebey.SmartIrc4net
     {
         private string           _Name;
         private string           _Key       = String.Empty;
-		private Hashtable        _Users     = Hashtable.Synchronized(new Hashtable(StringComparer.InvariantCultureIgnoreCase));
-		private Hashtable        _Ops       = Hashtable.Synchronized(new Hashtable(StringComparer.InvariantCultureIgnoreCase));
-		private Hashtable        _Voices    = Hashtable.Synchronized(new Hashtable(StringComparer.InvariantCultureIgnoreCase));
+        private Hashtable        _Users     = Hashtable.Synchronized(new Hashtable(StringComparer.InvariantCultureIgnoreCase));
+        private Hashtable        _Ops       = Hashtable.Synchronized(new Hashtable(StringComparer.InvariantCultureIgnoreCase));
+        private Hashtable        _Voices    = Hashtable.Synchronized(new Hashtable(StringComparer.InvariantCultureIgnoreCase));
         private StringCollection _Bans      = new StringCollection();
         private string           _Topic     = String.Empty;
         private int              _UserLimit;
