@@ -57,7 +57,7 @@ namespace LOIC
 
 		public static string RandomUserAgent()
 		{
-			if(rand.NextDouble() >= 0.5)
+			if(rnd.NextDouble() >= 0.5)
 			{
 				return String.Format("Mozilla/5.0 (Windows NT {0}; WOW64; rv:{1}.0) Gecko/20100101 Firefox/{1}.0", ntv[rnd.Next(0, ntv.Length-1)], rnd.Next(36, 46));
 			}
