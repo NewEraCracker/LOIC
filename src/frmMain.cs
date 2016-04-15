@@ -54,7 +54,7 @@ namespace LOIC
 				this.WindowState = FormWindowState.Minimized;
 				this.ShowInTaskbar = false;
 			}
-			this.FormClosing += frmMain_Closing;
+
 			enableHive.Checked |= hive;
 			disableHive.Checked |= !hive;
 		}
