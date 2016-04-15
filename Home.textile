@@ -16,6 +16,11 @@ This tool is released for educational purposes only, *with intent of developing 
 * *You are advised to use latest version.*
 
 ---
+*Reporting bugs*
+Use this page to report any issues:
+[[https://github.com/NewEraCracker/LOIC/issues]]
+
+---
 *System requirements*
 * Internet connection for "testing" servers outside LAN
 * Windows XP or higher:
@@ -28,8 +33,3 @@ This tool is released for educational purposes only, *with intent of developing 
 * Linux or Mac OS X:
 ** Mono or wine
 Please read [[https://github.com/NewEraCracker/LOIC/wiki/_pages]]
-
----
-*Reporting bugs*
-Use this page to report any issues:
-[[https://github.com/NewEraCracker/LOIC/issues]]
