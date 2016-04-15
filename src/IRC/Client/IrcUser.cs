@@ -8,9 +8,9 @@
  * SmartIrc4net - the IRC library for .NET/C# <http://smartirc4net.sf.net>
  *
  * Copyright (c) 2003-2005 Mirco Bauer <meebey@meebey.net> <http://www.meebey.net>
- * 
+ *
  * Full LGPL License: <http://www.gnu.org/licenses/lgpl.txt>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -81,7 +81,7 @@ namespace Meebey.SmartIrc4net
         }
 
         /// <summary>
-        /// Gets or sets the identity (username) of the user which is used by some IRC networks for authentication. 
+        /// Gets or sets the identity (username) of the user which is used by some IRC networks for authentication.
         /// </summary>
         /// <remarks>
         /// Do _not_ set this value, it will break channel sync!
@@ -96,7 +96,7 @@ namespace Meebey.SmartIrc4net
         }
 
         /// <summary>
-        /// Gets or sets the hostname of the user. 
+        /// Gets or sets the hostname of the user.
         /// </summary>
         /// <remarks>
         /// Do _not_ set this value, it will break channel sync!

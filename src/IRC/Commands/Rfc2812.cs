@@ -8,9 +8,9 @@
  * SmartIrc4net - the IRC library for .NET/C# <http://smartirc4net.sf.net>
  *
  * Copyright (c) 2003-2005 Mirco Bauer <meebey@meebey.net> <http://www.meebey.net>
- * 
+ *
  * Full LGPL License: <http://www.gnu.org/licenses/lgpl.txt>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -44,11 +44,11 @@ namespace Meebey.SmartIrc4net
         // special    =  %x5B-60 / %x7B-7D
         //                  ; "[", "]", "\", "`", "_", "^", "{", "|", "}"
         private static Regex _NicknameRegex = new Regex(@"^[A-Za-z\[\]\\`_^{|}][A-Za-z0-9\[\]\\`_\-^{|}]+$", RegexOptions.Compiled);
-        
+
         private Rfc2812()
         {
         }
-        
+
         /// <summary>
         /// Checks if the passed nickname is valid according to the RFC
         ///
@@ -61,20 +61,20 @@ namespace Meebey.SmartIrc4net
                 (_NicknameRegex.Match(nickname).Success)) {
                 return true;
             }
-            
+
             return false;
         }
-        
+
         public static string Pass(string password)
         {
             return "PASS "+password;
         }
-        
+
         public static string Nick(string nickname)
         {
             return "NICK "+nickname;
         }
-        
+
         public static string User(string username, int usermode, string realname)
         {
             return "USER "+username+" "+usermode.ToString()+" * :"+realname;
@@ -84,7 +84,7 @@ namespace Meebey.SmartIrc4net
         {
             return "OPER "+name+" "+password;
         }
-        
+
         public static string Privmsg(string destination, string message)
         {
             return "PRIVMSG "+destination+" :"+message;
@@ -99,13 +99,13 @@ namespace Meebey.SmartIrc4net
         {
             return "JOIN "+channel;
         }
-        
+
         public static string Join(string[] channels)
         {
             string channellist = String.Join(",", channels);
             return "JOIN "+channellist;
         }
-        
+
         public static string Join(string channel, string key)
         {
             return "JOIN "+channel+" "+key;
@@ -117,7 +117,7 @@ namespace Meebey.SmartIrc4net
             string keylist = String.Join(",", keys);
             return "JOIN "+channellist+" "+keylist;
         }
-        
+
         public static string Part(string channel)
         {
             return "PART "+channel;
@@ -128,7 +128,7 @@ namespace Meebey.SmartIrc4net
             string channellist = String.Join(",", channels);
             return "PART "+channellist;
         }
-        
+
         public static string Part(string channel, string partmessage)
         {
             return "PART "+channel+" :"+partmessage;
@@ -149,7 +149,7 @@ namespace Meebey.SmartIrc4net
         {
             return "KICK "+channel+" "+nickname+" :"+comment;
         }
-        
+
         public static string Kick(string[] channels, string nickname)
         {
             string channellist = String.Join(",", channels);
@@ -187,7 +187,7 @@ namespace Meebey.SmartIrc4net
             string nicknamelist = String.Join(",", nicknames);
             return "KICK "+channellist+" "+nicknamelist+" :"+comment;
         }
-        
+
         public static string Motd()
         {
             return "MOTD";
@@ -212,7 +212,7 @@ namespace Meebey.SmartIrc4net
         {
             return "LUSER "+mask+" "+target;
         }
-        
+
         public static string Version()
         {
             return "VERSION";
@@ -242,87 +242,87 @@ namespace Meebey.SmartIrc4net
         {
             return "LINKS";
         }
-        
+
         public static string Links(string servermask)
         {
             return "LINKS "+servermask;
         }
-        
+
         public static string Links(string remoteserver, string servermask)
         {
             return "LINKS "+remoteserver+" "+servermask;
         }
-        
+
         public static string Time()
         {
             return "TIME";
         }
-        
+
         public static string Time(string target)
         {
             return "TIME "+target;
         }
-        
+
         public static string Connect(string targetserver, string port)
         {
             return "CONNECT "+targetserver+" "+port;
         }
-        
+
         public static string Connect(string targetserver, string port, string remoteserver)
         {
             return "CONNECT "+targetserver+" "+port+" "+remoteserver;
         }
-        
+
         public static string Trace()
         {
             return "TRACE";
         }
-        
+
         public static string Trace(string target)
         {
             return "TRACE "+target;
         }
-        
+
         public static string Admin()
         {
             return "ADMIN";
         }
-        
+
         public static string Admin(string target)
         {
             return "ADMIN "+target;
         }
-        
+
         public static string Info()
         {
             return "INFO";
         }
-        
+
         public static string Info(string target)
         {
             return "INFO "+target;
         }
-        
+
         public static string Servlist()
         {
             return "SERVLIST";
         }
-        
+
         public static string Servlist(string mask)
         {
             return "SERVLIST "+mask;
         }
-        
+
         public static string Servlist(string mask, string type)
         {
             return "SERVLIST "+mask+" "+type;
         }
-        
+
         public static string Squery(string servicename, string servicetext)
         {
             return "SQUERY "+servicename+" :"+servicetext;
         }
-        
+
         public static string List()
         {
             return "LIST";
@@ -338,7 +338,7 @@ namespace Meebey.SmartIrc4net
             string channellist = String.Join(",", channels);
             return "LIST "+channellist;
         }
-        
+
         public static string List(string channel, string target)
         {
             return "LIST "+channel+" "+target;
@@ -349,7 +349,7 @@ namespace Meebey.SmartIrc4net
             string channellist = String.Join(",", channels);
             return "LIST "+channellist+" "+target;
         }
-        
+
         public static string Names()
         {
             return "NAMES";
@@ -365,18 +365,18 @@ namespace Meebey.SmartIrc4net
             string channellist = String.Join(",", channels);
             return "NAMES "+channellist;
         }
-        
+
         public static string Names(string channel, string target)
         {
             return "NAMES "+channel+" "+target;
         }
-        
+
         public static string Names(string[] channels, string target)
         {
             string channellist = String.Join(",", channels);
             return "NAMES "+channellist+" "+target;
         }
-        
+
         public static string Topic(string channel)
         {
             return "TOPIC "+channel;
@@ -401,7 +401,7 @@ namespace Meebey.SmartIrc4net
         {
             return "SERVICE "+nickname+" * "+distribution+" * * :"+info;
         }
-        
+
         public static string Invite(string nickname, string channel)
         {
             return "INVITE "+nickname+" "+channel;
@@ -411,12 +411,12 @@ namespace Meebey.SmartIrc4net
         {
             return "WHO";
         }
-        
+
         public static string Who(string mask)
         {
             return "WHO "+mask;
         }
-        
+
         public static string Who(string mask, bool ircop)
         {
             if (ircop) {
@@ -425,34 +425,34 @@ namespace Meebey.SmartIrc4net
                 return "WHO "+mask;
             }
         }
-        
+
         public static string Whois(string mask)
         {
             return "WHOIS "+mask;
         }
-        
+
         public static string Whois(string[] masks)
         {
             string masklist = String.Join(",", masks);
             return "WHOIS "+masklist;
         }
-        
+
         public static string Whois(string target, string mask)
         {
             return "WHOIS "+target+" "+mask;
         }
-        
+
         public static string Whois(string target, string[] masks)
         {
             string masklist = String.Join(",", masks);
             return "WHOIS "+target+" "+masklist;
         }
-        
+
         public static string Whowas(string nickname)
         {
             return "WHOWAS "+nickname;
         }
-        
+
         public static string Whowas(string[] nicknames)
         {
             string nicknamelist = String.Join(",", nicknames);
@@ -463,44 +463,44 @@ namespace Meebey.SmartIrc4net
         {
             return "WHOWAS "+nickname+" "+count+" ";
         }
-        
+
         public static string Whowas(string[] nicknames, string count)
         {
             string nicknamelist = String.Join(",", nicknames);
             return "WHOWAS "+nicknamelist+" "+count+" ";
         }
-        
+
         public static string Whowas(string nickname, string count, string target)
         {
             return "WHOWAS "+nickname+" "+count+" "+target;
         }
-        
+
         public static string Whowas(string[] nicknames, string count, string target)
         {
             string nicknamelist = String.Join(",", nicknames);
             return "WHOWAS "+nicknamelist+" "+count+" "+target;
         }
-        
+
         public static string Kill(string nickname, string comment)
         {
             return "KILL "+nickname+" :"+comment;
         }
-        
+
         public static string Ping(string server)
         {
             return "PING "+server;
         }
-        
+
         public static string Ping(string server, string server2)
         {
             return "PING "+server+" "+server2;
         }
-        
+
         public static string Pong(string server)
         {
             return "PONG "+server;
         }
-        
+
         public static string Pong(string server, string server2)
         {
             return "PONG "+server+" "+server2;
@@ -510,94 +510,94 @@ namespace Meebey.SmartIrc4net
         {
             return "ERROR :"+errormessage;
         }
-        
+
         public static string Away()
         {
             return "AWAY";
         }
-        
+
         public static string Away(string awaytext)
         {
             return "AWAY :"+awaytext;
         }
-        
+
         public static string Rehash()
         {
             return "REHASH";
         }
-        
+
         public static string Die()
         {
             return "DIE";
         }
-        
+
         public static string Restart()
         {
             return "RESTART";
         }
-        
+
         public static string Summon(string user)
         {
             return "SUMMON "+user;
         }
-        
+
         public static string Summon(string user, string target)
         {
             return "SUMMON "+user+" "+target;
         }
-        
+
         public static string Summon(string user, string target, string channel)
         {
             return "SUMMON "+user+" "+target+" "+channel;
         }
-        
+
         public static string Users()
         {
             return "USERS";
         }
-        
+
         public static string Users(string target)
         {
             return "USERS "+target;
         }
-        
+
         public static string Wallops(string wallopstext)
         {
             return "WALLOPS :"+wallopstext;
         }
-        
+
         public static string Userhost(string nickname)
         {
             return "USERHOST "+nickname;
         }
-        
+
         public static string Userhost(string[] nicknames)
         {
             string nicknamelist = String.Join(" ", nicknames);
             return "USERHOST "+nicknamelist;
         }
-        
+
         public static string Ison(string nickname)
         {
             return "ISON "+nickname;
         }
-        
+
         public static string Ison(string[] nicknames)
         {
             string nicknamelist = String.Join(" ", nicknames);
             return "ISON "+nicknamelist;
         }
-        
+
         public static string Quit()
         {
             return "QUIT";
         }
-        
+
         public static string Quit(string quitmessage)
         {
             return "QUIT :"+quitmessage;
         }
-        
+
         public static string Squit(string server, string comment)
         {
             return "SQUIT "+server+" :"+comment;

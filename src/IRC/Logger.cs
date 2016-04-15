@@ -8,9 +8,9 @@
  * SmartIrc4net - the IRC library for .NET/C# <http://smartirc4net.sf.net>
  *
  * Copyright (c) 2003-2005 Mirco Bauer <meebey@meebey.net> <http://www.meebey.net>
- * 
+ *
  * Full LGPL License: <http://www.gnu.org/licenses/lgpl.txt>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -61,19 +61,19 @@ namespace Meebey.SmartIrc4net
     {
         private static SortedList _LoggerList = new SortedList();
         private static bool       _Init;
-        
+
         private Logger()
         {
         }
-        
+
         public static void Init()
         {
             if (_Init) {
                 return;
             }
-            
+
             _Init = true;
-            
+
             /*
             FileInfo fi = new FileInfo("SmartIrc4net_log.config");
             if (fi.Exists) {
@@ -82,7 +82,7 @@ namespace Meebey.SmartIrc4net
                 log4net.Config.BasicConfigurator.Configure();
             }
             */
-            
+
             _LoggerList[LogCategory.Main]           = log4net.LogManager.GetLogger("MAIN");
             _LoggerList[LogCategory.Socket]         = log4net.LogManager.GetLogger("SOCKET");
             _LoggerList[LogCategory.Queue]          = log4net.LogManager.GetLogger("QUEUE");

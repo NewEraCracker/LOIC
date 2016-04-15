@@ -8,9 +8,9 @@
  * SmartIrc4net - the IRC library for .NET/C# <http://smartirc4net.sf.net>
  *
  * Copyright (c) 2003-2005 Mirco Bauer <meebey@meebey.net> <http://www.meebey.net>
- * 
+ *
  * Full LGPL License: <http://www.gnu.org/licenses/lgpl.txt>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -37,7 +37,7 @@ namespace Meebey.SmartIrc4net
     public class ReadLineEventArgs : EventArgs
     {
         private string _Line;
-        
+
         public string Line {
             get {
                 return _Line;
@@ -56,7 +56,7 @@ namespace Meebey.SmartIrc4net
     public class WriteLineEventArgs : EventArgs
     {
         private string _Line;
-        
+
         public string Line {
             get {
                 return _Line;
@@ -70,7 +70,7 @@ namespace Meebey.SmartIrc4net
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class AutoConnectErrorEventArgs : EventArgs
     {
@@ -89,13 +89,13 @@ namespace Meebey.SmartIrc4net
                 return _Address;
             }
         }
-        
+
         public int Port {
             get {
                 return _Port;
             }
         }
-        
+
         internal AutoConnectErrorEventArgs(string address, int port, Exception ex)
         {
             _Address   = address;

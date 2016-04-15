@@ -8,9 +8,9 @@
  * SmartIrc4net - the IRC library for .NET/C# <http://smartirc4net.sf.net>
  *
  * Copyright (c) 2003-2005 Mirco Bauer <meebey@meebey.net> <http://www.meebey.net>
- * 
+ *
  * Full LGPL License: <http://www.gnu.org/licenses/lgpl.txt>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -46,7 +46,7 @@ namespace Meebey.SmartIrc4net
         private string[]    _RawMessageArray;
         private ReceiveType _Type;
         private ReplyCode   _ReplyCode;
-        
+
         /// <summary>
         /// Gets the IrcClient object the message originated from
         /// </summary>
@@ -55,7 +55,7 @@ namespace Meebey.SmartIrc4net
                 return _Irc;
             }
         }
-        
+
         /// <summary>
         /// Gets the combined nickname, identity and hostname of the user that sent the message
         /// </summary>
@@ -67,7 +67,7 @@ namespace Meebey.SmartIrc4net
                 return _From;
             }
         }
-        
+
         /// <summary>
         /// Gets the nickname of the user that sent the message
         /// </summary>
@@ -103,7 +103,7 @@ namespace Meebey.SmartIrc4net
                 return _Channel;
             }
         }
-        
+
         /// <summary>
         /// Gets the message
         /// </summary>
@@ -112,7 +112,7 @@ namespace Meebey.SmartIrc4net
                 return _Message;
             }
         }
-        
+
         /// <summary>
         /// Gets the message as an array of strings (splitted by space)
         /// </summary>
@@ -121,7 +121,7 @@ namespace Meebey.SmartIrc4net
                 return _MessageArray;
             }
         }
-        
+
         /// <summary>
         /// Gets the raw message sent by the server
         /// </summary>
@@ -130,7 +130,7 @@ namespace Meebey.SmartIrc4net
                 return _RawMessage;
             }
         }
-        
+
         /// <summary>
         /// Gets the raw message sent by the server as array of strings (splitted by space)
         /// </summary>
