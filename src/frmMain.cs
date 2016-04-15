@@ -282,7 +282,7 @@ namespace LOIC
 				{
 					try
 					{
-						irc?.Disconnect ();
+						if(irc != null) irc.Disconnect();
 					}
 					// Analysis disable once EmptyGeneralCatchClause
 					catch
@@ -701,8 +701,8 @@ namespace LOIC
 			try
 			{
 				ircenabled = false;
-				irclisten?.Abort();
-				irc?.Disconnect();
+				if(irclisten != null) irclisten.Abort();
+				if(irc != null) irc.Disconnect();
 			}
 			// Analysis disable once EmptyGeneralCatchClause
 			catch
