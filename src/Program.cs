@@ -39,8 +39,9 @@ namespace LOIC
 	}
 	public class Functions
 	{
-		private static Random rnd = new Random();
-		private static String[] ntv = {"6.0","6.1","6.2","6.3","10.0"};
+		[ThreadStatic]
+		private static readonly Random rnd = new Random(Guid.NewGuid().GetHashCode());
+		private static readonly String[] ntv = {"6.0","6.1","6.2","6.3","10.0"};
 
 		public static string RandomString()
 		{
