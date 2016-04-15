@@ -63,11 +63,11 @@ namespace Meebey.SmartIrc4net
         private int              _AutoRetryDelay = 30;
         private bool             _AutoReconnect;
         private Encoding         _Encoding = Encoding.Default;
-        private int              _SocketReceiveTimeout  = 600;
-        private int              _SocketSendTimeout = 600;
+        private int              _SocketReceiveTimeout = 300;
+        private int              _SocketSendTimeout = 300;
         private int              _IdleWorkerInterval = 60;
         private int              _PingInterval = 60;
-        private int              _PingTimeout = 300;
+        private int              _PingTimeout = 150;
         private DateTime         _LastPingSent;
         private DateTime         _LastPongReceived;
         private TimeSpan         _Lag;
@@ -275,7 +275,7 @@ namespace Meebey.SmartIrc4net
 
         /// <summary>
         /// Timeout in seconds for receiving data from the socket
-        /// Default: 600
+        /// Default: 300
         /// </summary>
         public int SocketReceiveTimeout {
             get {
@@ -288,7 +288,7 @@ namespace Meebey.SmartIrc4net
         
         /// <summary>
         /// Timeout in seconds for sending data to the socket
-        /// Default: 600
+        /// Default: 300
         /// </summary>
         public int SocketSendTimeout {
             get {
@@ -327,7 +327,7 @@ namespace Meebey.SmartIrc4net
         
         /// <summary>
         /// Timeout in seconds for server response to a PING
-        /// Default: 600
+        /// Default: 150
         /// </summary>
         public int PingTimeout {
             get {
