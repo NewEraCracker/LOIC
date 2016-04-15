@@ -39,9 +39,8 @@ namespace LOIC
 	}
 	public class Functions
 	{
-		[ThreadStatic]
-		private readonly static Random rnd = new Random();
-		private readonly static String[] ntv = {"6.0","6.1","6.2","6.3","10.0"};
+		private static Random rnd = new Random();
+		private static String[] ntv = {"6.0","6.1","6.2","6.3","10.0"};
 
 		public static string RandomString()
 		{
