@@ -11,9 +11,9 @@ This tool is released for educational purposes only, *with intent of developing 
 ---
 *Downloads*
 * Source: [[https://github.com/NewEraCracker/LOIC/]]
-* Binaries: [[https://github.com/NewEraCracker/LOIC/downloads/]]
+* Binaries: [[https://github.com/NewEraCracker/LOIC/releases]]
 * License: Public Domain
-* *You are advised to use latest stable version.*
+* *You are advised to use latest version.*
 
 ---
 *System requirements*
@@ -33,11 +33,3 @@ Please read [[https://github.com/NewEraCracker/LOIC/wiki/_pages]]
 *Reporting bugs*
 Use this page to report any issues:
 [[https://github.com/NewEraCracker/LOIC/issues]]
-
----
-*Linux Packages [MADE BY pirate486743186 - UNOFFICIAL]*
-* for mono: [[http://www.mediafire.com/file/3n9xnbcop5o33bm/loic_1.1.1.8_all.deb]]
-* statically linked(64bit): [[http://www.mediafire.com/file/ac7akmi6cd55705/loic_1.1.1.8_amd64.deb]]
-* the same per above but as rpm packages:
-[[http://www.mediafire.com/file/c4fy4p3phweuspm/loic-1.1.1.8-2.noarch.rpm]]
-[[http://www.mediafire.com/file/v387ek46o76amm8/loic-1.1.1.8-2.x86_64.rpm]]
