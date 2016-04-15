@@ -490,6 +490,10 @@ namespace Meebey.SmartIrc4net
                 RfcPass(Password, Priority.Critical);
             }
 
+            // XXX: IRCv3.1 Client Capability Negotiation
+            WriteLine("CAP LS", Priority.Critical);
+
+            // RFC 2812
             RfcNick(Nickname, Priority.Critical);
             RfcUser(Username, IUsermode, Realname, Priority.Critical);
         }
@@ -1142,6 +1146,11 @@ namespace Meebey.SmartIrc4net
                 case "PONG":
                     _Event_PONG(ircdata);
                 break;
+
+                // XXX: IRCv3.1 Client Capability Negotiation
+                case "CAP":
+                    WriteLine("CAP END", Priority.Critical);
+                    break;
             }
 
             if (ircdata.ReplyCode != ReplyCode.Null) {
