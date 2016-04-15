@@ -446,7 +446,7 @@ namespace LOIC
             this.cmdAttack.Name = "cmdAttack";
             this.cmdAttack.Size = new System.Drawing.Size(246, 50);
             this.cmdAttack.TabIndex = 1;
-            this.cmdAttack.Text = AttackText;
+            this.cmdAttack.Text = "IMMA CHARGIN MAH LAZER";
             this.TTip.SetToolTip(this.cmdAttack, "I sincerely hope you can guess what this button does.");
             this.cmdAttack.UseVisualStyleBackColor = false;
             this.cmdAttack.Click += new System.EventHandler(this.cmdAttack_Click);
