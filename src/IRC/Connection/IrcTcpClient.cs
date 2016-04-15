@@ -36,6 +36,8 @@ namespace Meebey.SmartIrc4net
     /// <threadsafety static="true" instance="true" />
     internal class IrcTcpClient: TcpClient
     {
+        public IrcTcpClient(AddressFamily family) : base(family) { }
+
         public Socket Socket {
             get {
                 return Client;

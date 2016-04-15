@@ -32,6 +32,7 @@ using System.Text;
 using System.Collections;
 using System.Threading;
 using System.Reflection;
+using System.Net;
 using System.Net.Sockets;
 
 namespace Meebey.SmartIrc4net
@@ -412,14 +413,16 @@ namespace Meebey.SmartIrc4net
                 OnConnecting(this, EventArgs.Empty);
             }
             try {
-                var ip = System.Net.Dns.GetHostEntry (Address).AddressList [0];
-                _TcpClient = new IrcTcpClient();
+                IPAddress ip = Dns.GetHostEntry(Address).AddressList[0];
+                IPEndPoint endpoint = new IPEndPoint(ip, port);
+
+                _TcpClient = new IrcTcpClient(endpoint.AddressFamily);
                 _TcpClient.NoDelay = true;
                 _TcpClient.Socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, 1);
                 // set timeout, after this the connection will be aborted
                 _TcpClient.ReceiveTimeout = _SocketReceiveTimeout*1000;
                 _TcpClient.SendTimeout = _SocketSendTimeout*1000;
-                _TcpClient.Connect(ip, port);
+                _TcpClient.Connect(endpoint);
 
                 _Reader = new StreamReader(_TcpClient.GetStream(), _Encoding);
                 _Writer = new StreamWriter(_TcpClient.GetStream(), _Encoding);

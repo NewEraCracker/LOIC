@@ -242,7 +242,7 @@ namespace LOIC
 				ircenabled = enabled;
 				if(enabled)
 				{
-					label25.Text = "Connecting..";
+					SetStatus("Connecting..");
 					if (irc == null) {
 						irc = new IrcClient();
 						irc.OnConnected += IrcConnected;
@@ -287,7 +287,7 @@ namespace LOIC
 					// Analysis disable once EmptyGeneralCatchClause
 					catch
 					{ }
-					label25.Text = "Disconnected.";
+					SetStatus("Disconnected.");
 				}
 			}
 			catch
@@ -333,7 +333,7 @@ namespace LOIC
 		/// <param name="e">EventArgs.</param>
 		private void IrcConnected(object o, EventArgs e)
 		{
-			label25.Text = "Logging In...";
+			SetStatus("Logging In...");
 		}
 		private delegate void AddListBoxItemDelegate(object sender, ReadLineEventArgs e);
 
