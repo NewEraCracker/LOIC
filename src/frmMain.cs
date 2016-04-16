@@ -74,7 +74,7 @@ namespace LOIC
 					return;
 				}
 
-				if (!int.TryParse (txtThreads.Text, out iThreads) || iThreads < 1) {
+				if (!int.TryParse (txtThreads.Text, out iThreads) || iThreads < 1 || iThreads > 99) {
 					Wtf ("What on earth made you put THAT in the threads field?", silent);
 					return;
 				}
