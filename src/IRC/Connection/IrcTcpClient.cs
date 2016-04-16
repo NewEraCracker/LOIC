@@ -36,7 +36,11 @@ namespace Meebey.SmartIrc4net
     /// <threadsafety static="true" instance="true" />
     internal class IrcTcpClient: TcpClient
     {
+        // https://msdn.microsoft.com/en-us/library/system.net.sockets.tcpclient%28v=vs.110%29.aspx
+        public IrcTcpClient() : base() { }
         public IrcTcpClient(AddressFamily family) : base(family) { }
+        public IrcTcpClient(IPEndPoint localEP)   : base(localEP) { }
+        public IrcTcpClient(string hostname, int port) : base(hostname, port) { }
 
         public Socket Socket {
             get {
