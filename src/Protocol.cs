@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace LOIC {
 
@@ -28,4 +28,3 @@ namespace LOIC {
 		HTTP = 3,
 	}
 }
-

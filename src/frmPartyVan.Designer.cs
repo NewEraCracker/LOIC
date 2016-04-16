@@ -1,6 +1,6 @@
-﻿namespace LOIC
+namespace LOIC
 {
-    partial class FrmPartyVan
+    partial class frmPartyVan
     {
         /// <summary>
         /// Required designer variable.
@@ -66,7 +66,7 @@
             this.btnDecline.Text = "&Decline";
             this.btnDecline.UseVisualStyleBackColor = true;
             // 
-            // FrmPartyVan
+            // frmPartyVan
             // 
             this.Icon = global::LOIC.Properties.Resources.LOIC_ICO;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -75,7 +75,7 @@
             this.Controls.Add(this.btnDecline);
             this.Controls.Add(this.btnAccept);
             this.Controls.Add(this.txtEULA);
-            this.Name = "FrmPartyVan";
+            this.Name = "frmPartyVan";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Newfag\'s Low Orbit Ion Cannon End User License Agreement (EULA)";
             this.ResumeLayout(false);

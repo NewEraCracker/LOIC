@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -7,9 +7,9 @@ using System.Windows.Forms;
 
 namespace LOIC
 {
-	public partial class FrmPartyVan : Form
+	public partial class frmPartyVan : Form
 	{
-		public FrmPartyVan()
+		public frmPartyVan()
 		{
 			InitializeComponent();
 

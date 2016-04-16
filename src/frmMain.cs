@@ -40,7 +40,7 @@ namespace LOIC
 		public frmMain(bool hive, bool hide, string ircserver, string ircport, string ircchannel)
 		{
 			if(!hide && !Settings.HasAcceptedEula()) {
-				using(Form f = new FrmPartyVan()) {
+				using(Form f = new frmPartyVan()) {
 					if (f.ShowDialog() != DialogResult.OK) {
 						Environment.Exit(0);
 						return;

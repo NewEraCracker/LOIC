@@ -1,4 +1,4 @@
-﻿namespace LOIC
+namespace LOIC
 {
 	partial class frmWtf
 	{
