@@ -10,22 +10,22 @@ namespace LOIC {
 		/// <summary>
 		/// No (invalid) protocol.
 		/// </summary>
-		None	= 0,
+		None = 0,
 
 		/// <summary>
 		/// Transmission Control Protocol.
 		/// </summary>
-		TCP		= 1,
+		TCP = 1,
 
 		/// <summary>
 		/// User Datagram Protocol.
 		/// </summary>
-		UDP		= 2,
+		UDP = 2,
 
 		/// <summary>
 		/// HyperText Transfer Protocol.
 		/// </summary>
-		HTTP	= 3,
+		HTTP = 3,
 	}
 }
 
