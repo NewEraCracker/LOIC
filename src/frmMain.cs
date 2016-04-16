@@ -39,13 +39,13 @@ namespace LOIC
 		/// <param name="ircchannel">The irc channel.</param>
 		public frmMain(bool hive, bool hide, string ircserver, string ircport, string ircchannel)
 		{
-			if( !hide && String.IsNullOrEmpty(Settings.ReadSetting("EULA"))) {
+			if(!hide && !Settings.HasAcceptedEula()) {
 				using(Form f = new FrmPartyVan()) {
 					if (f.ShowDialog() != DialogResult.OK) {
 						Environment.Exit(0);
 						return;
 					} else {
-						LOIC.Settings.UpdateSetting("EULA", "1");
+						Settings.SaveAcceptedEula();
 					}
 				}
 			}

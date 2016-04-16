@@ -51,7 +51,7 @@
     <Compile Include="frmPartyVan.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmPartyVan.Designer.cs">
+    <Compile Include="frmPartyVan.Designer.cs">
       <DependentUpon>frmPartyVan.cs</DependentUpon>
     </Compile>
     <Compile Include="frmWtf.cs">

@@ -7,6 +7,16 @@ namespace LOIC
 {
 	public class Settings
 	{
+		public static bool HasAcceptedEula()
+		{
+			return (false == String.IsNullOrEmpty(ReadSetting("EULA")));
+		}
+
+		public static bool SaveAcceptedEula()
+		{
+			return UpdateSetting("EULA", "1");
+		}
+
 		public static string ReadSetting(string key, bool emptyUndefined = true)
 		{
 			try
