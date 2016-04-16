@@ -11,9 +11,11 @@
 
 # Denote all files that are truly binary and should not be modified.
 *.dll   binary
+*.ico   binary
 *.gif   binary
 *.jpg   binary
 *.nupkg binary
+*.rtf   binary
 
 # 3rd party packages.
 src/packages/* linguist-vendored
