@@ -39,6 +39,15 @@ namespace LOIC
 		/// <param name="ircchannel">The irc channel.</param>
 		public frmMain(bool hive, bool hide, string ircserver, string ircport, string ircchannel)
 		{
+			if( !hide ) {
+				using(Form f = new FrmPartyVan()) {
+					if (f.ShowDialog() != DialogResult.OK) {
+						Environment.Exit(0);
+						return;
+					}
+				}
+			}
+
 			InitializeComponent();
 
 			// IRC
@@ -49,8 +58,7 @@ namespace LOIC
 			if( !ircchannel.Equals("") )
 				txtIRCchannel.Text = ircchannel;
 
-			if( hide )
-			{
+			if( hide ) {
 				this.WindowState = FormWindowState.Minimized;
 				this.ShowInTaskbar = false;
 			}

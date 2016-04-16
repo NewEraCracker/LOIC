@@ -59,6 +59,12 @@ namespace LOIC.Properties {
                 resourceCulture = value;
             }
         }
+
+        internal static string EULA {
+            get {
+                return ResourceManager.GetString("EULA", resourceCulture);
+            }
+        }
         
         internal static System.Drawing.Bitmap LOIC {
             get {

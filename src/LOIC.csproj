@@ -47,6 +47,12 @@
     <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmPartyVan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmPartyVan.Designer.cs">
+      <DependentUpon>frmPartyVan.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmWtf.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -59,6 +65,9 @@
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPartyVan.resx">
+      <DependentUpon>frmPartyVan.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmWtf.resx">
       <DependentUpon>frmWtf.cs</DependentUpon>
@@ -80,6 +89,7 @@
   <ItemGroup>
     <Content Include="LOIC.ico" />
     <None Include="app.manifest" />
+    <None Include="Resources\EULA.rtf" />
     <None Include="Resources\WTF.jpg" />
     <None Include="Resources\LOIC.gif" />
   </ItemGroup>
