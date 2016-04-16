@@ -891,7 +891,7 @@ namespace LOIC
             // 
             // TrayIcon
             // 
-            this.TrayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("TrayIcon.Icon")));
+            this.TrayIcon.Icon = global::LOIC.Properties.Resources.LOIC_ICO;
             this.TrayIcon.Text = "Waiting for target!";
             this.TrayIcon.DoubleClick += new System.EventHandler(this.TrayIcon_DoubleClick);
             this.TrayIcon.MouseMove += new System.Windows.Forms.MouseEventHandler(this.TrayIcon_MouseMove);
@@ -927,7 +927,7 @@ namespace LOIC
             this.Controls.Add(this.groupBox1);
             this.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.LightBlue;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = global::LOIC.Properties.Resources.LOIC_ICO;
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "frmMain";

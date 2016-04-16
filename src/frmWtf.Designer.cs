@@ -37,6 +37,7 @@ namespace LOIC
 			this.BackgroundImage = global::LOIC.Properties.Resources.WTF;
 			this.ClientSize = new System.Drawing.Size(416, 300);
 			this.ControlBox = false;
+			this.Icon = global::LOIC.Properties.Resources.LOIC_ICO;
 			this.Name = "frmWtf";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

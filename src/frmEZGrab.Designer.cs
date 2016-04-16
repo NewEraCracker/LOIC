@@ -190,6 +190,7 @@ namespace LOIC
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.ForeColor = System.Drawing.Color.LightBlue;
+            this.Icon = global::LOIC.Properties.Resources.LOIC_ICO;
             this.Name = "frmEZGrab";
             this.Text = "HiveMind / Overlord eZGrab";
             this.groupBox1.ResumeLayout(false);
