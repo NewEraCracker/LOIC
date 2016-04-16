@@ -10,8 +10,8 @@
 
 namespace LOIC.Properties {
     using System;
-    
-    
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -23,15 +23,15 @@ namespace LOIC.Properties {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
-        
+
         private static global::System.Resources.ResourceManager resourceMan;
-        
+
         private static global::System.Globalization.CultureInfo resourceCulture;
-        
+
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal Resources() {
         }
-        
+
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
@@ -45,7 +45,7 @@ namespace LOIC.Properties {
                 return resourceMan;
             }
         }
-        
+
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
@@ -65,14 +65,21 @@ namespace LOIC.Properties {
                 return ResourceManager.GetString("EULA", resourceCulture);
             }
         }
-        
+
         internal static System.Drawing.Bitmap LOIC {
             get {
                 object obj = ResourceManager.GetObject("LOIC", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        
+
+        internal static System.Drawing.Icon LOIC_ICO {
+            get {
+                object obj = ResourceManager.GetObject("LOIC_ICO", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+
         internal static System.Drawing.Bitmap WTF {
             get {
                 object obj = ResourceManager.GetObject("WTF", resourceCulture);

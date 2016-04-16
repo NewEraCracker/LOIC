@@ -15,7 +15,7 @@
     <AssemblyName>LOIC</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ApplicationIcon>LOIC.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\LOIC.ico</ApplicationIcon>
     <StartupObject>LOIC.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -90,11 +90,11 @@
     <Compile Include="Protocol.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="LOIC.ico" />
     <None Include="app.manifest" />
     <None Include="Resources\EULA.rtf" />
     <None Include="Resources\WTF.jpg" />
     <None Include="Resources\LOIC.gif" />
+    <None Include="Resources\LOIC.ico" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="IRC\IRC.csproj">

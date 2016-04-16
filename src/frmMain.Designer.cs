@@ -733,6 +733,7 @@ namespace LOIC
             // 
             // frmMain
             // 
+            this.Icon = global::LOIC.Properties.Resources.LOIC_ICO;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(24)))), ((int)(((byte)(32)))));
