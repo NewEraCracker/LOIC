@@ -895,7 +895,7 @@ namespace LOIC
 		/// <param name="e">EventArgs.</param>
 		private void label24_Click(object sender, EventArgs e)
 		{
-			Process.Start("http://github.com/NewEraCracker/LOIC");
+			Process.Start("https://github.com/NewEraCracker/LOIC");
 		}
 	}
 }
