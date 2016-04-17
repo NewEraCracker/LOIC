@@ -4,6 +4,7 @@
  */
 
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
@@ -16,17 +17,17 @@ namespace LOIC
 	{
 		const string AttackText = "IMMA CHARGIN MAH LAZER";
 
-		private static XXPFlooder[] xxp;
-		private static HTTPFlooder[] http;
-		private static string sHost, sIP, sMethod, sData, sSubsite;
-		private static int iPort, iThreads, iDelay, iTimeout;
-		Protocol protocol;
-		private static bool intShowStats;
-		private static IrcClient irc;
-		private static Thread irclisten;
-		private static string channel;
-		private static bool ircenabled;
-		private static Dictionary<string, string> OpList;
+		private XXPFlooder[] xxp;
+		private HTTPFlooder[] http;
+		private string sHost, sIP, sMethod, sData, sSubsite;
+		private int iPort, iThreads, iDelay, iTimeout;
+		private Protocol protocol;
+		private bool intShowStats;
+		private IrcClient irc;
+		private Thread irclisten;
+		private string channel;
+		private bool ircenabled;
+		private Dictionary<string, string> OpList;
 		private delegate void CheckParamsDelegate(List<string> pars);
 
 		/// <summary>
@@ -889,7 +890,7 @@ namespace LOIC
 		/// <param name="e">EventArgs.</param>
 		private void label24_Click(object sender, EventArgs e)
 		{
-			System.Diagnostics.Process.Start("http://github.com/NewEraCracker/LOIC");
+			Process.Start("http://github.com/NewEraCracker/LOIC");
 		}
 	}
 }
