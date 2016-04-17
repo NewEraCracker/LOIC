@@ -7,15 +7,17 @@ using System.Windows.Forms;
 
 namespace LOIC
 {
-	public partial class frmPartyVan : Form
+	public partial class frmEULA : Form
 	{
-		public frmPartyVan()
+		public frmEULA()
 		{
 			InitializeComponent();
 
 			txtEULA.Clear();
 			txtEULA.ReadOnly = true;
 			txtEULA.Rtf = global::LOIC.Properties.Resources.EULA;
+
+			BringToFront();
 		}
 	}
 }

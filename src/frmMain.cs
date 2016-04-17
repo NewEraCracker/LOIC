@@ -40,31 +40,36 @@ namespace LOIC
 		/// <param name="ircchannel">The irc channel.</param>
 		public frmMain(bool hive, bool hide, string ircserver, string ircport, string ircchannel)
 		{
-			if(!hide && !Settings.HasAcceptedEula()) {
-				using(Form f = new frmPartyVan()) {
-					if (f.ShowDialog() != DialogResult.OK) {
+			InitializeComponent();
+
+			if(hide)
+			{
+				this.WindowState = FormWindowState.Minimized;
+				this.ShowInTaskbar = false;
+			}
+			else if(!Settings.HasAcceptedEula())
+			{
+				// Display EULA
+				using(Form f = new frmEULA())
+				{
+					if(f.ShowDialog() != DialogResult.OK) {
+						// Bail out if declined
 						Environment.Exit(0);
 						return;
 					} else {
+						// Save EULA acceptance
 						Settings.SaveAcceptedEula();
 					}
 				}
 			}
 
-			InitializeComponent();
-
 			// IRC
-			if( !ircserver.Equals("") )
+			if(ircserver.Length > 0)
 				txtIRCserver.Text = ircserver;
-			if( !ircport.Equals("") )
+			if(ircport.Length > 0)
 				txtIRCport.Text = ircport;
-			if( !ircchannel.Equals("") )
+			if(ircchannel.Length > 0)
 				txtIRCchannel.Text = ircchannel;
-
-			if( hide ) {
-				this.WindowState = FormWindowState.Minimized;
-				this.ShowInTaskbar = false;
-			}
 
 			enableHive.Checked |= hive;
 			disableHive.Checked |= !hive;
