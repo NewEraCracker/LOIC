@@ -19,17 +19,19 @@ namespace LOIC
 		public int Requested;
 		public int Failed;
 		public bool IsFlooding;
-		public string Host;
-		public string IP;
-		public int Port;
-		public string Subsite;
 		public int Delay;
-		public int Timeout;
-		public bool Resp;
-		private System.Windows.Forms.Timer tTimepoll = new System.Windows.Forms.Timer();
+
+		private System.Windows.Forms.Timer tTimepoll;
 		private long LastAction;
-		private bool AllowRandom;
-		private bool AllowGzip;
+
+		private readonly string Host;
+		private readonly string IP;
+		private readonly int Port;
+		private readonly string Subsite;
+		private readonly int Timeout;
+		private readonly bool Resp;
+		private readonly bool AllowRandom;
+		private readonly bool AllowGzip;
 
 		public HTTPFlooder(string host, string ip, int port, string subSite, bool resp, int delay, int timeout, bool random, bool gzip)
 		{
@@ -54,6 +56,10 @@ namespace LOIC
 			BackgroundWorker bw = new BackgroundWorker();
 			bw.DoWork += bw_DoWork;
 			bw.RunWorkerAsync();
+		}
+		public void Stop()
+		{
+			IsFlooding = false;
 		}
 		void tTimepoll_Tick(object sender, EventArgs e)
 		{

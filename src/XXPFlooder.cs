@@ -14,12 +14,13 @@ namespace LOIC
 	{
 		public bool IsFlooding;
 		public int FloodCount;
-		public string IP;
-		public int Port;
-		public int Protocol;
 		public int Delay;
-		public bool Resp;
-		public string Data;
+
+		private readonly string IP;
+		private readonly int Port;
+		private readonly int Protocol;
+		private readonly bool Resp;
+		private readonly string Data;
 		private readonly bool AllowRandom;
 
 		public XXPFlooder(string ip, int port, int proto, int delay, bool resp, string data, bool random)
@@ -38,6 +39,10 @@ namespace LOIC
 			BackgroundWorker bw = new BackgroundWorker();
 			bw.DoWork += bw_DoWork;
 			bw.RunWorkerAsync();
+		}
+		public void Stop()
+		{
+			IsFlooding = false;
 		}
 		private void bw_DoWork(object sender, DoWorkEventArgs e)
 		{
