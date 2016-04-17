@@ -1,6 +1,6 @@
 ## Newfag's Low Orbit Ion Cannon - End User License Agreement
 
-## 1. Parties and Scope of the Agreement
+## 1. Parties and Scope
 
 This agreement (or "License") is celebrated between two parties: Project Authors and Contributors - herein "We", "Us", "Licensor"; and the End User - herein "You", "Licensee".
 

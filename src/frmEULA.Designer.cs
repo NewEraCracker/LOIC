@@ -38,9 +38,10 @@ namespace LOIC
             this.txtEULA.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtEULA.Location = new System.Drawing.Point(0, 0);
+            this.txtEULA.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtEULA.Location = new System.Drawing.Point(1, 0);
             this.txtEULA.Name = "txtEULA";
-            this.txtEULA.Size = new System.Drawing.Size(568, 515);
+            this.txtEULA.Size = new System.Drawing.Size(567, 515);
             this.txtEULA.TabIndex = 0;
             this.txtEULA.Text = "";
             // 
