@@ -85,7 +85,7 @@ namespace LOIC
 		{
 			if((cmdAttack.Text == AttackText && toggle) || (!toggle && on))
 			{
-				if (!int.TryParse (txtPort.Text, out iPort)) {
+				if (!int.TryParse (txtPort.Text, out iPort) || iPort < 0 || iPort > 65535) {
 					Wtf ("I don't think ports are supposed to be written like THAT.", silent);
 					return;
 				}
