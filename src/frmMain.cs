@@ -216,7 +216,7 @@ namespace LOIC
 				Wtf ("A URL is fine too...", silent);
 				return;
 			}
-			if( !sHost.StartsWith("http://") && !sHost.StartsWith("https://") ) sHost = String.Concat("http://", sHost);
+			if( !sHost.Contains("://") ) sHost = String.Concat("http://", sHost);
 			try { txtTarget.Text = Dns.GetHostEntry(new Uri(sHost).Host).AddressList[0].ToString(); }
 			catch
 			{
