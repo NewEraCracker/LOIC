@@ -6,6 +6,8 @@ This agreement (or "License") is celebrated between two parties: Project Authors
 
 This agreement governs use of the accompanying software (the "Work"). If you use the software, you accept this License. If you do not accept the license, do not use the software.
 
+You may not use this software for any illegal or unethical purpose; including activities which would give rise to criminal or civil liability.
+
 ## 2. Grant of Rights
 
 Licensor hereby either (a) certifies that, to the best of his knowledge, the work of authorship identified is in the public domain of the country from which the work is published, or (b) hereby dedicates whatever copyright the Licensor holds in the Work of authorship to the public domain. The Licensor, moreover, dedicates any copyright interest he may have in the associated Work, and for these purposes, is described as a "Dedicator" below.
@@ -18,7 +20,7 @@ Dedicator recognizes that, once placed in the public domain, the Work may be fre
 
 ## 3. Conditions and Limitations
 
-The Work is licensed "as-is." You bear the risk of using it. The Licensor gives no express warranties, guarantees, or conditions. You may have additional consumer rights under your local laws which this license cannot change. To the extent permitted under your local laws, the Licensor excludes the implied warranties of merchantability, fitness for a particular purpose and non-infringement.
+The Work is licensed "AS-IS". You bear the risk of using it. The Licensor gives no express warranties, guarantees, or conditions. You may have additional consumer rights under your local laws which this license cannot change. To the extent permitted under your local laws, the Licensor excludes the implied warranties of merchantability, fitness for a particular purpose and non-infringement.
 
 The Work is released for educational purposes only, with intent of developing an "Hacker Defense" attitude.
 
