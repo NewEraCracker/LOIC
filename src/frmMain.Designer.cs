@@ -419,7 +419,7 @@ namespace LOIC
             // tbSpeed
             // 
             this.tbSpeed.Location = new System.Drawing.Point(370, 26);
-            this.tbSpeed.Maximum = 20;
+            this.tbSpeed.Maximum = 50;
             this.tbSpeed.Name = "tbSpeed";
             this.tbSpeed.Size = new System.Drawing.Size(374, 45);
             this.tbSpeed.TabIndex = 8;

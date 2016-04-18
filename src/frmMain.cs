@@ -128,7 +128,7 @@ namespace LOIC
 					return;
 				}
 
-				if (!int.TryParse (txtTimeout.Text, out iTimeout)) {
+				if (!int.TryParse (txtTimeout.Text, out iTimeout) || iTimeout < 1) {
 					Wtf ("What's up with something like that in the timeout box? =S", silent);
 					return;
 				}
@@ -575,7 +575,6 @@ namespace LOIC
 					}
 
 					int num;
-					bool isnum;
 					switch (cmd.ToLower())
 					{
 						case "targetip":
@@ -587,8 +586,7 @@ namespace LOIC
 							LockOnURL(true);
 							break;
 						case "timeout":
-							isnum = int.TryParse(value, out num);
-							if(isnum)
+							if(int.TryParse(value, out num) && num >= 1)
 								txtTimeout.Text = num.ToString();
 							break;
 						case "subsite":
@@ -598,7 +596,8 @@ namespace LOIC
 							txtData.Text = value;
 							break;
 						case "port":
-							txtPort.Text = value;
+							if(int.TryParse(value, out num) && num >= 0 && num <= 65535)
+								txtPort.Text = num.ToString();
 							break;
 						case "method":
 							int index = cbMethod.FindString(value);
@@ -606,46 +605,30 @@ namespace LOIC
 								cbMethod.SelectedIndex = index;
 							break;
 						case "threads":
-							isnum = int.TryParse(value, out num);
-							if(isnum && num < 100) //let's protect them a bit, yeah?
+							if(int.TryParse(value, out num) && num >= 1 && num <= 99)
 								txtThreads.Text = num.ToString();
 							break;
 						case "wait":
 							if(value.ToLower() == "true")
-							{
 								chkWaitReply.Checked = true;
-							}
 							else if(value.ToLower() == "false")
-							{
 								chkWaitReply.Checked = false;
-							}
 							break;
 						case "random":
 							if(value.ToLower() == "true")
-							{
 								chkAllowRandom.Checked = true;
-							}
 							else if(value.ToLower() == "false")
-							{
 								chkAllowRandom.Checked = false;
-							}
 							break;
 						case "gzip":
 							if(value.ToLower() == "true")
-							{
 								chkAllowGzip.Checked = true;
-							}
 							else if(value.ToLower() == "false")
-							{
 								chkAllowGzip.Checked = false;
-							}
 							break;
-							case "speed":
-							isnum = int.TryParse(value, out num);
-							if(isnum && num >= 0 && num <= 20) //let's protect them a bit, yeah?
-							{
+						case "speed":
+							if(int.TryParse(value, out num) && num >= 0 && num <= 50)
 								tbSpeed.Value = num;
-							}
 							break;
 					}
 				}
