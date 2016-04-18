@@ -24,5 +24,10 @@ namespace LOIC
 
 			BringToFront();
 		}
+
+		private void chkEULA_CheckedChanged(object sender, EventArgs e)
+		{
+			btnAccept.Enabled = chkEULA.Checked;
+		}
 	}
 }

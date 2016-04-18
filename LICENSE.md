@@ -4,9 +4,9 @@
 
 This agreement (or "License") is celebrated between two parties: Project Authors and Contributors - herein "We", "Us", "Licensor"; and the End User - herein "You", "Licensee".
 
-This agreement governs use of the accompanying software (the "Work"). If you use the software, you accept this License. If you do not accept the license, do not use the software.
+This agreement governs use of the accompanying software (the "Work"). If you use the software, you accept this License. If you decline the License, do not use the software.
 
-You may not use this software for any illegal or unethical purpose; including activities which would give rise to criminal or civil liability.
+**You may not use this software for any illegal or unethical purpose; including activities which would give rise to criminal or civil liability.**
 
 ## 2. Grant of Rights
 

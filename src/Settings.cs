@@ -14,12 +14,12 @@ namespace LOIC
 	{
 		public static bool HasAcceptedEula()
 		{
-			return (false == String.IsNullOrEmpty(ReadSetting("EULA")));
+			return (false == String.IsNullOrEmpty(ReadSetting("AcceptEULA")));
 		}
 
 		public static bool SaveAcceptedEula()
 		{
-			return UpdateSetting("EULA", "1");
+			return UpdateSetting("AcceptEULA", "1");
 		}
 
 		public static string ReadSetting(string key, bool emptyUndefined = true)
