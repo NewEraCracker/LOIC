@@ -109,7 +109,7 @@ namespace LOIC
 			}
 			// Analysis disable once EmptyGeneralCatchClause
 			catch { }
-			finally { IsFlooding = false; }
+			finally { tTimepoll.Stop(); State = ReqState.Ready; IsFlooding = false; }
 		}
 		private static long Tick()
 		{
