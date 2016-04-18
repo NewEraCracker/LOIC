@@ -5,11 +5,11 @@ Based on Praetox's loic project at https://sourceforge.net/projects/loic/
 
 ## DISCLAIMER
 
-The project authors and contributors (in quality of programmers) are not responsible for how you use this piece of software.
-
-They cannot be held responsible if you are guilty of using this software to attack servers that aren't in your possession.
-
 This tool is released for educational purposes only, with intent of developing an "Hacker Defense" attitude, and comes without any warranty at all.
+
+**You may not use this software for any illegal or unethical purpose; including activities which would give rise to criminal or civil liability.**
+
+**Under no event shall the Licensor be responsible for the activities or any misdeeds conducted by the Licensee.**
 
 ## HOW TO RUN ON WINDOWS
 
