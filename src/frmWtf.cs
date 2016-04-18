@@ -16,11 +16,11 @@ namespace LOIC
 		}
 		private void frmWtf_Click(object sender, EventArgs e)
 		{
-			this.Dispose();
+			Close();
 		}
 		private void frmWtf_KeyDown(object sender, KeyEventArgs e)
 		{
-			this.Dispose();
+			Close();
 		}
 	}
 }

