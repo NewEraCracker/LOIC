@@ -761,7 +761,7 @@ namespace LOIC
 		{
 			if(intShowStats) return; intShowStats = true;
 
-			if(protocol == Protocol.TCP || protocol == Protocol.UDP)
+			if(xxp != null && (protocol == Protocol.TCP || protocol == Protocol.UDP))
 			{
 				int iFloodCount = 0;
 				for (int a = 0; a < xxp.Length; a++)
@@ -770,7 +770,7 @@ namespace LOIC
 				}
 				lbRequested.Text = iFloodCount.ToString();
 			}
-			if(protocol == Protocol.HTTP && http != null)
+			if(http != null && protocol == Protocol.HTTP)
 			{
 				int iIdle = 0;
 				int iConnecting = 0;

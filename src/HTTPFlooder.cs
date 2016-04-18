@@ -22,6 +22,7 @@ namespace LOIC
 		public int Delay;
 
 		private System.Windows.Forms.Timer tTimepoll;
+		private bool intShowStats;
 		private long LastAction;
 
 		private readonly string Host;
@@ -63,6 +64,8 @@ namespace LOIC
 		}
 		void tTimepoll_Tick(object sender, EventArgs e)
 		{
+			if(intShowStats) return; intShowStats = true;
+
 			if(Tick() > LastAction + Timeout)
 			{
 				Failed++; State = ReqState.Failed;
@@ -70,6 +73,8 @@ namespace LOIC
 				if(IsFlooding)
 					tTimepoll.Start();
 			}
+
+			intShowStats = false;
 		}
 		private void bw_DoWork(object sender, DoWorkEventArgs e)
 		{
