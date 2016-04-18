@@ -11,4 +11,4 @@ using System.Runtime.InteropServices;
 [assembly: System.CLSCompliant(true)]
 [assembly: ComVisible(false)]
 
-[assembly: AssemblyVersion("1.9.9.99")]
+[assembly: AssemblyVersion("2.0.0.0")]
