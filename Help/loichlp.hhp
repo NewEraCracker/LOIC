@@ -1,0 +1,33 @@
+[OPTIONS]
+Auto Index=Yes
+Compatibility=1.1 or later
+Compiled file=help.chm
+Contents file=Table of Contents.hhc
+Default Font=Arial,10,0
+Default Window=NewFag
+Default topic=HTML\index.html
+Display compile progress=No
+Full-text search=Yes
+Index file=Index.hhk
+Language=0x409 Englisch (USA)
+Title=LOIC's NewFag Help
+
+[WINDOWS]
+NewFag="LOIC's NewFag Help","Table of Contents.hhc","Index.hhk","HTML\newfag.html","HTML\index.html",,,,,0x62520,240,0x307e,[0,0,800,600],,,,,,,0
+
+
+[FILES]
+HTML\index.html
+HTML\about.html
+HTML\LOIC.gif
+HTML\newfag.html
+HTML\hivemind.html
+HTML\http.html
+HTML\overlord.html
+HTML\recoil.html
+HTML\slowloic.html
+HTML\switches.html
+HTML\tcp.html
+
+[INFOTYPES]
+
