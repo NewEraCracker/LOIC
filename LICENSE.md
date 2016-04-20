@@ -22,6 +22,6 @@ Dedicator recognizes that, once placed in the public domain, the Work may be fre
 
 The Work is licensed "AS-IS". You bear the risk of using it. The Licensor gives no express warranties, guarantees, or conditions. You may have additional consumer rights under your local laws which this license cannot change. To the extent permitted under your local laws, the Licensor excludes the implied warranties of merchantability, fitness for a particular purpose and non-infringement.
 
-The Work is released for educational purposes only, with intent of developing an "Hacker Defense" attitude.
+The Work is released for educational purposes only, with the intent of helping to develop an "Hacker Defense" attitude.
 
 **Under no event shall the Licensor be responsible for the activities, or any misdeeds, conducted by the Licensee.**
