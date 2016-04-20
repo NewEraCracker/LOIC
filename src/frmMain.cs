@@ -484,10 +484,11 @@ namespace LOIC
 			if(OpList.ContainsKey(e.OldNickname))
 			{
 				OpList.Remove(e.OldNickname);
-			}
-			if(!OpList.ContainsKey(e.NewNickname))
-			{
-				OpList.Add(e.NewNickname, "");
+
+				if(!OpList.ContainsKey(e.NewNickname))
+				{
+					OpList.Add(e.NewNickname, "");
+				}
 			}
 		}
 
