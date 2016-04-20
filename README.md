@@ -9,7 +9,7 @@ This tool is released for educational purposes only, with the intent of helping 
 
 **You may not use this software for any illegal or unethical purpose; including activities which would give rise to criminal or civil liability.**
 
-**Under no event shall the Licensor be responsible for the activities of, or any misdeeds conducted by, the Licensee.**
+**Under no event shall the Licensor be responsible for the activities, or any misdeeds, conducted by the Licensee.**
 
 ## HOW TO RUN ON WINDOWS
 
