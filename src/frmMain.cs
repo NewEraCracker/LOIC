@@ -105,7 +105,9 @@ namespace LOIC
 
 				if( String.IsNullOrEmpty(sHost) ) sHost = sIP;
 				if( !sHost.Contains("://") ) sHost = String.Concat("http://", sHost);
-				sHost = new Uri(sHost).Host;
+				
+				try { sHost = new Uri(sHost).Host; }
+				catch(UriFormatException ex) { Wtf (ex.Message, silent); return; }
 
 				sMethod = cbMethod.Text;
 				protocol = Protocol.None;
