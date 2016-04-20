@@ -162,9 +162,9 @@ namespace LOIC
 				cmdAttack.Text = AttackText;
 				if(arr != null)
 				{
-					for (int a = 0; a < arr.Length; a++)
+					foreach (IFlooder i in arr)
 					{
-						arr[a].Stop();
+						i.Stop();
 					}
 				}
 			}
@@ -763,53 +763,32 @@ namespace LOIC
 
 			intShowStats = true;
 
-			switch(protocol)
+			int iIdle = 0;
+			int iConnecting = 0, iRequesting = 0, iDownloading = 0;
+			int iDownloaded = 0, iRequested = 0, iFailed = 0;
+
+			foreach (cHLDos c in arr)
 			{
-				case Protocol.TCP:
-				case Protocol.UDP:
-					{
-						int iRequested = 0;
-						XXPFlooder[] xxp = (XXPFlooder[]) arr;
-
-						for (int a = 0; a < xxp.Length; a++)
-						{
-							iRequested += xxp[a].Requested;
-						}
-						lbRequested.Text = iRequested.ToString();
-					}
-					break;
-				case Protocol.HTTP:
-					{
-						int iIdle = 0;
-						int iConnecting = 0, iRequesting = 0, iDownloading = 0;
-						int iDownloaded = 0, iRequested = 0, iFailed = 0;
-						HTTPFlooder[] http = (HTTPFlooder[]) arr;
-
-						for (int a = 0; a < http.Length; a++)
-						{
-							iDownloaded += http[a].Downloaded;
-							iRequested += http[a].Requested;
-							iFailed += http[a].Failed;
-							if(http[a].State == ReqState.Ready ||
-								http[a].State == ReqState.Completed)
-								iIdle++;
-							if(http[a].State == ReqState.Connecting)
-								iConnecting++;
-							if(http[a].State == ReqState.Requesting)
-								iRequesting++;
-							if(http[a].State == ReqState.Downloading)
-								iDownloading++;
-						}
-						lbFailed.Text = iFailed.ToString();
-						lbRequested.Text = iRequested.ToString();
-						lbDownloaded.Text = iDownloaded.ToString();
-						lbDownloading.Text = iDownloading.ToString();
-						lbRequesting.Text = iRequesting.ToString();
-						lbConnecting.Text = iConnecting.ToString();
-						lbIdle.Text = iIdle.ToString();
-					}
-					break;
+				iDownloaded += c.Downloaded;
+				iRequested += c.Requested;
+				iFailed += c.Failed;
+				if(c.State == ReqState.Ready ||
+					c.State == ReqState.Completed)
+					iIdle++;
+				if(c.State == ReqState.Connecting)
+					iConnecting++;
+				if(c.State == ReqState.Requesting)
+					iRequesting++;
+				if(c.State == ReqState.Downloading)
+					iDownloading++;
 			}
+			lbFailed.Text = iFailed.ToString();
+			lbRequested.Text = iRequested.ToString();
+			lbDownloaded.Text = iDownloaded.ToString();
+			lbDownloading.Text = iDownloading.ToString();
+			lbRequesting.Text = iRequesting.ToString();
+			lbConnecting.Text = iConnecting.ToString();
+			lbIdle.Text = iIdle.ToString();
 
 			intShowStats = false;
 		}
@@ -824,9 +803,9 @@ namespace LOIC
 			iDelay = tbSpeed.Value;
 			if(arr != null)
 			{
-				for (int a = 0; a < arr.Length; a++)
+				foreach (IFlooder i in arr)
 				{
-					if(arr[a] != null) arr[a].Delay = iDelay;
+					if(i != null) i.Delay = iDelay;
 				}
 			}
 		}
