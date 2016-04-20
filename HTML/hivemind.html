@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>LOIC's NewFag Help</title>
+<link rel="stylesheet" href="loic.css" type="text/css" />
+</head>
+<body>
+<div class="header">HiveMind - the IRC-LOIC</div>
+<p>Someone made you an op and now you are interested how to exploit your PA? (OMFG how did z happen?)</p>
+<h2>EZ Grab</h2>
+<p>Just fill out your attack-options .. run a short test and hit <b>F10</b>! paste that in the topic - done!</p>
+<h2>boring Nerd-Stuff</h2>
+<p>First of all you need to have op-rights in the channel ... otherwise nobody listens to you directly .. at least you have to be able to change the topic.<br />
+<br />
+Each command has to start with <i>!lazor</i>. If you want the attack to start append <i>start</i> to it .. <i>stop</i> to end the attack.<br />
+<i>default</i> set's the default values - use default as the the first command right after "!lazor" otherwise you end up resetting your own commands.<br />
+The commands available are:
+<i>targetip=</i> leave this as is (blank) unless you want to target a specific IP!<br />
+<i>targethost=</i>, <i>timeout=</i> (in seconds for 1.1.2.0+ // in milliseconds for 1.1.1.9 and previous versions!)<br />
+<i>subsite=</i>, <i>message=</i> both need to <u>be URL-encoded</u><br />
+<i>port=</i>, <i>method=</i> {TCP|UDP|HTTP|ReCoil|slowLOIC}, <i>threads=</i>, <i>speed=</i> {0..50}<br />
+<i>wait=</i>, <i>random=</i>, <i>useget=</i>, <i>usegzip=</i> all {true|false}</p>
+<h2>Tip</h2>
+<p>For backwards compability specify the ReCoil and SlowLOIC attack as follows: <i>method=TCP method=ReCoil</i><br />
+Due to the change of the timeout it might be best to go with the default values!</p>
+</body>
+</html>

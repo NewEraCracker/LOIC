@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>LOIC's NewFag Help</title>
+<link rel="stylesheet" href="loic.css" type="text/css" />
+</head>
+<body>
+<div class="header">TCP / UDP Attack</div>
+<p>The TCP / UDP method is a packet flooder. It is NOT a SYN-Flooder!!</p>
+<h2>Options</h2>
+<p>In the <b>"message"</b> you can set some payload to send to the targeted service.<br />
+If you need the newline chars, you can use \\r and \\n to construct the desired command / message.<br />
+If <b>"Append random chars"</b> is checked, 6 random characters are added at the end of the message.<br />
+<br />
+<b>"Wait for reply"</b> waits until the packet is completely send. (you may want to check this on slower connections!)
+</p>
+<h2>Remarks</h2>
+<p>"Failed" counts the unsuccessful connection attempts to the target.<br />
+In most cases 10 threads is more than enough and should use all available upload-bandwidth, however with the speed-slider you can adjust this.</p>
+</body>
+</html>
