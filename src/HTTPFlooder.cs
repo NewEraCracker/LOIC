@@ -12,16 +12,8 @@ using System.Windows.Forms;
 
 namespace LOIC
 {
-	public class HTTPFlooder : IFlooder
+	public class HTTPFlooder : cHLDos
 	{
-		public bool IsFlooding { get; set; }
-		public int Delay       { get; set; }
-
-		public ReqState State = ReqState.Ready;
-		public int Downloaded;
-		public int Requested;
-		public int Failed;
-
 		private BackgroundWorker bw;
 		private Timer tTimepoll;
 		private bool intShowStats;
@@ -31,7 +23,6 @@ namespace LOIC
 		private readonly string IP;
 		private readonly int Port;
 		private readonly string Subsite;
-		private readonly int Timeout;
 		private readonly bool Resp;
 		private readonly bool AllowRandom;
 		private readonly bool AllowGzip;
@@ -48,7 +39,7 @@ namespace LOIC
 			this.AllowRandom = random;
 			this.AllowGzip = gzip;
 		}
-		public void Start()
+		public override void Start()
 		{
 			this.IsFlooding = true;
 
@@ -62,7 +53,7 @@ namespace LOIC
 			this.bw.RunWorkerAsync();
 			this.bw.WorkerSupportsCancellation = true;
 		}
-		public void Stop()
+		public override void Stop()
 		{
 			this.IsFlooding = false;
 			this.bw.CancelAsync();

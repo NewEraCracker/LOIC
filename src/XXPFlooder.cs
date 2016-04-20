@@ -10,10 +10,8 @@ using System.Net.Sockets;
 
 namespace LOIC
 {
-	public class XXPFlooder : IFlooder
+	public class XXPFlooder : cHLDos
 	{
-		public bool IsFlooding { get; set; }
-		public int Delay       { get; set; }
 		public int FloodCount  { get; set; }
 
 		private BackgroundWorker bw;
@@ -35,7 +33,7 @@ namespace LOIC
 			this.Data = data;
 			this.AllowRandom = random;
 		}
-		public void Start()
+		public override void Start()
 		{
 			this.IsFlooding = true;
 			this.bw = new BackgroundWorker();
@@ -43,7 +41,7 @@ namespace LOIC
 			this.bw.RunWorkerAsync();
 			this.bw.WorkerSupportsCancellation = true;
 		}
-		public void Stop()
+		public override void Stop()
 		{
 			this.IsFlooding = false;
 			this.bw.CancelAsync();
