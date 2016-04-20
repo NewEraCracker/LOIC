@@ -8,9 +8,9 @@
  * SmartIrc4net - the IRC library for .NET/C# <http://smartirc4net.sf.net>
  *
  * Copyright (c) 2003-2005 Mirco Bauer <meebey@meebey.net> <http://www.meebey.net>
- * 
+ *
  * Full LGPL License: <http://www.gnu.org/licenses/lgpl.txt>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -26,6 +26,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Net;
 using System.Net.Sockets;
 
 namespace Meebey.SmartIrc4net
@@ -36,6 +37,12 @@ namespace Meebey.SmartIrc4net
     /// <threadsafety static="true" instance="true" />
     internal class IrcTcpClient: TcpClient
     {
+        // https://msdn.microsoft.com/en-us/library/system.net.sockets.tcpclient%28v=vs.110%29.aspx
+        public IrcTcpClient() : base() { }
+        public IrcTcpClient(AddressFamily family) : base(family) { }
+        public IrcTcpClient(IPEndPoint localEP)   : base(localEP) { }
+        public IrcTcpClient(string hostname, int port) : base(hostname, port) { }
+
         public Socket Socket {
             get {
                 return Client;

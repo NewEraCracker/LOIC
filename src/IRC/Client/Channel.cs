@@ -8,9 +8,9 @@
  * SmartIrc4net - the IRC library for .NET/C# <http://smartirc4net.sf.net>
  *
  * Copyright (c) 2003-2005 Mirco Bauer <meebey@meebey.net> <http://www.meebey.net>
- * 
+ *
  * Full LGPL License: <http://www.gnu.org/licenses/lgpl.txt>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -33,16 +33,16 @@ using System.Collections.Specialized;
 namespace Meebey.SmartIrc4net
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <threadsafety static="true" instance="true" />
     public class Channel
     {
         private string           _Name;
         private string           _Key       = String.Empty;
-        private Hashtable        _Users     = Hashtable.Synchronized(new Hashtable(new CaseInsensitiveHashCodeProvider(), new CaseInsensitiveComparer()));
-        private Hashtable        _Ops       = Hashtable.Synchronized(new Hashtable(new CaseInsensitiveHashCodeProvider(), new CaseInsensitiveComparer()));
-        private Hashtable        _Voices    = Hashtable.Synchronized(new Hashtable(new CaseInsensitiveHashCodeProvider(), new CaseInsensitiveComparer()));
+        private Hashtable        _Users     = Hashtable.Synchronized(new Hashtable(StringComparer.InvariantCultureIgnoreCase));
+        private Hashtable        _Ops       = Hashtable.Synchronized(new Hashtable(StringComparer.InvariantCultureIgnoreCase));
+        private Hashtable        _Voices    = Hashtable.Synchronized(new Hashtable(StringComparer.InvariantCultureIgnoreCase));
         private StringCollection _Bans      = new StringCollection();
         private string           _Topic     = String.Empty;
         private int              _UserLimit;
@@ -50,9 +50,9 @@ namespace Meebey.SmartIrc4net
         private DateTime         _ActiveSyncStart;
         private DateTime         _ActiveSyncStop;
         private TimeSpan         _ActiveSyncTime;
-        
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="name"> </param>
         internal Channel(string name)
@@ -69,7 +69,7 @@ namespace Meebey.SmartIrc4net
 #endif
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <value> </value>
         public string Name {
@@ -79,7 +79,7 @@ namespace Meebey.SmartIrc4net
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <value> </value>
         public string Key {
@@ -92,7 +92,7 @@ namespace Meebey.SmartIrc4net
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <value> </value>
         public Hashtable Users {
@@ -102,7 +102,7 @@ namespace Meebey.SmartIrc4net
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <value> </value>
         internal Hashtable UnsafeUsers {
@@ -112,7 +112,7 @@ namespace Meebey.SmartIrc4net
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <value> </value>
         public Hashtable Ops {
@@ -122,7 +122,7 @@ namespace Meebey.SmartIrc4net
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <value> </value>
         internal Hashtable UnsafeOps {
@@ -132,7 +132,7 @@ namespace Meebey.SmartIrc4net
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <value> </value>
         public Hashtable Voices {
@@ -142,7 +142,7 @@ namespace Meebey.SmartIrc4net
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <value> </value>
         internal Hashtable UnsafeVoices {
@@ -152,7 +152,7 @@ namespace Meebey.SmartIrc4net
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <value> </value>
         public StringCollection Bans {
@@ -162,7 +162,7 @@ namespace Meebey.SmartIrc4net
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <value> </value>
         public string Topic {
@@ -175,7 +175,7 @@ namespace Meebey.SmartIrc4net
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <value> </value>
         public int UserLimit {
@@ -188,7 +188,7 @@ namespace Meebey.SmartIrc4net
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <value> </value>
         public string Mode {
@@ -201,7 +201,7 @@ namespace Meebey.SmartIrc4net
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <value> </value>
         public DateTime ActiveSyncStart {
@@ -211,7 +211,7 @@ namespace Meebey.SmartIrc4net
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <value> </value>
         public DateTime ActiveSyncStop {
@@ -225,7 +225,7 @@ namespace Meebey.SmartIrc4net
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <value> </value>
         public TimeSpan ActiveSyncTime {
