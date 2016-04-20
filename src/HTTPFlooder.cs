@@ -58,8 +58,9 @@ namespace LOIC
 			this.IsFlooding = false;
 			this.bw.CancelAsync();
 		}
-		void tTimepoll_Tick(object sender, EventArgs e)
+		private void tTimepoll_Tick(object sender, EventArgs e)
 		{
+			// Protect against race condition
 			if(intShowStats) return; intShowStats = true;
 
 			if(Tick() > lastAction + Timeout)

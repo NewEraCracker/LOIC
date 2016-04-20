@@ -84,6 +84,7 @@ namespace LOIC
 		{
 			if((cmdAttack.Text == AttackText && toggle) || (!toggle && on))
 			{
+				// Protect against race condition
 				if(tShowStats.Enabled) tShowStats.Stop();
 
 				if (!int.TryParse (txtPort.Text, out iPort) || iPort < 0 || iPort > 65535) {
@@ -756,52 +757,58 @@ namespace LOIC
 		/// <param name="e">EventArgs.</param>
 		private void tShowStats_Tick(object sender, EventArgs e)
 		{
-			if(intShowStats) return; intShowStats = true;
+			// Protect against null reference and race condition
+			if(arr == null || intShowStats)
+				return;
 
-			if(arr != null && (protocol == Protocol.TCP || protocol == Protocol.UDP))
+			intShowStats = true;
+
+			switch(protocol)
 			{
-				int iFloodCount = 0;
-				XXPFlooder[] xxp = (XXPFlooder[]) arr;
+				case Protocol.TCP:
+				case Protocol.UDP:
+					{
+						int iRequested = 0;
+						XXPFlooder[] xxp = (XXPFlooder[]) arr;
 
-				for (int a = 0; a < xxp.Length; a++)
-				{
-					iFloodCount += xxp[a].FloodCount;
-				}
-				lbRequested.Text = iFloodCount.ToString();
-			}
-			if(arr != null && protocol == Protocol.HTTP)
-			{
-				int iIdle = 0;
-				int iConnecting = 0;
-				int iRequesting = 0;
-				int iDownloading = 0;
-				int iDownloaded = 0;
-				int iRequested = 0;
-				int iFailed = 0;
-				HTTPFlooder[] http = (HTTPFlooder[]) arr;
+						for (int a = 0; a < xxp.Length; a++)
+						{
+							iRequested += xxp[a].Requested;
+						}
+						lbRequested.Text = iRequested.ToString();
+					}
+					break;
+				case Protocol.HTTP:
+					{
+						int iIdle = 0;
+						int iConnecting = 0, iRequesting = 0, iDownloading = 0;
+						int iDownloaded = 0, iRequested = 0, iFailed = 0;
+						HTTPFlooder[] http = (HTTPFlooder[]) arr;
 
-				for (int a = 0; a < http.Length; a++)
-				{
-					iDownloaded += http[a].Downloaded;
-					iRequested += http[a].Requested;
-					iFailed += http[a].Failed;
-					if(http[a].State == ReqState.Ready ||
-						http[a].State == ReqState.Completed)
-						iIdle++;
-					if(http[a].State == ReqState.Connecting)
-						iConnecting++;
-					if(http[a].State == ReqState.Requesting)
-						iRequesting++;
-					if(http[a].State == ReqState.Downloading)
-						iDownloading++;
-				}
-				lbFailed.Text = iFailed.ToString();
-				lbRequested.Text = iRequested.ToString();
-				lbDownloaded.Text = iDownloaded.ToString();
-				lbDownloading.Text = iDownloading.ToString();
-				lbRequesting.Text = iRequesting.ToString();
-				lbConnecting.Text = iConnecting.ToString();
-				lbIdle.Text = iIdle.ToString();
+						for (int a = 0; a < http.Length; a++)
+						{
+							iDownloaded += http[a].Downloaded;
+							iRequested += http[a].Requested;
+							iFailed += http[a].Failed;
+							if(http[a].State == ReqState.Ready ||
+								http[a].State == ReqState.Completed)
+								iIdle++;
+							if(http[a].State == ReqState.Connecting)
+								iConnecting++;
+							if(http[a].State == ReqState.Requesting)
+								iRequesting++;
+							if(http[a].State == ReqState.Downloading)
+								iDownloading++;
+						}
+						lbFailed.Text = iFailed.ToString();
+						lbRequested.Text = iRequested.ToString();
+						lbDownloaded.Text = iDownloaded.ToString();
+						lbDownloading.Text = iDownloading.ToString();
+						lbRequesting.Text = iRequesting.ToString();
+						lbConnecting.Text = iConnecting.ToString();
+						lbIdle.Text = iIdle.ToString();
+					}
+					break;
 			}
 
 			intShowStats = false;
