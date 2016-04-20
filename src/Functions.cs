@@ -4,7 +4,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace LOIC
@@ -43,6 +42,11 @@ namespace LOIC
 					return String.Format("Mozilla/5.0 (Windows NT {0}; rv:{1}.0) Gecko/20100101 Firefox/{1}.0", ntv[rnd.Next(0, ntv.Length)], rnd.Next(36, 46));
 				}
 			}
+		}
+
+		public static byte[] RandomHttpHeader(string method, string subsite, string host, bool subsite_random = false, bool gzip = false, int keep_alive = 0)
+		{
+			return Encoding.ASCII.GetBytes(String.Format("{0} {1}{2} HTTP/1.1{7}Host: {3}{7}User-Agent: {4}{7}Accept: */*{7}{5}{6}{7}", method, subsite, (subsite_random ? RandomString() : ""), host, RandomUserAgent(), (gzip ? "Accept-Encoding: gzip, deflate\r\n" : ""), (keep_alive > 0 ? String.Format("Keep-Alive: {0}\r\nConnection: keep-alive\r\n", keep_alive) : ""), "\r\n"));
 		}
 	}
 }
