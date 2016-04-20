@@ -46,13 +46,12 @@ namespace LOIC
 		}
 		private void bw_DoWork(object sender, DoWorkEventArgs e)
 		{
-			State = ReqState.Ready; // SET STATE TO READY //
-
 			try
 			{
 				IPEndPoint RHost = new IPEndPoint(IPAddress.Parse(IP), Port);
 				while (this.IsFlooding)
 				{
+					State = ReqState.Ready; // SET STATE TO READY //
 					if(Protocol == 1)
 					{
 						using (Socket socket = new Socket(RHost.AddressFamily, SocketType.Stream, ProtocolType.Tcp))
@@ -103,8 +102,7 @@ namespace LOIC
 			}
 			// Analysis disable once EmptyGeneralCatchClause
 			catch { }
-
-			State = ReqState.Ready; // SET STATE TO READY //
+			finally { State = ReqState.Ready; this.IsFlooding = false; }
 		}
 	}
 }

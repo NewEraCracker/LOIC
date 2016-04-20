@@ -95,13 +95,15 @@ namespace LOIC
 						socket.Blocking = Resp;
 						State = ReqState.Requesting; // SET STATE TO REQUESTING //
 
-						try { socket.Send(buf, SocketFlags.None); }
+						try
+						{
+							socket.Send(buf, SocketFlags.None);
+							State = ReqState.Downloading; Requested++; // SET STATE TO DOWNLOADING // REQUESTED++
+
+							if (Resp)
+								socket.Receive(recvBuf, recvBuf.Length, SocketFlags.None);
+						}
 						catch(SocketException) { goto _continue; }
-
-						State = ReqState.Downloading; Requested++; // SET STATE TO DOWNLOADING // REQUESTED++
-
-						if (Resp)
-							socket.Receive(recvBuf, recvBuf.Length, SocketFlags.None);
 					}
 					State = ReqState.Completed; Downloaded++; // SET STATE TO COMPLETED // DOWNLOADED++
 					tTimepoll.Stop();
