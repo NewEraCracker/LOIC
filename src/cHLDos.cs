@@ -4,11 +4,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Net.Sockets;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace LOIC
 {
