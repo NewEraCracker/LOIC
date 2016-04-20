@@ -627,7 +627,7 @@ namespace LOIC
             // 
             // tShowStats
             // 
-            this.tShowStats.Interval = 10;
+            this.tShowStats.Interval = 20;
             this.tShowStats.Tick += new System.EventHandler(this.tShowStats_Tick);
             // 
             // disableHive
