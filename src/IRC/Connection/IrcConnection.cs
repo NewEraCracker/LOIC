@@ -831,9 +831,11 @@ namespace Meebey.SmartIrc4net
                             Logger.Socket.Debug("received: \""+data+"\"");
 #endif
                         }
-                    } catch (IOException) {
 #if LOG4NET
+                    } catch (IOException e) {
                         Logger.Socket.Warn("IOException: "+e.Message);
+#else
+                    } catch (IOException) {
 #endif
                     } finally {
 #if LOG4NET
@@ -913,9 +915,11 @@ namespace Meebey.SmartIrc4net
                             _CheckBuffer();
                             Thread.Sleep(_Connection._SendDelay);
                         }
-                    } catch (IOException) {
 #if LOG4NET
+                    } catch (IOException e) {
                         Logger.Socket.Warn("IOException: "+e.Message);
+#else
+                    } catch (IOException) {
 #endif
                     } finally {
 #if LOG4NET
