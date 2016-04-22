@@ -197,7 +197,7 @@ namespace LOIC
 				}
 				try
 				{
-					txtTarget.Text = sHost = sIP = tIP = IPAddress.Parse(tIP).ToString();
+					txtTarget.Text = sHost = sIP = IPAddress.Parse(tIP).ToString();
 					if(sHost.Contains(":"))
 					{
 						sHost = "[" + sHost.Trim('[', ']') + "]";
@@ -276,7 +276,7 @@ namespace LOIC
 				}
 				if(disableHive.Checked && enabled)
 				{
-					Wtf ("Did you filled IRC options correctly?");
+					Wtf ("Did you fill IRC options correctly?");
 					return;
 				}
 
