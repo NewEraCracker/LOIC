@@ -29,6 +29,7 @@ namespace LOIC
 		private void InitializeComponent()
 		{
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.cmdTargetIP = new System.Windows.Forms.Button();
@@ -38,9 +39,11 @@ namespace LOIC
             this.txtTargetURL = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtTarget = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.chkUsegZip = new System.Windows.Forms.CheckBox();
+            this.chkUseGet = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtSLSpT = new System.Windows.Forms.TextBox();
             this.chkMsgRandom = new System.Windows.Forms.CheckBox();
             this.chkRandom = new System.Windows.Forms.CheckBox();
             this.label21 = new System.Windows.Forms.Label();
@@ -59,7 +62,6 @@ namespace LOIC
             this.cbMethod = new System.Windows.Forms.ComboBox();
             this.txtPort = new System.Windows.Forms.TextBox();
             this.tbSpeed = new System.Windows.Forms.TrackBar();
-            this.label10 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.cmdAttack = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
@@ -81,6 +83,9 @@ namespace LOIC
             this.label16 = new System.Windows.Forms.Label();
             this.TTip = new System.Windows.Forms.ToolTip(this.components);
             this.label24 = new System.Windows.Forms.Label();
+            this.textOLServer = new System.Windows.Forms.TextBox();
+            this.textOLTime = new System.Windows.Forms.TextBox();
+            this.chkbOLUp = new System.Windows.Forms.CheckBox();
             this.tShowStats = new System.Windows.Forms.Timer(this.components);
             this.disableHive = new System.Windows.Forms.RadioButton();
             this.enableHive = new System.Windows.Forms.RadioButton();
@@ -88,10 +93,15 @@ namespace LOIC
             this.txtIRCserver = new System.Windows.Forms.TextBox();
             this.txtIRCport = new System.Windows.Forms.TextBox();
             this.txtIRCchannel = new System.Windows.Forms.TextBox();
-            this.pBanner = new System.Windows.Forms.PictureBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label26 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
+            this.enableOverlord = new System.Windows.Forms.RadioButton();
+            this.labelOLStatus = new System.Windows.Forms.Label();
+            this.label28 = new System.Windows.Forms.Label();
+            this.tCheckOL = new System.Windows.Forms.Timer(this.components);
+            this.tZergRush = new System.Windows.Forms.Timer(this.components);
+            this.pBanner = new System.Windows.Forms.PictureBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -110,7 +120,7 @@ namespace LOIC
             this.groupBox1.Controls.Add(this.cmdTargetURL);
             this.groupBox1.Controls.Add(this.txtTargetURL);
             this.groupBox1.ForeColor = System.Drawing.Color.LightBlue;
-            this.groupBox1.Location = new System.Drawing.Point(212, 42);
+            this.groupBox1.Location = new System.Drawing.Point(212, 65);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(465, 75);
             this.groupBox1.TabIndex = 1;
@@ -185,9 +195,9 @@ namespace LOIC
             // 
             this.groupBox2.Controls.Add(this.txtTarget);
             this.groupBox2.ForeColor = System.Drawing.Color.LightBlue;
-            this.groupBox2.Location = new System.Drawing.Point(212, 136);
+            this.groupBox2.Location = new System.Drawing.Point(212, 148);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(758, 106);
+            this.groupBox2.Size = new System.Drawing.Size(758, 103);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Selected target";
@@ -196,11 +206,11 @@ namespace LOIC
             // 
             this.txtTarget.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(48)))), ((int)(((byte)(64)))));
             this.txtTarget.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtTarget.Font = new System.Drawing.Font("Arial", 48F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtTarget.Font = new System.Drawing.Font("Arial", 45F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtTarget.ForeColor = System.Drawing.Color.Azure;
             this.txtTarget.Location = new System.Drawing.Point(6, 19);
             this.txtTarget.Name = "txtTarget";
-            this.txtTarget.Size = new System.Drawing.Size(746, 81);
+            this.txtTarget.Size = new System.Drawing.Size(746, 76);
             this.txtTarget.TabIndex = 1;
             this.txtTarget.TabStop = false;
             this.txtTarget.Text = "N O N E !";
@@ -208,22 +218,12 @@ namespace LOIC
             this.TTip.SetToolTip(this.txtTarget, "The currently selected target");
             this.txtTarget.Enter += new System.EventHandler(this.txtTarget_Enter);
             // 
-            // label5
-            // 
-            this.label5.Location = new System.Drawing.Point(245, 243);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(23, 23);
-            this.label5.TabIndex = 7;
-            // 
-            // label3
-            // 
-            this.label3.Location = new System.Drawing.Point(212, 242);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(23, 23);
-            this.label3.TabIndex = 8;
-            // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.chkUsegZip);
+            this.groupBox3.Controls.Add(this.chkUseGet);
+            this.groupBox3.Controls.Add(this.label3);
+            this.groupBox3.Controls.Add(this.txtSLSpT);
             this.groupBox3.Controls.Add(this.chkMsgRandom);
             this.groupBox3.Controls.Add(this.chkRandom);
             this.groupBox3.Controls.Add(this.label21);
@@ -243,16 +243,64 @@ namespace LOIC
             this.groupBox3.Controls.Add(this.txtPort);
             this.groupBox3.Controls.Add(this.tbSpeed);
             this.groupBox3.ForeColor = System.Drawing.Color.LightBlue;
-            this.groupBox3.Location = new System.Drawing.Point(212, 268);
+            this.groupBox3.Location = new System.Drawing.Point(212, 263);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(758, 112);
+            this.groupBox3.Size = new System.Drawing.Size(757, 130);
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "3. Attack options";
             // 
+            // chkUsegZip
+            // 
+            this.chkUsegZip.AutoSize = true;
+            this.chkUsegZip.Enabled = false;
+            this.chkUsegZip.Location = new System.Drawing.Point(655, 34);
+            this.chkUsegZip.Name = "chkUsegZip";
+            this.chkUsegZip.Size = new System.Drawing.Size(67, 17);
+            this.chkUsegZip.TabIndex = 33;
+            this.chkUsegZip.Text = "use gZip";
+            this.TTip.SetToolTip(this.chkUsegZip, "If checked it adds gZip compression to the slowLOIC attack");
+            this.chkUsegZip.UseVisualStyleBackColor = true;
+            // 
+            // chkUseGet
+            // 
+            this.chkUseGet.AutoSize = true;
+            this.chkUseGet.Enabled = false;
+            this.chkUseGet.Location = new System.Drawing.Point(655, 13);
+            this.chkUseGet.Name = "chkUseGet";
+            this.chkUseGet.Size = new System.Drawing.Size(68, 17);
+            this.chkUseGet.TabIndex = 32;
+            this.chkUseGet.Text = "use GET";
+            this.TTip.SetToolTip(this.chkUseGet, "If checked it uses the GET method instead of POST.");
+            this.chkUseGet.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            this.label3.Location = new System.Drawing.Point(327, 95);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(92, 15);
+            this.label3.TabIndex = 31;
+            this.label3.Text = "Sockets / Thread";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // txtSLSpT
+            // 
+            this.txtSLSpT.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(48)))), ((int)(((byte)(64)))));
+            this.txtSLSpT.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtSLSpT.Enabled = false;
+            this.txtSLSpT.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtSLSpT.ForeColor = System.Drawing.Color.Azure;
+            this.txtSLSpT.Location = new System.Drawing.Point(343, 72);
+            this.txtSLSpT.Name = "txtSLSpT";
+            this.txtSLSpT.Size = new System.Drawing.Size(57, 20);
+            this.txtSLSpT.TabIndex = 30;
+            this.txtSLSpT.Text = "50";
+            this.txtSLSpT.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TTip.SetToolTip(this.txtSLSpT, "Amount of sockets per thread");
+            // 
             // chkMsgRandom
             // 
-            this.chkMsgRandom.Location = new System.Drawing.Point(522, 15);
+            this.chkMsgRandom.Location = new System.Drawing.Point(437, 14);
             this.chkMsgRandom.Name = "chkMsgRandom";
             this.chkMsgRandom.Size = new System.Drawing.Size(212, 18);
             this.chkMsgRandom.TabIndex = 29;
@@ -261,9 +309,9 @@ namespace LOIC
             // chkRandom
             // 
             this.chkRandom.AutoSize = true;
-            this.chkRandom.Location = new System.Drawing.Point(165, 15);
+            this.chkRandom.Location = new System.Drawing.Point(135, 13);
             this.chkRandom.Name = "chkRandom";
-            this.chkRandom.Size = new System.Drawing.Size(187, 18);
+            this.chkRandom.Size = new System.Drawing.Size(185, 17);
             this.chkRandom.TabIndex = 28;
             this.chkRandom.Text = "Append random chars to the URL";
             this.chkRandom.UseVisualStyleBackColor = true;
@@ -279,20 +327,20 @@ namespace LOIC
             // 
             // label18
             // 
-            this.label18.Location = new System.Drawing.Point(392, 16);
+            this.label18.Location = new System.Drawing.Point(328, 15);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(124, 16);
+            this.label18.Size = new System.Drawing.Size(105, 16);
             this.label18.TabIndex = 25;
-            this.label18.Text = "TCP / UDP message";
+            this.label18.Text = "TCP / UDP message:";
             this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label17
             // 
-            this.label17.Location = new System.Drawing.Point(70, 15);
+            this.label17.Location = new System.Drawing.Point(62, 14);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(89, 17);
+            this.label17.Size = new System.Drawing.Size(77, 17);
             this.label17.TabIndex = 24;
-            this.label17.Text = "HTTP Subsite";
+            this.label17.Text = "HTTP Subsite:";
             this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label9
@@ -306,16 +354,16 @@ namespace LOIC
             // 
             // label7
             // 
-            this.label7.Location = new System.Drawing.Point(168, 94);
+            this.label7.Location = new System.Drawing.Point(161, 94);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(75, 15);
+            this.label7.Size = new System.Drawing.Size(57, 15);
             this.label7.TabIndex = 22;
             this.label7.Text = "Threads";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label4
             // 
-            this.label4.Location = new System.Drawing.Point(87, 94);
+            this.label4.Location = new System.Drawing.Point(75, 94);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(75, 15);
             this.label4.TabIndex = 21;
@@ -326,7 +374,7 @@ namespace LOIC
             // 
             this.label6.Location = new System.Drawing.Point(6, 94);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(75, 15);
+            this.label6.Size = new System.Drawing.Size(60, 15);
             this.label6.TabIndex = 20;
             this.label6.Text = "Port";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -343,11 +391,9 @@ namespace LOIC
             // chkResp
             // 
             this.chkResp.AutoSize = true;
-            this.chkResp.Checked = true;
-            this.chkResp.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkResp.Location = new System.Drawing.Point(249, 72);
+            this.chkResp.Location = new System.Drawing.Point(231, 72);
             this.chkResp.Name = "chkResp";
-            this.chkResp.Size = new System.Drawing.Size(91, 18);
+            this.chkResp.Size = new System.Drawing.Size(88, 17);
             this.chkResp.TabIndex = 7;
             this.chkResp.Text = "Wait for reply";
             this.TTip.SetToolTip(this.chkResp, "Don\'t disconnect before the server\'s started to answer");
@@ -359,9 +405,9 @@ namespace LOIC
             this.txtData.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtData.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtData.ForeColor = System.Drawing.Color.Azure;
-            this.txtData.Location = new System.Drawing.Point(359, 34);
+            this.txtData.Location = new System.Drawing.Point(330, 34);
             this.txtData.Name = "txtData";
-            this.txtData.Size = new System.Drawing.Size(393, 20);
+            this.txtData.Size = new System.Drawing.Size(312, 20);
             this.txtData.TabIndex = 3;
             this.txtData.Text = "U dun goofed";
             this.txtData.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -375,7 +421,7 @@ namespace LOIC
             this.txtSubsite.ForeColor = System.Drawing.Color.Azure;
             this.txtSubsite.Location = new System.Drawing.Point(62, 34);
             this.txtSubsite.Name = "txtSubsite";
-            this.txtSubsite.Size = new System.Drawing.Size(291, 20);
+            this.txtSubsite.Size = new System.Drawing.Size(259, 20);
             this.txtSubsite.TabIndex = 2;
             this.txtSubsite.Text = "/";
             this.txtSubsite.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -391,7 +437,7 @@ namespace LOIC
             this.txtTimeout.Name = "txtTimeout";
             this.txtTimeout.Size = new System.Drawing.Size(50, 20);
             this.txtTimeout.TabIndex = 1;
-            this.txtTimeout.Text = "9001";
+            this.txtTimeout.Text = "30";
             this.txtTimeout.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.TTip.SetToolTip(this.txtTimeout, "Max time to wait for a response");
             // 
@@ -401,13 +447,14 @@ namespace LOIC
             this.txtThreads.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtThreads.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtThreads.ForeColor = System.Drawing.Color.Azure;
-            this.txtThreads.Location = new System.Drawing.Point(168, 71);
+            this.txtThreads.Location = new System.Drawing.Point(161, 71);
             this.txtThreads.Name = "txtThreads";
-            this.txtThreads.Size = new System.Drawing.Size(75, 20);
+            this.txtThreads.Size = new System.Drawing.Size(57, 20);
             this.txtThreads.TabIndex = 6;
             this.txtThreads.Text = "10";
             this.txtThreads.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.TTip.SetToolTip(this.txtThreads, "How many users LOIC should emulate");
+            this.txtThreads.Leave += new System.EventHandler(this.txtThreads_Leave);
             // 
             // cbMethod
             // 
@@ -419,13 +466,16 @@ namespace LOIC
             this.cbMethod.Items.AddRange(new object[] {
             "TCP",
             "UDP",
-            "HTTP"});
-            this.cbMethod.Location = new System.Drawing.Point(87, 69);
+            "HTTP",
+            "ReCoil",
+            "slowLOIC"});
+            this.cbMethod.Location = new System.Drawing.Point(75, 69);
             this.cbMethod.Name = "cbMethod";
             this.cbMethod.Size = new System.Drawing.Size(75, 22);
             this.cbMethod.TabIndex = 5;
             this.cbMethod.Text = "TCP";
             this.TTip.SetToolTip(this.cbMethod, "What type of attack to launch");
+            this.cbMethod.SelectedIndexChanged += new System.EventHandler(this.cbMethod_SelectedIndexChanged);
             // 
             // txtPort
             // 
@@ -435,7 +485,7 @@ namespace LOIC
             this.txtPort.ForeColor = System.Drawing.Color.Azure;
             this.txtPort.Location = new System.Drawing.Point(6, 70);
             this.txtPort.Name = "txtPort";
-            this.txtPort.Size = new System.Drawing.Size(75, 20);
+            this.txtPort.Size = new System.Drawing.Size(60, 20);
             this.txtPort.TabIndex = 4;
             this.txtPort.Text = "80";
             this.txtPort.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -443,25 +493,18 @@ namespace LOIC
             // 
             // tbSpeed
             // 
-            this.tbSpeed.Location = new System.Drawing.Point(362, 65);
-            this.tbSpeed.Maximum = 20;
+            this.tbSpeed.Location = new System.Drawing.Point(414, 65);
+            this.tbSpeed.Maximum = 50;
             this.tbSpeed.Name = "tbSpeed";
-            this.tbSpeed.Size = new System.Drawing.Size(390, 45);
+            this.tbSpeed.Size = new System.Drawing.Size(338, 42);
             this.tbSpeed.TabIndex = 8;
             this.tbSpeed.ValueChanged += new System.EventHandler(this.tbSpeed_ValueChanged);
-            // 
-            // label10
-            // 
-            this.label10.Location = new System.Drawing.Point(677, 110);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(23, 23);
-            this.label10.TabIndex = 9;
             // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.cmdAttack);
             this.groupBox4.ForeColor = System.Drawing.Color.LightBlue;
-            this.groupBox4.Location = new System.Drawing.Point(712, 42);
+            this.groupBox4.Location = new System.Drawing.Point(712, 65);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(258, 75);
             this.groupBox4.TabIndex = 2;
@@ -484,9 +527,9 @@ namespace LOIC
             // 
             // label11
             // 
-            this.label11.Location = new System.Drawing.Point(212, 380);
+            this.label11.Location = new System.Drawing.Point(212, 375);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(23, 23);
+            this.label11.Size = new System.Drawing.Size(22, 41);
             this.label11.TabIndex = 10;
             // 
             // groupBox5
@@ -663,6 +706,44 @@ namespace LOIC
             this.TTip.SetToolTip(this.label24, "Go to official page");
             this.label24.Click += new System.EventHandler(this.label24_Click);
             // 
+            // textOLServer
+            // 
+            this.textOLServer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(48)))), ((int)(((byte)(64)))));
+            this.textOLServer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textOLServer.ForeColor = System.Drawing.Color.Azure;
+            this.textOLServer.Location = new System.Drawing.Point(505, 39);
+            this.textOLServer.Name = "textOLServer";
+            this.textOLServer.Size = new System.Drawing.Size(107, 20);
+            this.textOLServer.TabIndex = 25;
+            this.TTip.SetToolTip(this.textOLServer, "URL of the Overlord-Server (http://overlord.com:8100/hidden/go.lcs");
+            // 
+            // textOLTime
+            // 
+            this.textOLTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(48)))), ((int)(((byte)(64)))));
+            this.textOLTime.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textOLTime.ForeColor = System.Drawing.Color.Azure;
+            this.textOLTime.Location = new System.Drawing.Point(727, 39);
+            this.textOLTime.MaxLength = 3;
+            this.textOLTime.Name = "textOLTime";
+            this.textOLTime.Size = new System.Drawing.Size(27, 20);
+            this.textOLTime.TabIndex = 28;
+            this.textOLTime.Text = "30";
+            this.TTip.SetToolTip(this.textOLTime, "the time between rechecks of the OverLord CC (in minutes)");
+            // 
+            // chkbOLUp
+            // 
+            this.chkbOLUp.AutoSize = true;
+            this.chkbOLUp.Checked = true;
+            this.chkbOLUp.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkbOLUp.Location = new System.Drawing.Point(626, 40);
+            this.chkbOLUp.Name = "chkbOLUp";
+            this.chkbOLUp.Size = new System.Drawing.Size(45, 18);
+            this.chkbOLUp.TabIndex = 30;
+            this.chkbOLUp.Text = "Up?";
+            this.TTip.SetToolTip(this.chkbOLUp, "Search Up or Down in the Page. Use Up for Pages like Twitter or \"dedicated\" Web-P" +
+                    "ages and Down for Boards / Blogs.");
+            this.chkbOLUp.UseVisualStyleBackColor = true;
+            // 
             // tShowStats
             // 
             this.tShowStats.Interval = 10;
@@ -732,15 +813,6 @@ namespace LOIC
             this.txtIRCchannel.TabIndex = 20;
             this.txtIRCchannel.Text = "#loic";
             // 
-            // pBanner
-            // 
-            this.pBanner.Image = global::LOIC.Properties.Resources.LOIC;
-            this.pBanner.Location = new System.Drawing.Point(12, 12);
-            this.pBanner.Name = "pBanner";
-            this.pBanner.Size = new System.Drawing.Size(184, 462);
-            this.pBanner.TabIndex = 12;
-            this.pBanner.TabStop = false;
-            // 
             // label8
             // 
             this.label8.AutoSize = true;
@@ -768,12 +840,65 @@ namespace LOIC
             this.label27.TabIndex = 23;
             this.label27.Text = "Channel";
             // 
+            // enableOverlord
+            // 
+            this.enableOverlord.AutoSize = true;
+            this.enableOverlord.Location = new System.Drawing.Point(377, 39);
+            this.enableOverlord.Name = "enableOverlord";
+            this.enableOverlord.Size = new System.Drawing.Size(104, 18);
+            this.enableOverlord.TabIndex = 24;
+            this.enableOverlord.Text = "DAMN OverLord";
+            this.enableOverlord.UseVisualStyleBackColor = true;
+            this.enableOverlord.CheckedChanged += new System.EventHandler(this.enableOverlord_CheckedChanged);
+            // 
+            // labelOLStatus
+            // 
+            this.labelOLStatus.Location = new System.Drawing.Point(760, 43);
+            this.labelOLStatus.Name = "labelOLStatus";
+            this.labelOLStatus.Size = new System.Drawing.Size(210, 16);
+            this.labelOLStatus.TabIndex = 26;
+            this.labelOLStatus.Text = "Disconnected.";
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(680, 43);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(45, 14);
+            this.label28.TabIndex = 27;
+            this.label28.Text = "Interval:";
+            // 
+            // tCheckOL
+            // 
+            this.tCheckOL.Interval = 300000;
+            this.tCheckOL.Tick += new System.EventHandler(this.tCheckOL_Tick);
+            // 
+            // tZergRush
+            // 
+            this.tZergRush.Interval = 300000;
+            this.tZergRush.Tick += new System.EventHandler(this.tStartZergRush);
+            // 
+            // pBanner
+            // 
+            this.pBanner.Image = global::LOIC.Properties.Resources.LOIC;
+            this.pBanner.Location = new System.Drawing.Point(12, 12);
+            this.pBanner.Name = "pBanner";
+            this.pBanner.Size = new System.Drawing.Size(184, 462);
+            this.pBanner.TabIndex = 12;
+            this.pBanner.TabStop = false;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(24)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(982, 486);
+            this.ClientSize = new System.Drawing.Size(984, 486);
+            this.Controls.Add(this.chkbOLUp);
+            this.Controls.Add(this.textOLTime);
+            this.Controls.Add(this.label28);
+            this.Controls.Add(this.labelOLStatus);
+            this.Controls.Add(this.textOLServer);
+            this.Controls.Add(this.enableOverlord);
             this.Controls.Add(this.label27);
             this.Controls.Add(this.label26);
             this.Controls.Add(this.label8);
@@ -789,18 +914,18 @@ namespace LOIC
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.groupBox4);
-            this.Controls.Add(this.label10);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label5);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.LightBlue;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "frmMain";
             this.Load += new System.EventHandler(this.frmMain_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmMain_KeyDown);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -826,15 +951,12 @@ namespace LOIC
 		private System.Windows.Forms.TextBox txtTargetIP;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.GroupBox groupBox2;
-		private System.Windows.Forms.TextBox txtTarget;
-		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txtTarget;
 		private System.Windows.Forms.GroupBox groupBox3;
 		private System.Windows.Forms.TextBox txtPort;
 		private System.Windows.Forms.TextBox txtThreads;
 		private System.Windows.Forms.ComboBox cbMethod;
-		private System.Windows.Forms.TextBox txtTimeout;
-		private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox txtTimeout;
 		private System.Windows.Forms.GroupBox groupBox4;
 		private System.Windows.Forms.Button cmdAttack;
 		private System.Windows.Forms.Label label11;
@@ -881,6 +1003,18 @@ namespace LOIC
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.RadioButton enableOverlord;
+        private System.Windows.Forms.TextBox textOLServer;
+        private System.Windows.Forms.Label labelOLStatus;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.TextBox textOLTime;
+        private System.Windows.Forms.Timer tCheckOL;
+        private System.Windows.Forms.CheckBox chkbOLUp;
+        private System.Windows.Forms.Timer tZergRush;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txtSLSpT;
+        private System.Windows.Forms.CheckBox chkUsegZip;
+        private System.Windows.Forms.CheckBox chkUseGet;
 
 	}
 }

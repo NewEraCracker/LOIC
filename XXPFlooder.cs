@@ -14,7 +14,7 @@ namespace LOIC
 		public int Delay { get; set; }
 		public bool Resp { get; set; }
 		public string Data { get; set; }
-        	private bool random;
+        private bool random;
 
 		public XXPFlooder(string ip, int port, int proto, int delay, bool resp, string data, bool random)
 		{

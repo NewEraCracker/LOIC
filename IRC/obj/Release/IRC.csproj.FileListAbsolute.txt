@@ -1,0 +1,5 @@
+Z:\loic_1119_\source\bin\Release\IRC.dll
+Z:\loic_1119_\source\bin\Release\IRC.pdb
+Z:\loic_1119_\source\IRC\obj\Release\ResolveAssemblyReference.cache
+Z:\loic_1119_\source\IRC\obj\Release\IRC.dll
+Z:\loic_1119_\source\IRC\obj\Release\IRC.pdb
