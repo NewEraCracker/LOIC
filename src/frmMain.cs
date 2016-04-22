@@ -80,7 +80,7 @@ namespace LOIC
 		/// <param name="toggle">Whether to toggle.</param>
 		/// <param name="on">Whether the attack should start.</param>
 		/// <param name="silent">Whether to silence error output.</param>
-		private void Attack(bool toggle, bool on, bool silent)
+		private void Attack(bool toggle, bool on, bool silent = false)
 		{
 			if((cmdAttack.Text == AttackText && toggle) || (!toggle && on))
 			{
@@ -191,7 +191,7 @@ namespace LOIC
 		/// Lock on IP target.
 		/// </summary>
 		/// <param name="silent">Silent?</param>
-		private void LockOnIP(bool silent)
+		private void LockOnIP(bool silent = false)
 		{
 			if(txtTargetIP.Text.Length == 0)
 			{
@@ -206,7 +206,7 @@ namespace LOIC
 		/// Lock on URL target.
 		/// </summary>
 		/// <param name="silent">Silent?</param>
-		private void LockOnURL(bool silent)
+		private void LockOnURL(bool silent = false)
 		{
 			sHost = txtTargetURL.Text.ToLower();
 			if( String.IsNullOrEmpty(sHost) )
