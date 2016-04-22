@@ -1,5 +1,0 @@
-Z:\loic_1119_\source\bin\Debug\IRC.dll
-Z:\loic_1119_\source\bin\Debug\IRC.pdb
-Z:\loic_1119_\source\IRC\obj\Debug\ResolveAssemblyReference.cache
-Z:\loic_1119_\source\IRC\obj\Debug\IRC.dll
-Z:\loic_1119_\source\IRC\obj\Debug\IRC.pdb

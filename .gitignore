@@ -1,0 +1,16 @@
+obj
+bin
+*.ReSharper.user
+_ReSharper.*
+*.csproj.user
+*.resharper.user
+*.resharper
+*.suo
+*.cache
+*~
+*.swp
+/Build
+NDependOut
+UpgradeLog.XML
+_UpgradeReport_Files
+*DotSettings*
