@@ -241,7 +241,7 @@ namespace LOIC
                                                     }
                                                 }
                                             }
-                                            else if ((tsp[0] == "Transfer-Encoding") && (tsp.Length >= 2) && (tsp[1].ToLower().Trim() == "chunked"))
+                                            else if ((tsp[0] == "Transfer-Encoding") && (tsp.Length >= 2) && (tsp[1].ToLowerInvariant().Trim() == "chunked"))
                                             {
                                                 keeps = true; //well, what doo?
                                                 i = -1;

