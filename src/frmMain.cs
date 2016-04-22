@@ -7,6 +7,7 @@ using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 using System.Windows.Forms;
 using Meebey.SmartIrc4net;
@@ -97,17 +98,10 @@ namespace LOIC
 					return;
 				}
 
-				sIP = txtTarget.Text;
-				if (String.IsNullOrEmpty(sIP) || sIP.Equals("N O N E !")) {
+				if (String.IsNullOrEmpty(sIP) || String.IsNullOrEmpty(sHost)) {
 					Wtf ("Select a target.", silent);
 					return;
 				}
-
-				if( String.IsNullOrEmpty(sHost) ) sHost = sIP;
-				if( !sHost.Contains("://") ) sHost = String.Concat("http://", sHost);
-
-				try { sHost = new Uri(sHost).Host; }
-				catch(UriFormatException ex) { Wtf (ex.Message, silent); return; }
 
 				sMethod = cbMethod.Text;
 				protocol = Protocol.None;
@@ -193,13 +187,32 @@ namespace LOIC
 		/// <param name="silent">Silent?</param>
 		private void LockOnIP(bool silent = false)
 		{
-			if(txtTargetIP.Text.Length == 0)
+			try
 			{
-				Wtf ("I think you forgot the IP.", silent);
-				return;
+				string tIP = txtTargetIP.Text.Trim().ToLowerInvariant();
+				if(tIP.Length == 0)
+				{
+					Wtf ("I think you forgot the IP.", silent);
+					return;
+				}
+				try
+				{
+					txtTarget.Text = sHost = sIP = tIP = IPAddress.Parse(tIP).ToString();
+					if(sHost.Contains(":"))
+					{
+						sHost = "[" + sHost.Trim('[', ']') + "]";
+					}
+				}
+				catch(FormatException)
+				{
+					Wtf ("I don't think an IP is supposed to be written like THAT.", silent);
+					return;
+				}
 			}
-			txtTarget.Text = txtTargetIP.Text;
-			sHost = txtTargetIP.Text;
+			catch(Exception ex)
+			{
+				Wtf (ex.Message, silent);
+			}
 		}
 
 		/// <summary>
@@ -208,18 +221,38 @@ namespace LOIC
 		/// <param name="silent">Silent?</param>
 		private void LockOnURL(bool silent = false)
 		{
-			sHost = txtTargetURL.Text.ToLowerInvariant();
-			if( String.IsNullOrEmpty(sHost) )
+			try
 			{
-				Wtf ("A URL is fine too...", silent);
-				return;
+				string tURL = txtTargetURL.Text.Trim().ToLowerInvariant();
+				if(tURL.Length == 0)
+				{
+					Wtf ("A URL is fine too...", silent);
+					return;
+				}
+				try
+				{
+					if(!tURL.Contains("://"))
+					{
+						tURL = String.Concat("http://", tURL);
+					}
+					tURL = new Uri(tURL).Host;
+					txtTarget.Text = sIP = (Functions.RandomElement(Dns.GetHostEntry(tURL).AddressList) as IPAddress).ToString();
+					sHost = tURL;
+				}
+				catch(UriFormatException)
+				{
+					Wtf ("I don't think an URL is supposed to be written like THAT.", silent);
+					return;
+				}
+				catch(SocketException)
+				{
+					Wtf ("The URL you entered does not resolve to an IP!", silent);
+					return;
+				}
 			}
-			if( !sHost.Contains("://") ) sHost = String.Concat("http://", sHost);
-			try { txtTarget.Text = (Functions.RandomElement(Dns.GetHostEntry(new Uri(sHost).Host).AddressList) as IPAddress).ToString(); }
-			catch
+			catch(Exception ex)
 			{
-				Wtf ("The URL you entered does not resolve to an IP!", silent);
-				return;
+				Wtf (ex.Message, silent);
 			}
 		}
 
