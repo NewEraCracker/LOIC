@@ -1,0 +1,52 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	font-size: 100%;
+}
+
+body {
+	font-family: Arial;
+	color: LightBlue;
+	background-color: #0C1820;
+	font-size: 72%; /* This sets the default font size to be equivalent to 10px */
+	margin: 15px 15px;
+}
+
+.intro {
+	background-image: url(LOIC.gif);
+	background-repeat: no-repeat;
+	background-position: left top;
+	background-attachment: fixed;
+	margin: 15px 15px 15px 200px;
+}
+
+.header {
+	padding: 20px 20px 20px 40px;
+	font-size: 3em;
+	font-weight: bold;
+	color: Azure;
+}
+
+p {
+	margin: 10px 0px 20px 0px;
+	font-size: 1.2 em;
+}
+
+b, i {
+	color: Azure;
+}
+
+a {
+	color: Orange;
+}
+
+h1 {
+	font-size: 2em;
+}
+
+h2 {
+	font-size: 1.8em;
+}

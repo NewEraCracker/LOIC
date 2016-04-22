@@ -102,6 +102,7 @@ namespace LOIC
             this.tCheckOL = new System.Windows.Forms.Timer(this.components);
             this.tZergRush = new System.Windows.Forms.Timer(this.components);
             this.pBanner = new System.Windows.Forms.PictureBox();
+            this.TrayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -256,7 +257,7 @@ namespace LOIC
             this.chkUsegZip.Enabled = false;
             this.chkUsegZip.Location = new System.Drawing.Point(655, 34);
             this.chkUsegZip.Name = "chkUsegZip";
-            this.chkUsegZip.Size = new System.Drawing.Size(67, 17);
+            this.chkUsegZip.Size = new System.Drawing.Size(68, 18);
             this.chkUsegZip.TabIndex = 33;
             this.chkUsegZip.Text = "use gZip";
             this.TTip.SetToolTip(this.chkUsegZip, "If checked it adds gZip compression to the slowLOIC attack");
@@ -268,7 +269,7 @@ namespace LOIC
             this.chkUseGet.Enabled = false;
             this.chkUseGet.Location = new System.Drawing.Point(655, 13);
             this.chkUseGet.Name = "chkUseGet";
-            this.chkUseGet.Size = new System.Drawing.Size(68, 17);
+            this.chkUseGet.Size = new System.Drawing.Size(67, 18);
             this.chkUseGet.TabIndex = 32;
             this.chkUseGet.Text = "use GET";
             this.TTip.SetToolTip(this.chkUseGet, "If checked it uses the GET method instead of POST.");
@@ -309,6 +310,7 @@ namespace LOIC
             // chkRandom
             // 
             this.chkRandom.AutoSize = true;
+            this.chkRandom.Enabled = false;
             this.chkRandom.Location = new System.Drawing.Point(135, 13);
             this.chkRandom.Name = "chkRandom";
             this.chkRandom.Size = new System.Drawing.Size(185, 17);
@@ -439,7 +441,7 @@ namespace LOIC
             this.txtTimeout.TabIndex = 1;
             this.txtTimeout.Text = "30";
             this.txtTimeout.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.TTip.SetToolTip(this.txtTimeout, "Max time to wait for a response");
+            this.TTip.SetToolTip(this.txtTimeout, "Max time in seconds to wait for a response.");
             // 
             // txtThreads
             // 
@@ -887,12 +889,19 @@ namespace LOIC
             this.pBanner.TabIndex = 12;
             this.pBanner.TabStop = false;
             // 
+            // TrayIcon
+            // 
+            this.TrayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("TrayIcon.Icon")));
+            this.TrayIcon.Text = "Waiting for target!";
+            this.TrayIcon.DoubleClick += new System.EventHandler(this.TrayIcon_DoubleClick);
+            this.TrayIcon.MouseMove += new System.Windows.Forms.MouseEventHandler(this.TrayIcon_MouseMove);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(24)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(984, 486);
+            this.ClientSize = new System.Drawing.Size(983, 486);
             this.Controls.Add(this.chkbOLUp);
             this.Controls.Add(this.textOLTime);
             this.Controls.Add(this.label28);
@@ -926,6 +935,7 @@ namespace LOIC
             this.Text = "frmMain";
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmMain_KeyDown);
+            this.Resize += new System.EventHandler(this.frmMain_Resize);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -1015,6 +1025,7 @@ namespace LOIC
         private System.Windows.Forms.TextBox txtSLSpT;
         private System.Windows.Forms.CheckBox chkUsegZip;
         private System.Windows.Forms.CheckBox chkUseGet;
+        private System.Windows.Forms.NotifyIcon TrayIcon;
 
 	}
 }

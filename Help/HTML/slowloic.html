@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>LOIC's NewFag Help</title>
+<link rel="stylesheet" href="loic.css" type="text/css" />
+</head>
+<body>
+<div class="header">SlowLOIC Attack</div>
+<p>SlowLoris (originally by RSnake) keeps the connections alive as long as possible by sending partial headers but nether completing the request.</p>
+<h2>Options</h2>
+<p>In the <b>"subsite"</b> you can specify the page to request.<br />
+If <b>"Append random chars"</b> is checked, 6 random characters are added at the end of the subsite. (usefull with dynamic pages and get-parameters)<br />
+The <b>"Timeout"</b> field is for the wait time in seconds between sending a new part of the header. This must be less than the read timeout on the target side.<br />
+The amount of worker <b>"threads"</b> can be changed during the attack at any time. This value should be initially lower than the maximum allowed half-open connections.<br />
+Check <b>"use gZip"</b> to check for CEV-2009-1891.<br />
+Check <b>"use GET"</b> to use the GET-command instead of POST. (mods like http-ready mitigate GET-attacks)<br />
+In the <b>"Sockets / Thread"</b> field you can define the number of connections per thread. (this number should <u>not</u> be insanely high - if you go over 100 it might be better to increase the amount of threads!)<br />
+the speed-slider sets just the delay between the creation of sockets.</p>
+<h2>Remarks</h2>
+<p>The "requested" value shows the amount of currently connected sockets. <br />
+If no thread is in the "Connecting" state you should increase the number of threads - if all your threads or most of them are connecting you should lower the amount of threads.<br />
+"Failed" counts the connections which were reset by the server.<br />
+If "failed" goes up too fast you are doing it <b><u>WRONG!</u></b></p>
+<h2>Tip</h2>
+<p>If you target a system which is not vulnerable to this attack you can always go for port-starving!<br />
+Just use up all max possible 64K connections and you are done! (running 16 clients with 5.000 connections each should do the trick!)</p>
+</body>
+</html>

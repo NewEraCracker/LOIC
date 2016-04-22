@@ -23,6 +23,7 @@ namespace LOIC
         private static List<cHLDos> lLoic = new List<cHLDos>();
         private StringCollection aUpOLSites = new StringCollection();
         private StringCollection aDownOLSites = new StringCollection();
+        private bool bIsHidden = false;
 		private static string sIP, sMethod, sData, sSubsite, sTargetDNS = "", sTargetIP = "";
 		private static int iPort, iThreads, iProtocol, iDelay, iTimeout, iSockspThread;
 		private static bool bResp, intShowStats;
@@ -40,6 +41,7 @@ namespace LOIC
 			if (ircport != "") {txtIRCport.Text = ircport;}
 			if (ircchannel != "") {txtIRCchannel.Text = ircchannel;}
 			/* Lets try this! */
+            bIsHidden = hide;
 			if ( hide )
 			{
 			    this.WindowState = FormWindowState.Minimized;
@@ -113,6 +115,10 @@ namespace LOIC
                 chkUsegZip.Enabled = false;
                 chkUseGet.Enabled = false;
                 chkMsgRandom.Enabled = false;
+                chkRandom.Enabled = false;
+                cbMethod.Enabled = false;
+                chkResp.Enabled = false;
+                txtSLSpT.Enabled = false;
 
                 if (String.Equals(sMethod, "TCP") || String.Equals(sMethod, "UDP"))
                 {
@@ -147,7 +153,7 @@ namespace LOIC
                     {
                         if (iProtocol == 5)
                         {
-                            ts = new ReCoil(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, chkResp.Checked, iSockspThread, chkUsegZip.Checked);
+                            ts = new ReCoil(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, bResp, iSockspThread, chkUsegZip.Checked);
                         }
                         else
                         {
@@ -166,6 +172,10 @@ namespace LOIC
                 chkUsegZip.Enabled = true;
                 chkUseGet.Enabled = true;
                 chkMsgRandom.Enabled = true;
+                chkRandom.Enabled = true;
+                cbMethod.Enabled = true;
+                chkResp.Enabled = true;
+                txtSLSpT.Enabled = true;
                 if (xxp != null)
                 {
                     for (int a = 0; a < xxp.Length; a++)
@@ -334,7 +344,8 @@ namespace LOIC
         private delegate void AddListBoxItemDelegate(object sender, ReadLineEventArgs e);
         void OnNames(object sender, NamesEventArgs e)
         {
-            SetStatus("Connected!");
+            if (label25.Text == "Logging In...") // we don't want to overwrite the Topic thingy on connect!
+                SetStatus("Connected!");
             if (OpList != null)
             {
                 OpList.Clear();
@@ -667,12 +678,41 @@ namespace LOIC
 			if (iProtocol == 1 || iProtocol == 2)
 			{
 				int iFloodCount = 0;
+                int iFailed = 0;
 				for (int a = 0; a < xxp.Length; a++)
 				{
 					iFloodCount += xxp[a].FloodCount;
+                    iFailed += xxp[a].Failed;
+                    if (isFlooding && !xxp[a].IsFlooding)
+                    {
+                        xxp[a].Start();
+                    }
 				}
 				lbRequested.Text = iFloodCount.ToString();
-			}
+                lbFailed.Text = iFailed.ToString();
+                if (!bIsHidden && TrayIcon.Visible)
+                {
+                    if (isFlooding)
+                    {
+                        string tst = "Target: " + ((sTargetDNS == "") ? sTargetIP : (sTargetDNS + "(" + sTargetIP + ")"));
+                        if (tst.Length > 63)
+                            tst = tst.Substring(0, 63);
+                        TrayIcon.Text = tst;
+                        TrayIcon.BalloonTipTitle = tst;
+                        tst = "requested: " + iFloodCount.ToString() + Environment.NewLine
+                            + "failed: " + iFailed.ToString();
+                        if (tst.Length > 254)
+                            tst = tst.Substring(0, 254);
+                        TrayIcon.BalloonTipText = tst;
+                    }
+                    else
+                    {
+                        TrayIcon.Text = "Waiting for target!";
+                        TrayIcon.BalloonTipText = "";
+                        TrayIcon.BalloonTipTitle = "";
+                    }
+                }
+            }
 			if (iProtocol >= 3)
 			{
 				int iIdle = 0;
@@ -735,7 +775,7 @@ namespace LOIC
                             cHLDos ts;
                             if (iProtocol == 5)
                             {
-                                ts = new ReCoil(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, chkResp.Checked, iSockspThread, chkUsegZip.Checked);
+                                ts = new ReCoil(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, bResp, iSockspThread, chkUsegZip.Checked);
                             }
                             else
                             {
@@ -749,12 +789,12 @@ namespace LOIC
                     }
                     if (isFlooding)
                     {
-                        if (lLoic.Count < iThreads)
+                        while (lLoic.Count < iThreads)
                         {
                             cHLDos ts;
                             if (iProtocol == 5)
                             {
-                                ts = new ReCoil(sTargetDNS, sTargetDNS, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, chkResp.Checked, iSockspThread, chkUsegZip.Checked);
+                                ts = new ReCoil(sTargetDNS, sTargetDNS, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, bResp, iSockspThread, chkUsegZip.Checked);
                             }
                             else
                             {
@@ -763,7 +803,7 @@ namespace LOIC
                             ts.start();
                             lLoic.Add(ts);
                         }
-                        else if (lLoic.Count > iThreads)
+                        if (lLoic.Count > iThreads)
                         {
                             for (int a = (lLoic.Count - 1); a >= iThreads; a--)
                             {
@@ -780,6 +820,33 @@ namespace LOIC
 				lbRequesting.Text = iRequesting.ToString();
 				lbConnecting.Text = iConnecting.ToString();
 				lbIdle.Text = iIdle.ToString();
+                if (!bIsHidden && TrayIcon.Visible)
+                {
+                    if (isFlooding)
+                    {
+                        string tst = "Target: " + ((sTargetDNS == "") ? sTargetIP : (sTargetDNS + "(" + sTargetIP + ")"));
+                        if(tst.Length > 63)
+                            tst = tst.Substring(0,63);
+                        TrayIcon.Text = tst;
+                        TrayIcon.BalloonTipTitle = tst;
+                        tst = "Idle: " + iIdle.ToString() + Environment.NewLine
+                            + "Connecting: " + iConnecting.ToString() + Environment.NewLine
+                            + "Requesting: " + iRequesting.ToString() + Environment.NewLine
+                            + "Downloading: " + iDownloading.ToString() + Environment.NewLine + Environment.NewLine
+                            + "downloaded: " + iDownloaded.ToString() + Environment.NewLine
+                            + "requested: " + iRequested.ToString() + Environment.NewLine
+                            + "failed: " + iFailed.ToString();
+                        if(tst.Length > 254)
+                            tst = tst.Substring(0,254);
+                        TrayIcon.BalloonTipText = tst;
+                    }
+                    else
+                    {
+                        TrayIcon.Text = "Waiting for target!";
+                        TrayIcon.BalloonTipText = "";
+                        TrayIcon.BalloonTipTitle = "";
+                    }
+                }
 			}
 
 			intShowStats = false;
@@ -801,6 +868,13 @@ namespace LOIC
 					if (xxp[a] != null) xxp[a].Delay = iDelay;
 				}
 			}
+            if (lLoic.Count > 0)
+            {
+                for (int a = (lLoic.Count - 1); a >= 0; a--)
+                {
+                    lLoic[a].Delay = iDelay;
+                }
+            }
 		}
         private void enableHive_CheckedChanged(object sender, EventArgs e)
         {
@@ -925,7 +999,8 @@ namespace LOIC
                                 if (txtThreads.Text != num.ToString())
                                 {
                                     txtThreads.Text = num.ToString();
-                                    restart = true;
+                                    if(cbMethod.SelectedIndex >= 3)
+                                        restart = true;
                                 }
                             }
                             break;
@@ -1325,11 +1400,19 @@ namespace LOIC
                     new frmEZGrab(hivemind, overlord).Show();
                     e.Handled = true;
                     break;
+                case Keys.F1:
+                    System.Diagnostics.Process.Start("help.chm");
+                    break;
             }
         }
 
         private void cbMethod_SelectedIndexChanged(object sender, EventArgs e)
         {
+            chkMsgRandom.Enabled = (cbMethod.SelectedIndex <= 1) ? true : false;
+            txtData.Enabled = (cbMethod.SelectedIndex <= 1) ? true : false;
+            chkRandom.Enabled = (cbMethod.SelectedIndex >= 2) ? true : false;
+            txtSubsite.Enabled = (cbMethod.SelectedIndex >= 2) ? true : false;
+
             txtSLSpT.Enabled = (cbMethod.SelectedIndex >= 3) ? true : false;
             chkUsegZip.Enabled = (cbMethod.SelectedIndex >= 2) ? true : false;
             chkResp.Enabled = (cbMethod.SelectedIndex == 4) ? false : true;
@@ -1348,5 +1431,27 @@ namespace LOIC
             }
         }
 
+        private void TrayIcon_DoubleClick(object sender, EventArgs e)
+        {
+            this.ShowInTaskbar = true;
+            TrayIcon.Visible = false;
+            this.WindowState = FormWindowState.Normal;
+            this.Focus();
+        }
+
+        private void frmMain_Resize(object sender, EventArgs e)
+        {
+            if ((this.WindowState == FormWindowState.Minimized) && !bIsHidden)
+            {
+                TrayIcon.Visible = true;
+                this.ShowInTaskbar = false;
+            }
+        }
+
+        private void TrayIcon_MouseMove(object sender, MouseEventArgs e)
+        {
+            if((TrayIcon.BalloonTipText != "") && (TrayIcon.BalloonTipTitle != ""))
+                TrayIcon.ShowBalloonTip(1);
+        }
 	}
 }

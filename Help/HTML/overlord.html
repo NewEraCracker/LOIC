@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>LOIC's NewFag Help</title>
+<link rel="stylesheet" href="loic.css" type="text/css" />
+</head>
+<body>
+<div class="header">OverLord - the WEB-LOIC</div>
+<p>OverLord encodes the commands in Hyperlinks. You can place your commands virtually on any place in the internet. You can use Twitter, Facebook, any Forum / Message-Board / Blog or what so ever.<br />
+It is fully compatible with all common URL-shorteners and works with any header-redirector (the Location-Header is processed).<br />
+Most services give you the possibility to change the URL if you have signed up - this gives you the possibility to hand out one single link and control your PA by changing that link for new commands. In addition most services provide you with some "click-stats" which should give you an estimation of the size of your PA. (though not that exact .. there might be actual browsers trying to follow these links xD)<br />
+In addition OverLord lets you announce new HiveMind-IRC-Servers and even set countdowns for raids!<br />
+The countdown option let's you even set a time and give your fellow Anons time to report in WITHOUT revealing the target. the given URL is rechecked directly before the attack was scheduled to start, so that you set the actual target right before the attack starts by changing the command in the URL.<br />
+Besides command links OverLord supports backup-mirrors (as many as you want) - these mirrors can point to other mirros or contain target-links and so on.</p>
+<h2>EZ Grab</h2>
+<p>Just fill out your attack-options .. run a short test and hit <b>F10</b>!<br />
+You can use any URL shortener you like or just choose one of the given services and click <b>"Make tiny"</b></p>
+<h2>boring Nerd-Stuff</h2>
+<p>All commands which are <u>not</u> set will be set to default automatically on the client!</p>
+<p>There are 3 Methods:<br />
+<br />
+<u>I. Plain-Text Links</u>: can ONLY specify TARGETS<br />
+<i>LOIC: {OL-URI}</i></p>
+<p><u>II: a-href Links:</u><br />
+<u>II.a: Back-Up Mirrors</u> - they contain no target information and point to sites, where target are posted.<br />
+<i>class="LO bu" href="{URI}"</i> - read diretion top to bottom<br />
+<i>class="LO bu r" href="{URI}"</i> - read direcion bottom to top<br />
+<br />
+The read direction depends on the site: e.g. for twitter, where the newest post is on the top, you want to scan the site top-to-bottom for targets.<br />
+On Blogs / Boards where the newest posts are at the bottom, you want to scan in the reverse direction.<br />
+<br />
+In the GUI the checkbox "Up?" scans top-to-bottom if checked and reverse otherwise.<br />
+<br />
+The scan stops at the first encountered target and uses this as the current target - all BackUp Mirrors up to this point are stored. (mirrors after the 1st target in read-direction are ignored)<br />
+<br />
+<u>II.b: Target-Links</u><br />
+<i>class="LO tar" href="{OL-URI}"</i></p>
+<p>III. Plain Text instruction <u>(this is depreciated)</u>
+<i>[LOIC]<br />
+{command}:{value}<br />
+{command}:{value}<br />
+...<br />
+[/LOIC]</i><br />
+<br />
+If there is a "lot" of html-code merged into the text it is best to use the "@"-Delimeter:<br />
+<i>[LOIC]@{command}:{value}@&lt;html goes here&tt;@{command}:{value}@......[/LOIC]</i></p>
+<p><u>The URI-Syntax for Targets:</u><br />
+<i>{OL-URI} = {URI}@{command}={value}@{single_sign}@{command}={value}@...</i><br />
+<u>IT IS HIGHLY RECOMMENDED TO USE URL-SHORTENER FOR THE TARGET-COMMANDS!!</u></p>
+<p><u>Commands:</u><br />
+(there are 2 new commands - the others are the same as on IRC)<br />
+<br />
+<i>targetip, targethost, timeout, subsite, message, port, method, threads, wait, random, speed, sockspthread, useget, usegzip</i><br />
+<br />
+<i>hivemind</i> - let's you set an Hive-Mind-Server over OverLord: <i>@hivemind=irc.cooldomin.heros:6667#hivemind@</i><br />
+If this command is used the control is immediately transferred to the HiveMind! (aka: OverLord STOPS working!) Therefor the hivemind command is best used alone <u>without other commands</u>.<br />
+<br />
+<i>time</i> - you can set a timer for the beginning of the fun: <i>@time=YYYY/MM/DD HH:mm@</i> (time-zone is <b>UTC</b> for the time - the time-zone-correction is done by the client according to the system-settings and time!)<br />
+If a time command is issued the current attack stops and the Lazor waits until the time is reached. The target-information is updated once again EXACTLY at the beginning of the attack.<br />
+Using this it is possible, to set a time for all "connected" lazors WITHOUT revealing the target:<br />
+1. <i>http://hive.mind/go.hp?@time=2010/05/23 15:00@</i><br />
+at 14:55 (UTC) you just change the Link to: <i>http://hive.mind/go.hp?@time=2010/05/23 15:00@&@targetip=127.0.0.1@</i></p>
+<h3>... enough with the crap - a real world example:</h3>
+<p>On site http://main.com is the command center where you don't want to post target-information:<br />
+put somewhere on your site (in a .php / .txt / .html / .js or whatever file you have) the Back-Up-Mirrors for your OP:<br />
+<br />
+&lt;a class=&quot;LO bu&quot; href=&quot;http://somefree-hoster.com/url/yourbackup&quot;&gt;&amp;nbsp&lt;/a&gt;<br />
+&lt;a class=&quot;LO bu&quot; href=&quot;http://twitter.com/account&quot;&gt;&amp;nbsp&lt;/a&gt;<br />
+&lt;a class=&quot;LO bu r&quot; href=&quot;http://xyx.chan.com/b/1234&quot;&gt;&amp;nbsp&lt;/a&gt;<br />
+&lt;a class=&quot;LO bu&quot; href=&quot;http://bit.ly&quot;&gt;&amp;nbsp&lt;/a&gt;<br />
+<br />
+As soon as one mirror fails the next is taken - the mirrors are accumulated at the client - so you can change them or add more atfer the majority of the nodes have read them once. Back-Up-Mirrors are only removed from the client, if one seems to be offline. (the effects of the Stress-Test on the client machine is (to some degree) mitigated!)<br />
+<br />
+it might be a good idea, to hide the &quot;LO&quot;-Class with a (inline-) CSS or put it into any hidden container ... or just leave as is.<br />
+<br /></p>
+<h2><u>ATTENTION: Backup Mirrors + Targets in one Page!</u></h2>
+<p>Pay attention to the scan-direction! If you read top-to-bottom (Up? = checked in the GUI) you HAVE TO PUT your mirrors BEFORE the first target-link!<br />
+If you scan reverse you have to put the mirrors BELOW the target!<br />
+<br />
+<u>example: Scanning REVERSE + Mixed-Mode</u><br />
+&lt;html-code&gt;<br />
+&lt;p&gt;your very long paragraph LOIC: http://bit.ly/abcde your paragraph contniues on for hours&lt;/p&gt;<br />
+&lt;more html&gt;<br />
+&lt;a style=&quot;display:none&quot; class=&quot;LO bu&quot; href=&quot;http://bit.ly&quot;&gt;&amp;nbsp&lt;/a&gt;<br />
+&lt;footer-stuff&gt;</p>
+<h2>Tip</h2>
+<p>For backwards compability specify the ReCoil and SlowLOIC attack as follows: <i>@method=TCP@&@method=ReCoil@</i><br />
+Due to the change of the timeout it might be best to go with the default values!</p>
+</body>
+</html>
