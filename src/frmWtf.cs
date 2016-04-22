@@ -22,5 +22,10 @@ namespace LOIC
 		{
 			Close();
 		}
+
+		private void frmWtf_FormClosed(object sender, FormClosedEventArgs e)
+		{
+			Dispose();
+		}
 	}
 }

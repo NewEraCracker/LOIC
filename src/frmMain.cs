@@ -183,10 +183,8 @@ namespace LOIC
 				return;
 			}
 
-			using (Form frmWtf = new frmWtf()) {
-				frmWtf.Show();
-				MessageBox.Show(message, "What the shit.");
-			}
+			new frmWtf().Show();
+			MessageBox.Show(message, "What the shit.");
 		}
 
 		/// <summary>
