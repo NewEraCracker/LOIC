@@ -19,12 +19,12 @@ namespace LOIC
 			int count = 0;
 			foreach(string s in cmdLine)
 			{
-				if(s.ToLower() == "/hidden") {
+				if(s.ToLowerInvariant() == "/hidden") {
 					hide = true;
 				}
 
 				// IRC
-				if(s.ToLower() == "/hivemind") {
+				if(s.ToLowerInvariant() == "/hivemind") {
 					hive = true;
 					ircserver = cmdLine[count + 1]; //if no server entered let it crash
 					try {ircport = cmdLine[count + 2];}
