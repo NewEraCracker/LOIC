@@ -51,7 +51,7 @@ namespace LOIC
 				// Display EULA
 				using(Form f = new frmEULA())
 				{
-					if(f.ShowDialog() != DialogResult.OK) {
+					if(f.ShowDialog(this) != DialogResult.OK) {
 						// Bail out if declined
 						Environment.Exit(0);
 						return;
