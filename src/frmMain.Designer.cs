@@ -313,7 +313,7 @@ namespace LOIC
             this.chkRandom.Enabled = false;
             this.chkRandom.Location = new System.Drawing.Point(135, 13);
             this.chkRandom.Name = "chkRandom";
-            this.chkRandom.Size = new System.Drawing.Size(185, 17);
+            this.chkRandom.Size = new System.Drawing.Size(187, 18);
             this.chkRandom.TabIndex = 28;
             this.chkRandom.Text = "Append random chars to the URL";
             this.chkRandom.UseVisualStyleBackColor = true;
@@ -395,7 +395,7 @@ namespace LOIC
             this.chkResp.AutoSize = true;
             this.chkResp.Location = new System.Drawing.Point(231, 72);
             this.chkResp.Name = "chkResp";
-            this.chkResp.Size = new System.Drawing.Size(88, 17);
+            this.chkResp.Size = new System.Drawing.Size(91, 18);
             this.chkResp.TabIndex = 7;
             this.chkResp.Text = "Wait for reply";
             this.TTip.SetToolTip(this.chkResp, "Don\'t disconnect before the server\'s started to answer");
@@ -498,7 +498,7 @@ namespace LOIC
             this.tbSpeed.Location = new System.Drawing.Point(414, 65);
             this.tbSpeed.Maximum = 50;
             this.tbSpeed.Name = "tbSpeed";
-            this.tbSpeed.Size = new System.Drawing.Size(338, 42);
+            this.tbSpeed.Size = new System.Drawing.Size(338, 45);
             this.tbSpeed.TabIndex = 8;
             this.tbSpeed.ValueChanged += new System.EventHandler(this.tbSpeed_ValueChanged);
             // 
