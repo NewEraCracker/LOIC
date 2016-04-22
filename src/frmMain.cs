@@ -241,7 +241,7 @@ namespace LOIC
 				}
 				catch(UriFormatException)
 				{
-					Wtf ("I don't think an URL is supposed to be written like THAT.", silent);
+					Wtf ("I don't think a URL is supposed to be written like THAT.", silent);
 					return;
 				}
 				catch(SocketException)
