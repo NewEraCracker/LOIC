@@ -690,11 +690,11 @@ namespace LOIC
 		}
 
 		/// <summary>
-		/// Handles the Form Closing event.
+		/// Handles the Form Closed event.
 		/// </summary>
 		/// <param name="sender">Sender.</param>
 		/// <param name="e">EventArgs.</param>
-		private void frmMain_Closing(object sender, FormClosingEventArgs e)
+		private void frmMain_Closed(object sender, FormClosedEventArgs e)
 		{
 			try
 			{
