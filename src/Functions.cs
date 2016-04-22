@@ -35,12 +35,23 @@ namespace LOIC
 			{
 				if (rnd.NextDouble() >= 0.5)
 				{
-					return String.Format("Mozilla/5.0 (Windows NT {0}; WOW64; rv:{1}.0) Gecko/20100101 Firefox/{1}.0", ntv[rnd.Next(0, ntv.Length)], rnd.Next(36, 46));
+					return String.Format("Mozilla/5.0 (Windows NT {0}; WOW64; rv:{1}.0) Gecko/20100101 Firefox/{1}.0", ntv[rnd.Next(ntv.Length)], rnd.Next(36, 46));
 				}
 				else
 				{
-					return String.Format("Mozilla/5.0 (Windows NT {0}; rv:{1}.0) Gecko/20100101 Firefox/{1}.0", ntv[rnd.Next(0, ntv.Length)], rnd.Next(36, 46));
+					return String.Format("Mozilla/5.0 (Windows NT {0}; rv:{1}.0) Gecko/20100101 Firefox/{1}.0", ntv[rnd.Next(ntv.Length)], rnd.Next(36, 46));
 				}
+			}
+		}
+
+		public static object RandomElement(object[] array)
+		{
+			if(array == null || array.Length < 1)
+				return null;
+
+			lock (rnd)
+			{
+				return array[rnd.Next(array.Length)];
 			}
 		}
 

@@ -215,7 +215,7 @@ namespace LOIC
 				return;
 			}
 			if( !sHost.Contains("://") ) sHost = String.Concat("http://", sHost);
-			try { txtTarget.Text = Dns.GetHostEntry(new Uri(sHost).Host).AddressList[0].ToString(); }
+			try { txtTarget.Text = (Functions.RandomElement(Dns.GetHostEntry(new Uri(sHost).Host).AddressList) as IPAddress).ToString(); }
 			catch
 			{
 				Wtf ("The URL you entered does not resolve to an IP!", silent);
