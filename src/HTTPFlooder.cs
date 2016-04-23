@@ -101,7 +101,10 @@ namespace LOIC
 							State = ReqState.Downloading; Requested++; // SET STATE TO DOWNLOADING // REQUESTED++
 
 							if (Resp)
+							{
+								socket.ReceiveTimeout = Timeout;
 								socket.Receive(recvBuf, recvBuf.Length, SocketFlags.None);
+							}
 						}
 						catch(SocketException) { goto _continue; }
 					}
