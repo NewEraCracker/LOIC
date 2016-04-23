@@ -35,11 +35,11 @@ namespace LOIC
 			{
 				if (rnd.NextDouble() >= 0.5)
 				{
-					return String.Format("Mozilla/5.0 (Windows NT {0}; WOW64; rv:{1}.0) Gecko/20100101 Firefox/{1}.0", ntv[rnd.Next(ntv.Length)], rnd.Next(36, 46));
+					return String.Format("Mozilla/5.0 (Windows NT {0}; WOW64; rv:{1}.0) Gecko/20100101 Firefox/{1}.0", ntv[rnd.Next(ntv.Length)], rnd.Next(36, 47));
 				}
 				else
 				{
-					return String.Format("Mozilla/5.0 (Windows NT {0}; rv:{1}.0) Gecko/20100101 Firefox/{1}.0", ntv[rnd.Next(ntv.Length)], rnd.Next(36, 46));
+					return String.Format("Mozilla/5.0 (Windows NT {0}; rv:{1}.0) Gecko/20100101 Firefox/{1}.0", ntv[rnd.Next(ntv.Length)], rnd.Next(36, 47));
 				}
 			}
 		}
@@ -48,6 +48,9 @@ namespace LOIC
 		{
 			if(array == null || array.Length < 1)
 				return null;
+
+			if(array.Length == 1)
+				return array[0];
 
 			lock (rnd)
 			{
