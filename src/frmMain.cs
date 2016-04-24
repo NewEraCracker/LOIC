@@ -1063,7 +1063,7 @@ namespace LOIC
                         case "time": // might be not a bad idea to include a NTP-lookup before this?
                             System.Globalization.CultureInfo ci = System.Globalization.CultureInfo.CurrentCulture;
                             DateTime dtGo = DateTime.Parse(tval, ci.DateTimeFormat, System.Globalization.DateTimeStyles.AssumeUniversal);
-                            DateTime dtNow = DateTime.Now;
+                            DateTime dtNow = DateTime.UtcNow;
                             long tdiff = dtGo.Ticks - dtNow.Ticks;
                             tdiff /= TimeSpan.TicksPerMillisecond;
                             ret = true;

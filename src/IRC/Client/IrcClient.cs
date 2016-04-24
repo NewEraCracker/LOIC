@@ -2413,7 +2413,7 @@ namespace Meebey.SmartIrc4net
             if (ActiveChannelSyncing &&
                 IsJoined(channelname)) {
                 Channel channel = GetChannel(channelname);
-                channel.ActiveSyncStop = DateTime.Now;
+                channel.ActiveSyncStop = DateTime.UtcNow;
 #if LOG4NET
                 Logger.ChannelSyncing.Debug("active synced: "+channelname+
                     " (in "+channel.ActiveSyncTime.TotalSeconds+" sec)");

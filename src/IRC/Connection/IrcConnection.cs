@@ -735,7 +735,7 @@ namespace Meebey.SmartIrc4net
                 } else {
                     switch (rawlineex[1]) {
                         case "PONG":
-                            DateTime now = DateTime.Now;
+                            DateTime now = DateTime.UtcNow;
                             _LastPongReceived = now;
                             _Lag = now - _LastPingSent;
 
@@ -1102,7 +1102,7 @@ namespace Meebey.SmartIrc4net
             /// </summary>
             public void Start()
             {
-                DateTime now = DateTime.Now;
+                DateTime now = DateTime.UtcNow;
                 _Connection._LastPingSent = now;
                 _Connection._LastPongReceived = now;
 
@@ -1128,7 +1128,7 @@ namespace Meebey.SmartIrc4net
                 try {
                    while (_Connection.IsConnected ) {
                        if (_Connection.IsRegistered) {
-                           DateTime now = DateTime.Now;
+                           DateTime now = DateTime.UtcNow;
                            int last_ping_sent = (int)(now - _Connection._LastPingSent).TotalSeconds;
                            int last_pong_rcvd = (int)(now - _Connection._LastPongReceived).TotalSeconds;
                            // determins if the resoponse time is ok
