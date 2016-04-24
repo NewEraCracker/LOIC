@@ -46,7 +46,7 @@ namespace LOIC
 		public int Delay { get; set; }
 
 		/// <summary>
-		/// The timeout in seconds between requests for the same connection.
+		/// The timeout in milliseconds between requests for the same connection.
 		/// </summary>
 		public int Timeout { get; set; }
 
