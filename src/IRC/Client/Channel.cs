@@ -58,7 +58,7 @@ namespace Meebey.SmartIrc4net
         internal Channel(string name)
         {
             _Name = name;
-            _ActiveSyncStart = DateTime.Now;
+            _ActiveSyncStart = DateTime.UtcNow;
         }
 
 #if LOG4NET

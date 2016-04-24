@@ -122,7 +122,7 @@ _continue:
 		}
 		private static long Tick()
 		{
-			return DateTime.Now.Ticks / 10000;
+			return DateTime.UtcNow.Ticks / 10000;
 		}
 	}
 }
