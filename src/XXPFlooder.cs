@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.Sockets;
 using System.ComponentModel;
 
@@ -43,7 +43,7 @@ namespace LOIC
         	        	byte[] buf;
 				if (random == true)
 				{
-					buf = System.Text.Encoding.ASCII.GetBytes(String.Format(Data, new Functions().RandomString()));
+					buf = System.Text.Encoding.ASCII.GetBytes(String.Format(Data, Functions.RandomString()));
 				}
 				else
 		                {
