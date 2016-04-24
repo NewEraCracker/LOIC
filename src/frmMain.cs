@@ -12,8 +12,6 @@ using System.Threading;
 using System.Windows.Forms;
 using Meebey.SmartIrc4net;
 
-
-
 namespace LOIC
 {
     public partial class frmMain : Form

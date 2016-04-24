@@ -1,3 +1,8 @@
+/* LOIC - Low Orbit Ion Cannon
+ * Released to the public domain
+ * Enjoy getting v&, kids.
+ */
+
 using System;
 using System.Windows.Forms;
 
@@ -9,15 +14,17 @@ namespace LOIC
 		{
 			InitializeComponent();
 		}
-
 		private void frmWtf_Click(object sender, EventArgs e)
 		{
-			this.Dispose();
+			Close();
 		}
-
 		private void frmWtf_KeyDown(object sender, KeyEventArgs e)
 		{
-			this.Dispose();
+			Close();
+		}
+		private void frmWtf_FormClosed(object sender, FormClosedEventArgs e)
+		{
+			Dispose();
 		}
 	}
 }

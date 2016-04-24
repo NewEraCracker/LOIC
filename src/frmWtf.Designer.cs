@@ -40,6 +40,7 @@ namespace LOIC
 			this.Name = "frmWtf";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmWtf_FormClosed);
 			this.Click += new System.EventHandler(this.frmWtf_Click);
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmWtf_KeyDown);
 			this.ResumeLayout(false);
