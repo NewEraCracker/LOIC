@@ -54,7 +54,7 @@ namespace LOIC
 				this.WindowState = FormWindowState.Minimized;
 				this.ShowInTaskbar = false;
 			}
-			this.FormClosing += frmMain_Closing;
+			this.FormClosed += frmMain_Closed;
 			if (hive) enableHive.Checked = true;
 			if (!hive) disableHive.Checked = true;
 		}
@@ -759,7 +759,13 @@ namespace LOIC
 		{
 			this.Text = String.Format("{0} | U dun goofed | v. {1}", Application.ProductName, Application.ProductVersion);
 		}
-		private void frmMain_Closing(object sender, FormClosingEventArgs e)
+
+		/// <summary>
+		/// Handles the Form Closed event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">EventArgs.</param>
+		private void frmMain_Closed(object sender, FormClosedEventArgs e)
 		{
 			try
 			{

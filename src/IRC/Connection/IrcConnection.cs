@@ -1131,7 +1131,7 @@ namespace Meebey.SmartIrc4net
                            DateTime now = DateTime.UtcNow;
                            int last_ping_sent = (int)(now - _Connection._LastPingSent).TotalSeconds;
                            int last_pong_rcvd = (int)(now - _Connection._LastPongReceived).TotalSeconds;
-                           // determins if the resoponse time is ok
+                           // determines if the response time is ok
                            if (last_ping_sent < _Connection._PingTimeout) {
                                // determines if it need to send another ping yet
                                if (last_pong_rcvd > _Connection._PingInterval) {
