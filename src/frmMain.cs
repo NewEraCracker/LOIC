@@ -45,20 +45,40 @@ namespace LOIC
 		public frmMain(bool hive, bool hide, string ircserver, string ircport, string ircchannel)
 		{
 			InitializeComponent();
-			/* IRC */
-			if (ircserver != "") {txtIRCserver.Text = ircserver;}
-			if (ircport != "") {txtIRCport.Text = ircport;}
-			if (ircchannel != "") {txtIRCchannel.Text = ircchannel;}
+
 			/* Lets try this! */
 			bIsHidden = hide;
-			if ( hide )
+			if(hide)
 			{
 				this.WindowState = FormWindowState.Minimized;
 				this.ShowInTaskbar = false;
 			}
-			this.FormClosed += frmMain_Closed;
-			if (hive) enableHive.Checked = true;
-			if (!hive) disableHive.Checked = true;
+			else if(!Settings.HasAcceptedEula())
+			{
+				// Display EULA
+				using(Form f = new frmEULA())
+				{
+					if(f.ShowDialog(this) != DialogResult.OK) {
+						// Bail out if declined
+						Environment.Exit(0);
+						return;
+					} else {
+						// Save EULA acceptance
+						Settings.SaveAcceptedEula();
+					}
+				}
+			}
+
+			// IRC
+			if(ircserver.Length > 0)
+				txtIRCserver.Text = ircserver;
+			if(ircport.Length > 0)
+				txtIRCport.Text = ircport;
+			if(ircchannel.Length > 0)
+				txtIRCchannel.Text = ircchannel;
+
+			enableHive.Checked |= hive;
+			disableHive.Checked |= !hive;
 		}
 
 		/// <summary>

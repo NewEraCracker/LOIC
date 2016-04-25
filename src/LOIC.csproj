@@ -37,6 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -58,6 +59,12 @@
     <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmEULA.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmEULA.Designer.cs">
+      <DependentUpon>frmEULA.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmWtf.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -75,6 +82,9 @@
       <DependentUpon>frmMain.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmEULA.resx">
+      <DependentUpon>frmEULA.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmWtf.resx">
       <DependentUpon>frmWtf.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -89,11 +99,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Settings.cs" />
     <Compile Include="XXPFlooder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="app.manifest" />
+    <None Include="Resources\EULA.rtf" />
     <None Include="Resources\WTF.jpg" />
     <None Include="Resources\LOIC.gif" />
     <None Include="Resources\LOIC.ico" />
