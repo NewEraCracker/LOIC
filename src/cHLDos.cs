@@ -19,6 +19,9 @@ using System.Text.RegularExpressions;
 
 namespace LOIC
 {
+	/// <summary>
+	/// Abstract class cHLDos contributed by B²
+	/// </summary>
 	public abstract class cHLDos : IFlooder
 	{
 		public ReqState State = ReqState.Ready;
@@ -68,9 +71,11 @@ namespace LOIC
 			IsDelayed = true;
 		}
 
-		// override this if you want to test the settings before spreading the word to the hivemind!
-		// should make a single connection and check for the expected outcome!
-		public virtual bool test()
+		/// <summary>
+		/// override this if you want to test the settings before spreading the word to the hivemind!
+		/// should make a single connection and check for the expected outcome!
+		/// </summary>
+		public virtual bool Test()
 		{
 			return true;
 		}

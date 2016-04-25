@@ -16,19 +16,21 @@ namespace LOIC
 {
 	public partial class frmMain : Form
 	{
-		private static XXPFlooder[] xxp;
-		private static HTTPFlooder[] http;
-		private static List<cHLDos> lLoic = new List<cHLDos>();
+		const string AttackText = "IMMA CHARGIN MAH LAZER";
+
+		private XXPFlooder[] xxp;
+		private HTTPFlooder[] http;
+		private List<cHLDos> lLoic = new List<cHLDos>();
 		private StringCollection aUpOLSites = new StringCollection();
 		private StringCollection aDownOLSites = new StringCollection();
 		private bool bIsHidden = false;
-		private static string sIP, sMethod, sData, sSubsite, sTargetDNS = "", sTargetIP = "";
-		private static int iPort, iThreads, iProtocol, iDelay, iTimeout, iSockspThread;
-		private static bool bResp, intShowStats;
+		private string sIP, sMethod, sData, sSubsite, sTargetDNS = "", sTargetIP = "";
+		private int iPort, iThreads, iProtocol, iDelay, iTimeout, iSockspThread;
+		private bool bResp, intShowStats;
 		private IrcClient irc;
 		private Thread irclisten;
 		private string channel;
-		private static bool ircenabled = false;
+		private bool ircenabled = false;
 		private Dictionary<string, string> OpList;
 		private delegate void CheckParamsDelegate(List<string> pars);
 
@@ -65,9 +67,9 @@ namespace LOIC
 		/// <param name="toggle">Whether to toggle.</param>
 		/// <param name="on">Whether the attack should start.</param>
 		/// <param name="silent">Whether to silence error output.</param>
-		private void Attack(bool toggle, bool on, bool silent)
+		private void Attack(bool toggle, bool on, bool silent = false)
 		{
-			if ((cmdAttack.Text == "IMMA CHARGIN MAH LAZER" && toggle == true) || (toggle == false && on == true))
+			if ((cmdAttack.Text == AttackText && toggle == true) || (toggle == false && on == true))
 			{
 				try
 				{
@@ -182,7 +184,7 @@ namespace LOIC
 			}
 			else if (toggle == true || on == false)
 			{
-				cmdAttack.Text = "IMMA CHARGIN MAH LAZER";
+				cmdAttack.Text = AttackText;
 				chkUsegZip.Enabled = true;
 				chkUseGet.Enabled = true;
 				chkMsgRandom.Enabled = true;
@@ -219,7 +221,7 @@ namespace LOIC
 		/// Lock on IP target.
 		/// </summary>
 		/// <param name="silent">Silent?</param>
-		private void LockOnIP(bool silent)
+		private void LockOnIP(bool silent = false)
 		{
 			if (txtTargetIP.Text.Length == 0)
 			{
@@ -235,7 +237,7 @@ namespace LOIC
 		/// Lock on URL target.
 		/// </summary>
 		/// <param name="silent">Silent?</param>
-		private void LockOnURL(bool silent)
+		private void LockOnURL(bool silent = false)
 		{
 			string url = txtTargetURL.Text.ToLowerInvariant();
 			if (url.Length == 0)
@@ -601,7 +603,15 @@ namespace LOIC
 				if (sp.Length > 1)
 				{
 					string cmd = sp[0];
-					string value = sp[1];
+
+					// Find param value
+					string value = "";
+					for (int key = 0; key < sp.Length; ++key)
+					{
+						if(key >= 1)
+							value += sp[key] + ( (key+1 < sp.Length) ? "=" : "");
+					}
+
 					int num;
 					bool isnum;
 					switch (cmd.ToLowerInvariant())
@@ -1351,7 +1361,7 @@ namespace LOIC
 					if(!tZergRush.Enabled)
 						Attack(false, true, true);
 				}
-				else if (ctdwndn && (cmdAttack.Text == "IMMA CHARGIN MAH LAZER"))
+				else if (ctdwndn && (cmdAttack.Text == AttackText))
 				{
 					Attack(false, true, true);
 				}
