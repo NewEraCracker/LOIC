@@ -19,9 +19,8 @@ using System.Text.RegularExpressions;
 
 namespace LOIC
 {
-	public abstract class cHLDos
+	public abstract class cHLDos : IFlooder
 	{
-		public enum ReqState { Ready, Connecting, Requesting, Downloading, Completed, Failed };
 		public ReqState State = ReqState.Ready;
 
 		/// <summary>
@@ -60,10 +59,10 @@ namespace LOIC
 		/// </summary>
 		public int Timeout { get; set; }
 
-		public virtual void start()
+		public virtual void Start()
 		{ }
 
-		public virtual void stop()
+		public virtual void Stop()
 		{
 			IsFlooding = false;
 			IsDelayed = true;
@@ -157,7 +156,7 @@ namespace LOIC
 			Requested = 0; // we reset this! - meaning of this counter changes in this context!
 		}
 
-		public override void start()
+		public override void Start()
 		{
 			IsFlooding = true;
 			var bw = new BackgroundWorker();
@@ -394,7 +393,7 @@ namespace LOIC
 		}
 
 
-		public override void start()
+		public override void Start()
 		{
 			IsFlooding = true;
 			var bw = new BackgroundWorker();

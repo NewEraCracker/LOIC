@@ -44,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="cHLDos.cs" />
+    <Compile Include="IFlooder.cs" />
+    <Compile Include="ReqState.cs" />
     <Compile Include="frmEZGrab.cs">
       <SubType>Form</SubType>
     </Compile>

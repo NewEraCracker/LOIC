@@ -29,7 +29,7 @@ namespace LOIC
 			this.random = random;
 			this.usegZip = usegzip;
 		}
-		public override void start()
+		public override void Start()
 		{
 			IsDelayed = false;
 			IsFlooding = true;

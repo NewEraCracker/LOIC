@@ -149,7 +149,7 @@ namespace LOIC
 					for (int a = 0; a < http.Length; a++)
 					{
 						http[a] = new HTTPFlooder(sTargetDNS, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkUsegZip.Checked);
-						http[a].start();
+						http[a].Start();
 					}
 				}
 				if ((iProtocol == 4) || (iProtocol == 5))
@@ -173,7 +173,7 @@ namespace LOIC
 						{
 							ts = new SlowLoic(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked, chkUsegZip.Checked);
 						}
-						ts.start();
+						ts.Start();
 						lLoic.Add(ts);
 					}
 				}
@@ -888,13 +888,13 @@ namespace LOIC
 						iDownloaded += http[a].Downloaded;
 						iRequested += http[a].Requested;
 						iFailed += http[a].Failed;
-						if (http[a].State == HTTPFlooder.ReqState.Completed)
+						if (http[a].State == ReqState.Completed)
 							iIdle++;
-						if (http[a].State == HTTPFlooder.ReqState.Connecting)
+						if (http[a].State == ReqState.Connecting)
 							iConnecting++;
-						if (http[a].State == HTTPFlooder.ReqState.Requesting)
+						if (http[a].State == ReqState.Requesting)
 							iRequesting++;
-						if (http[a].State == HTTPFlooder.ReqState.Downloading)
+						if (http[a].State == ReqState.Downloading)
 							iDownloading++;
 						if (isFlooding && !http[a].IsFlooding)
 						{
@@ -906,7 +906,7 @@ namespace LOIC
 							http[a].Downloaded = iaDownloaded;
 							http[a].Requested = iaRequested;
 							http[a].Failed = iaFailed;
-							http[a].start();
+							http[a].Start();
 						}
 					}
 				}
@@ -917,13 +917,13 @@ namespace LOIC
 						iDownloaded += lLoic[a].Downloaded;
 						iRequested += lLoic[a].Requested;
 						iFailed += lLoic[a].Failed;
-						if (lLoic[a].State == cHLDos.ReqState.Completed)
+						if (lLoic[a].State == ReqState.Completed)
 							iIdle++;
-						if (lLoic[a].State == cHLDos.ReqState.Connecting)
+						if (lLoic[a].State == ReqState.Connecting)
 							iConnecting++;
-						if (lLoic[a].State == cHLDos.ReqState.Requesting)
+						if (lLoic[a].State == ReqState.Requesting)
 							iRequesting++;
-						if (lLoic[a].State == cHLDos.ReqState.Downloading)
+						if (lLoic[a].State == ReqState.Downloading)
 							iDownloading++;
 						if (isFlooding && !lLoic[a].IsFlooding)
 						{
@@ -941,7 +941,7 @@ namespace LOIC
 							}
 							ts.Downloaded = iaDownloaded;
 							ts.Failed = iaFailed;
-							ts.start();
+							ts.Start();
 							lLoic.Add(ts);
 						}
 					}
@@ -958,14 +958,14 @@ namespace LOIC
 							{
 								ts = new SlowLoic(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked, chkUsegZip.Checked);
 							}
-							ts.start();
+							ts.Start();
 							lLoic.Add(ts);
 						}
 						if (lLoic.Count > iThreads)
 						{
 							for (int a = (lLoic.Count - 1); a >= iThreads; a--)
 							{
-								lLoic[a].stop();
+								lLoic[a].Stop();
 								lLoic.RemoveAt(a);
 							}
 						}
