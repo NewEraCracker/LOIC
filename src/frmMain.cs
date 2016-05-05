@@ -276,6 +276,7 @@ namespace LOIC
 			catch(Exception ex)
 			{
 				Wtf (ex.Message, silent);
+				return;
 			}
 		}
 
@@ -295,13 +296,23 @@ namespace LOIC
 			else if (!url.StartsWith("http://")) url = String.Concat("http://", url);
 			try
 			{
-				var turi = new Uri(url).Host;
+				string turi = new Uri(url).Host;
 				txtTarget.Text = sTargetIP = (Functions.RandomElement(Dns.GetHostEntry(turi).AddressList) as IPAddress).ToString();
 				txtTargetURL.Text = sTargetHost = turi;
 			}
-			catch (Exception)
+			catch(UriFormatException)
+			{
+				Wtf ("I don't think a URL is supposed to be written like THAT.", silent);
+				return;
+			}
+			catch(SocketException)
 			{
 				Wtf ("The URL you entered does not resolve to an IP!", silent);
+				return;
+			}
+			catch(Exception ex)
+			{
+				Wtf (ex.Message, silent);
 				return;
 			}
 		}
@@ -884,7 +895,11 @@ namespace LOIC
 		/// <param name="e">EventArgs.</param>
 		private void tShowStats_Tick(object sender, EventArgs e)
 		{
-			if (intShowStats) return; intShowStats = true;
+			// Protect against null reference and race condition
+			if(arr == null || intShowStats)
+				return;
+
+			intShowStats = true;
 
 			int iIdle = 0;
 			int iConnecting = 0, iRequesting = 0, iDownloading = 0;
@@ -894,7 +909,7 @@ namespace LOIC
 			if (cmdAttack.Text == StpFldText)
 				isFlooding = true;
 
-			if(arr != null && arr.Count > 0)
+			if(arr.Count > 0)
 			{
 				for (int a = (arr.Count - 1); a >= 0; a--)
 				{
