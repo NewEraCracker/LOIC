@@ -194,7 +194,7 @@ namespace LOIC
 					{
 						ts = new HTTPFlooder(sTargetHost, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkUsegZip.Checked);
 					}
-					if ((int)protocol == 2 || (int)protocol == 1)
+					if (protocol == Protocol.TCP || protocol == Protocol.UDP)
 					{
 						ts = new XXPFlooder(sTargetIP, iPort, (int)protocol, iDelay, bResp, sData, chkMsgRandom.Checked);
 					}
@@ -296,8 +296,8 @@ namespace LOIC
 			try
 			{
 				var turi = new Uri(url).Host;
-				txtTarget.Text = (Functions.RandomElement(Dns.GetHostEntry(turi).AddressList) as IPAddress).ToString();
-				txtTargetURL.Text = turi;
+				txtTarget.Text = sTargetIP = (Functions.RandomElement(Dns.GetHostEntry(turi).AddressList) as IPAddress).ToString();
+				txtTargetURL.Text = sTargetHost = turi;
 			}
 			catch (Exception)
 			{
@@ -935,7 +935,7 @@ namespace LOIC
 							{
 								ts = new HTTPFlooder(sTargetHost, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkUsegZip.Checked);
 							}
-							if ((int)protocol == 2 || (int)protocol == 1)
+							if (protocol == Protocol.TCP || protocol == Protocol.UDP)
 							{
 								ts = new XXPFlooder(sTargetIP, iPort, (int)protocol, iDelay, bResp, sData, chkMsgRandom.Checked);
 							}
@@ -975,7 +975,7 @@ namespace LOIC
 						{
 							ts = new HTTPFlooder(sTargetHost, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkUsegZip.Checked);
 						}
-						if ((int)protocol == 2 || (int)protocol == 1)
+						if (protocol == Protocol.TCP || protocol == Protocol.UDP)
 						{
 							ts = new XXPFlooder(sTargetIP, iPort, (int)protocol, iDelay, bResp, sData, chkMsgRandom.Checked);
 						}
