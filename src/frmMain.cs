@@ -19,6 +19,7 @@ namespace LOIC
 	public partial class frmMain : Form
 	{
 		const string AttackText = "IMMA CHARGIN MAH LAZER";
+		const string StpFldText = "Stop flooding";
 
 		private List<IFlooder> arr = new List<IFlooder>();
 		private StringCollection aUpOLSites = new StringCollection();
@@ -159,7 +160,7 @@ namespace LOIC
 					return;
 				}
 
-				cmdAttack.Text = "Stop flooding";
+				cmdAttack.Text = StpFldText;
 				//let's lock down the controls, that could actually change the creation of new sockets
 				chkUsegZip.Enabled = false;
 				chkUseGet.Enabled = false;
@@ -872,7 +873,7 @@ namespace LOIC
 			int iDownloaded = 0, iRequested = 0, iFailed = 0;
 
 			bool isFlooding = false;
-			if (cmdAttack.Text == "Stop flooding")
+			if (cmdAttack.Text == StpFldText)
 				isFlooding = true;
 
 			if(arr != null && arr.Count > 0)
@@ -1571,7 +1572,7 @@ namespace LOIC
 
 		private void txtThreads_Leave(object sender, EventArgs e)
 		{
-			if (cmdAttack.Text == "Stop flooding")
+			if (cmdAttack.Text == StpFldText)
 			{
 				int num = iThreads;
 				if (int.TryParse(txtThreads.Text, out num))
@@ -1579,29 +1580,6 @@ namespace LOIC
 					iThreads = num;
 				}
 			}
-		}
-
-		private void TrayIcon_DoubleClick(object sender, EventArgs e)
-		{
-			this.ShowInTaskbar = true;
-			TrayIcon.Visible = false;
-			this.WindowState = FormWindowState.Normal;
-			this.Focus();
-		}
-
-		private void frmMain_Resize(object sender, EventArgs e)
-		{
-			if ((this.WindowState == FormWindowState.Minimized) && !bIsHidden)
-			{
-				TrayIcon.Visible = true;
-				this.ShowInTaskbar = false;
-			}
-		}
-
-		private void TrayIcon_MouseMove(object sender, MouseEventArgs e)
-		{
-			if((TrayIcon.BalloonTipText != "") && (TrayIcon.BalloonTipTitle != ""))
-				TrayIcon.ShowBalloonTip(1);
 		}
 	}
 }

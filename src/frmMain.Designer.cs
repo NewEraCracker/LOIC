@@ -29,7 +29,6 @@ namespace LOIC
 		private void InitializeComponent()
 		{
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.cmdTargetIP = new System.Windows.Forms.Button();
@@ -102,7 +101,6 @@ namespace LOIC
             this.tCheckOL = new System.Windows.Forms.Timer(this.components);
             this.tZergRush = new System.Windows.Forms.Timer(this.components);
             this.pBanner = new System.Windows.Forms.PictureBox();
-            this.TrayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -889,13 +887,6 @@ namespace LOIC
             this.pBanner.TabIndex = 12;
             this.pBanner.TabStop = false;
             // 
-            // TrayIcon
-            // 
-            this.TrayIcon.Icon = global::LOIC.Properties.Resources.LOIC_ICO;
-            this.TrayIcon.Text = "Waiting for target!";
-            this.TrayIcon.DoubleClick += new System.EventHandler(this.TrayIcon_DoubleClick);
-            this.TrayIcon.MouseMove += new System.Windows.Forms.MouseEventHandler(this.TrayIcon_MouseMove);
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
@@ -936,7 +927,6 @@ namespace LOIC
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmMain_Closed);
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmMain_KeyDown);
-            this.Resize += new System.EventHandler(this.frmMain_Resize);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -1026,6 +1016,5 @@ namespace LOIC
 		private System.Windows.Forms.TextBox txtSLSpT;
 		private System.Windows.Forms.CheckBox chkUsegZip;
 		private System.Windows.Forms.CheckBox chkUseGet;
-		private System.Windows.Forms.NotifyIcon TrayIcon;
 	}
 }
