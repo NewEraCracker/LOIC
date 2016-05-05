@@ -170,10 +170,10 @@ namespace LOIC
 
 				if (arr.Count > 0)
 				{
-					for (int a = (arr.Count - 1); a >= 0; a--)
+					foreach (IFlooder i in arr)
 					{
-						arr[a].Stop();
-						arr[a].IsFlooding = false;
+						i.Stop();
+						i.IsFlooding = false;
 					}
 					arr.Clear();
 				}
@@ -221,10 +221,10 @@ namespace LOIC
 
 				if (arr != null && arr.Count > 0)
 				{
-					for (int a = (arr.Count - 1); a >= 0; a--)
+					foreach (IFlooder i in arr)
 					{
-						arr[a].Stop();
-						arr[a].IsFlooding = false;
+						i.Stop();
+						i.IsFlooding = false;
 					}
 				}
 			}
@@ -681,11 +681,8 @@ namespace LOIC
 							LockOnURL(true);
 							break;
 						case "timeout":
-							isnum = int.TryParse(value, out num);
-							if (isnum)
-							{
+							if(int.TryParse(value, out num) && num >= 1)
 								txtTimeout.Text = num.ToString();
-							}
 							break;
 						case "subsite":
 							txtSubsite.Text = Uri.UnescapeDataString(value);
@@ -694,18 +691,16 @@ namespace LOIC
 							txtData.Text = Uri.UnescapeDataString(value);
 							break;
 						case "port":
-							txtPort.Text = value;
+							if(int.TryParse(value, out num) && num >= 0 && num <= 65535)
+								txtPort.Text = num.ToString();
 							break;
 						case "method":
 							int index = cbMethod.FindString(value);
 							if (index != -1) { cbMethod.SelectedIndex = index; }
 							break;
 						case "threads":
-							isnum = int.TryParse(value, out num);
-							if (isnum && num < 100) //let's protect them a bit, yeah?
-							{
+							if(int.TryParse(value, out num) && num >= 1 && num <= 99)
 								txtThreads.Text = num.ToString();
-							}
 							break;
 						case "wait":
 							if (value.ToLowerInvariant() == "true")
