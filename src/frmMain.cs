@@ -17,6 +17,7 @@ namespace LOIC
 	public partial class frmMain : Form
 	{
 		const string AttackText = "IMMA CHARGIN MAH LAZER";
+		const string StpFldText = "Stop flooding";
 
 		private IFlooder[] arr;
 		private string sHost, sIP, sMethod, sData, sSubsite;
@@ -131,7 +132,7 @@ namespace LOIC
 					return;
 				}
 
-				cmdAttack.Text = "Stop flooding";
+				cmdAttack.Text = StpFldText;
 
 				if(protocol == Protocol.TCP || protocol == Protocol.UDP)
 				{
@@ -212,6 +213,7 @@ namespace LOIC
 			catch(Exception ex)
 			{
 				Wtf (ex.Message, silent);
+				return;
 			}
 		}
 
@@ -253,6 +255,7 @@ namespace LOIC
 			catch(Exception ex)
 			{
 				Wtf (ex.Message, silent);
+				return;
 			}
 		}
 
@@ -653,6 +656,7 @@ namespace LOIC
 								chkAllowRandom.Checked = false;
 							break;
 						case "gzip":
+						case "usegzip":
 							if(value.ToLowerInvariant() == "true")
 								chkAllowGzip.Checked = true;
 							else if(value.ToLowerInvariant() == "false")
