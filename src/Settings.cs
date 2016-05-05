@@ -4,6 +4,7 @@
  */
 
 using System;
+using System.Collections.Specialized;
 using System.Configuration;
 
 namespace LOIC
@@ -24,7 +25,7 @@ namespace LOIC
 		{
 			try
 			{
-				var appSettings = ConfigurationManager.AppSettings;
+				NameValueCollection appSettings = ConfigurationManager.AppSettings;
 				string result = appSettings[key] ?? (emptyUndefined ? "" : "Not Found");
 				return result;
 			}
@@ -38,8 +39,8 @@ namespace LOIC
 		{
 			try
 			{
-				var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-				var settings = configFile.AppSettings.Settings;
+				Configuration configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+				KeyValueConfigurationCollection settings = configFile.AppSettings.Settings;
 				if (settings[key] == null)
 				{
 					settings.Add(key, value);

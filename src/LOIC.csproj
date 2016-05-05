@@ -101,6 +101,7 @@
     </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="XXPFlooder.cs" />
+    <Compile Include="Protocol.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
