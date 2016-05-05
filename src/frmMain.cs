@@ -663,7 +663,7 @@ namespace LOIC
 								chkAllowGzip.Checked = false;
 							break;
 						case "speed":
-							if(int.TryParse(value, out num) && num >= 0 && num <= 50)
+							if(int.TryParse(value, out num) && num >= tbSpeed.Minimum && num <= tbSpeed.Maximum)
 								tbSpeed.Value = num;
 							break;
 					}
