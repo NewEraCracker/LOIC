@@ -28,7 +28,7 @@ namespace LOIC
 
 		public HTTPFlooder(string host, string ip, int port, string subSite, bool resp, int delay, int timeout, bool random, bool gzip)
 		{
-			this.Host = host;
+			this.Host = (host == "") ? ip : host;
 			this.IP = ip;
 			this.Port = port;
 			this.Subsite = subSite;

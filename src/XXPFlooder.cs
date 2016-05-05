@@ -30,6 +30,8 @@ namespace LOIC
 			this.Resp = resp;
 			this.Data = data;
 			this.AllowRandom = random;
+			this.Requested = 0;
+			this.Failed = 0;
 		}
 		public override void Start()
 		{
