@@ -29,9 +29,9 @@ namespace LOIC
 		private void InitializeComponent()
 		{
 			this.SuspendLayout();
-			// 
+			//
 			// frmWtf
-			// 
+			//
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackgroundImage = global::LOIC.Properties.Resources.WTF;
