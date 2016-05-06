@@ -45,7 +45,7 @@ namespace LOIC
             this.txtSLSpT = new System.Windows.Forms.TextBox();
             this.chkMsgRandom = new System.Windows.Forms.CheckBox();
             this.chkRandom = new System.Windows.Forms.CheckBox();
-            this.label21 = new System.Windows.Forms.Label();
+            this.lbSepOptions = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
@@ -64,7 +64,7 @@ namespace LOIC
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.cmdAttack = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.label19 = new System.Windows.Forms.Label();
+            this.lbSepStatus = new System.Windows.Forms.Label();
             this.lbFailed = new System.Windows.Forms.Label();
             this.lbRequested = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
@@ -224,7 +224,7 @@ namespace LOIC
             this.groupBox3.Controls.Add(this.txtSLSpT);
             this.groupBox3.Controls.Add(this.chkMsgRandom);
             this.groupBox3.Controls.Add(this.chkRandom);
-            this.groupBox3.Controls.Add(this.label21);
+            this.groupBox3.Controls.Add(this.lbSepOptions);
             this.groupBox3.Controls.Add(this.label18);
             this.groupBox3.Controls.Add(this.label17);
             this.groupBox3.Controls.Add(this.label9);
@@ -317,14 +317,14 @@ namespace LOIC
             this.TTip.SetToolTip(this.chkRandom, "Enable appending random chars to the subsite every request");
             this.chkRandom.UseVisualStyleBackColor = true;
             //
-            // label21
+            // lbSepOptions
             //
-            this.label21.BackColor = System.Drawing.Color.Azure;
-            this.label21.Location = new System.Drawing.Point(6, 61);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(746, 1);
-            this.label21.TabIndex = 27;
-            this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbSepOptions.BackColor = System.Drawing.Color.Azure;
+            this.lbSepOptions.Location = new System.Drawing.Point(6, 61);
+            this.lbSepOptions.Name = "lbSepOptions";
+            this.lbSepOptions.Size = new System.Drawing.Size(746, 1);
+            this.lbSepOptions.TabIndex = 27;
+            this.lbSepOptions.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             //
             // label18
             //
@@ -529,7 +529,7 @@ namespace LOIC
             //
             // groupBox5
             //
-            this.groupBox5.Controls.Add(this.label19);
+            this.groupBox5.Controls.Add(this.lbSepStatus);
             this.groupBox5.Controls.Add(this.lbFailed);
             this.groupBox5.Controls.Add(this.lbRequested);
             this.groupBox5.Controls.Add(this.label22);
@@ -552,15 +552,15 @@ namespace LOIC
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Attack status";
             //
-            // label19
+            // lbSepStatus
             //
-            this.label19.BackColor = System.Drawing.Color.Azure;
-            this.label19.Location = new System.Drawing.Point(6, 40);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(746, 1);
-            this.label19.TabIndex = 25;
-            this.label19.Text = "Idle";
-            this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbSepStatus.BackColor = System.Drawing.Color.Azure;
+            this.lbSepStatus.Location = new System.Drawing.Point(6, 40);
+            this.lbSepStatus.Name = "lbSepStatus";
+            this.lbSepStatus.Size = new System.Drawing.Size(746, 1);
+            this.lbSepStatus.TabIndex = 25;
+            this.lbSepStatus.Text = "Idle";
+            this.lbSepStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             //
             // lbFailed
             //
@@ -974,7 +974,7 @@ namespace LOIC
 		private System.Windows.Forms.ToolTip TTip;
 		private System.Windows.Forms.TextBox txtData;
 		private System.Windows.Forms.Timer tShowStats;
-		private System.Windows.Forms.Label label19;
+		private System.Windows.Forms.Label lbSepStatus;
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Label label6;
@@ -984,7 +984,7 @@ namespace LOIC
 		private System.Windows.Forms.Label label18;
 		private System.Windows.Forms.Label label17;
 		private System.Windows.Forms.Label label9;
-		private System.Windows.Forms.Label label21;
+		private System.Windows.Forms.Label lbSepOptions;
 		private System.Windows.Forms.PictureBox pBanner;
 		private System.Windows.Forms.CheckBox chkMsgRandom;
 		private System.Windows.Forms.CheckBox chkRandom;
