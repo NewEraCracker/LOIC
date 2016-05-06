@@ -292,7 +292,7 @@ namespace LOIC
             this.txtSLSpT.Name = "txtSLSpT";
             this.txtSLSpT.Size = new System.Drawing.Size(57, 20);
             this.txtSLSpT.TabIndex = 30;
-            this.txtSLSpT.Text = "50";
+            this.txtSLSpT.Text = "25";
             this.txtSLSpT.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.TTip.SetToolTip(this.txtSLSpT, "Amount of sockets per thread");
             //

@@ -774,7 +774,7 @@ namespace LOIC
 						chkRandom.Checked = false;
 						chkMsgRandom.Checked = false;
 						tbSpeed.Value = 0;
-						txtSLSpT.Text = "50";
+						txtSLSpT.Text = "25";
 						chkAllowGzip.Checked = false;
 						chkUseGet.Checked = false;
 					}
@@ -1324,7 +1324,7 @@ namespace LOIC
 							tbSpeed.Value = 0;
 							break;
 						case "sockspthread":
-							txtSLSpT.Text = "50";
+							txtSLSpT.Text = "25";
 							break;
 						case "useget":
 							chkUseGet.Checked = false;
