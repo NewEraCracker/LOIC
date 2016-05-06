@@ -63,7 +63,6 @@ namespace LOIC
             this.tbSpeed = new System.Windows.Forms.TrackBar();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.cmdAttack = new System.Windows.Forms.Button();
-            this.label11 = new System.Windows.Forms.Label();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.label19 = new System.Windows.Forms.Label();
             this.lbFailed = new System.Windows.Forms.Label();
@@ -528,13 +527,6 @@ namespace LOIC
             this.cmdAttack.UseVisualStyleBackColor = false;
             this.cmdAttack.Click += new System.EventHandler(this.cmdAttack_Click);
             //
-            // label11
-            //
-            this.label11.Location = new System.Drawing.Point(212, 375);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(22, 41);
-            this.label11.TabIndex = 10;
-            //
             // groupBox5
             //
             this.groupBox5.Controls.Add(this.label19);
@@ -916,7 +908,6 @@ namespace LOIC
             this.Controls.Add(this.pBanner);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox5);
-            this.Controls.Add(this.label11);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -964,7 +955,6 @@ namespace LOIC
 		private System.Windows.Forms.TextBox txtTimeout;
 		private System.Windows.Forms.GroupBox groupBox4;
 		private System.Windows.Forms.Button cmdAttack;
-		private System.Windows.Forms.Label label11;
 		private System.Windows.Forms.GroupBox groupBox5;
 		private System.Windows.Forms.Label label22;
 		private System.Windows.Forms.Label label23;
