@@ -121,14 +121,14 @@ namespace LOIC
             this.groupBox1.ForeColor = System.Drawing.Color.LightBlue;
             this.groupBox1.Location = new System.Drawing.Point(212, 65);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(465, 75);
+            this.groupBox1.Size = new System.Drawing.Size(488, 75);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "1. Select your target";
             //
             // label2
             //
-            this.label2.Location = new System.Drawing.Point(6, 51);
+            this.label2.Location = new System.Drawing.Point(3, 50);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(30, 14);
             this.label2.TabIndex = 5;
@@ -139,7 +139,7 @@ namespace LOIC
             //
             this.cmdTargetIP.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(64)))), ((int)(((byte)(96)))));
             this.cmdTargetIP.ForeColor = System.Drawing.Color.Azure;
-            this.cmdTargetIP.Location = new System.Drawing.Point(388, 47);
+            this.cmdTargetIP.Location = new System.Drawing.Point(410, 46);
             this.cmdTargetIP.Name = "cmdTargetIP";
             this.cmdTargetIP.Size = new System.Drawing.Size(71, 22);
             this.cmdTargetIP.TabIndex = 4;
@@ -152,15 +152,15 @@ namespace LOIC
             this.txtTargetIP.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(48)))), ((int)(((byte)(64)))));
             this.txtTargetIP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtTargetIP.ForeColor = System.Drawing.Color.Azure;
-            this.txtTargetIP.Location = new System.Drawing.Point(42, 48);
+            this.txtTargetIP.Location = new System.Drawing.Point(39, 48);
             this.txtTargetIP.Name = "txtTargetIP";
-            this.txtTargetIP.Size = new System.Drawing.Size(340, 20);
+            this.txtTargetIP.Size = new System.Drawing.Size(365, 20);
             this.txtTargetIP.TabIndex = 3;
             this.TTip.SetToolTip(this.txtTargetIP, "If you know your target\'s IP, enter the IP here and click \"Lock on\"");
             //
             // label1
             //
-            this.label1.Location = new System.Drawing.Point(6, 23);
+            this.label1.Location = new System.Drawing.Point(3, 23);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(30, 14);
             this.label1.TabIndex = 2;
@@ -171,7 +171,7 @@ namespace LOIC
             //
             this.cmdTargetURL.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(64)))), ((int)(((byte)(96)))));
             this.cmdTargetURL.ForeColor = System.Drawing.Color.Azure;
-            this.cmdTargetURL.Location = new System.Drawing.Point(388, 19);
+            this.cmdTargetURL.Location = new System.Drawing.Point(410, 19);
             this.cmdTargetURL.Name = "cmdTargetURL";
             this.cmdTargetURL.Size = new System.Drawing.Size(71, 22);
             this.cmdTargetURL.TabIndex = 2;
@@ -184,9 +184,9 @@ namespace LOIC
             this.txtTargetURL.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(48)))), ((int)(((byte)(64)))));
             this.txtTargetURL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtTargetURL.ForeColor = System.Drawing.Color.Azure;
-            this.txtTargetURL.Location = new System.Drawing.Point(42, 20);
+            this.txtTargetURL.Location = new System.Drawing.Point(39, 20);
             this.txtTargetURL.Name = "txtTargetURL";
-            this.txtTargetURL.Size = new System.Drawing.Size(340, 20);
+            this.txtTargetURL.Size = new System.Drawing.Size(365, 20);
             this.txtTargetURL.TabIndex = 1;
             this.TTip.SetToolTip(this.txtTargetURL, "If you don\'t know your target\'s IP, enter a URL here and click \"Lock on\"");
             //
@@ -758,10 +758,10 @@ namespace LOIC
             this.disableHive.Checked = true;
             this.disableHive.Location = new System.Drawing.Point(212, 15);
             this.disableHive.Name = "disableHive";
-            this.disableHive.Size = new System.Drawing.Size(154, 18);
+            this.disableHive.Size = new System.Drawing.Size(163, 18);
             this.disableHive.TabIndex = 15;
             this.disableHive.TabStop = true;
-            this.disableHive.Text = "Manual Mode (for pussies)";
+            this.disableHive.Text = "Manual Mode (Do it yourself)";
             this.disableHive.UseVisualStyleBackColor = true;
             this.disableHive.CheckedChanged += new System.EventHandler(this.disableHive_CheckedChanged);
             //
@@ -770,9 +770,10 @@ namespace LOIC
             this.enableHive.AutoSize = true;
             this.enableHive.Location = new System.Drawing.Point(377, 15);
             this.enableHive.Name = "enableHive";
-            this.enableHive.Size = new System.Drawing.Size(122, 18);
+            this.enableHive.Size = new System.Drawing.Size(124, 18);
             this.enableHive.TabIndex = 16;
-            this.enableHive.Text = "FUCKING HIVE MIND";
+            this.enableHive.Text = "IRC Mode (HiveMind)";
+            this.TTip.SetToolTip(this.enableHive, "Fill the IRC options if you wish to use this mode");
             this.enableHive.UseVisualStyleBackColor = true;
             this.enableHive.CheckedChanged += new System.EventHandler(this.enableHive_CheckedChanged);
             //
