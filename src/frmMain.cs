@@ -655,7 +655,7 @@ namespace LOIC
 
 			foreach (string param in pars)
 			{
-				string[] sp = param.Split('=', 2, StringSplitOptions.RemoveEmptyEntries);
+				string[] sp = param.Split(new char[]{'='}, 2, StringSplitOptions.RemoveEmptyEntries);
 				if (sp.Length == 2)
 				{
 					string cmd   = sp[0];
