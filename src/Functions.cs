@@ -13,14 +13,14 @@ namespace LOIC
 		private static readonly Random rnd = new Random(Guid.NewGuid().GetHashCode());
 		private static readonly String[] ntv = { "6.0", "6.1", "6.2", "6.3", "10.0" };
 
-		public static string RandomString()
+		public static string RandomString(int length = 6)
 		{
 			lock (rnd)
 			{
 				StringBuilder builder = new StringBuilder();
 
 				char ch;
-				for (int i = 0; i < 6; i++)
+				for (int i = 0; i < length; i++)
 				{
 					ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * rnd.NextDouble() + 65)));
 					builder.Append(ch);
