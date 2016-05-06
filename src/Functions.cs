@@ -8,7 +8,7 @@ using System.Text;
 
 namespace LOIC
 {
-	public class Functions
+	public static class Functions
 	{
 		private static readonly Random rnd = new Random(Guid.NewGuid().GetHashCode());
 		private static readonly String[] ntv = { "6.0", "6.1", "6.2", "6.3", "10.0" };
