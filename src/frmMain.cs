@@ -286,29 +286,34 @@ namespace LOIC
 		/// <param name="silent">Silent?</param>
 		private void LockOnURL(bool silent = false)
 		{
-			string url = txtTargetURL.Text.Trim().ToLowerInvariant();
-			if (url.Length == 0)
-			{
-				Wtf ("A URL is fine too...", silent);
-				return;
-			}
-			if (url.StartsWith("https://")) url = url.Replace("https://", "http://");
-			else if (!url.StartsWith("http://")) url = String.Concat("http://", url);
 			try
 			{
-				string turi = new Uri(url).Host;
-				txtTarget.Text = sTargetIP = (Functions.RandomElement(Dns.GetHostEntry(turi).AddressList) as IPAddress).ToString();
-				txtTargetURL.Text = sTargetHost = turi;
-			}
-			catch(UriFormatException)
-			{
-				Wtf ("I don't think a URL is supposed to be written like THAT.", silent);
-				return;
-			}
-			catch(SocketException)
-			{
-				Wtf ("The URL you entered does not resolve to an IP!", silent);
-				return;
+				string tURL = txtTargetURL.Text.Trim().ToLowerInvariant();
+				if(tURL.Length == 0)
+				{
+					Wtf ("A URL is fine too...", silent);
+					return;
+				}
+				if(!tURL.Contains("://"))
+				{
+					tURL = String.Concat("http://", tURL);
+				}
+				try
+				{
+					tURL = new Uri(tURL).Host;
+					txtTarget.Text = sTargetIP = (Functions.RandomElement(Dns.GetHostEntry(tURL).AddressList) as IPAddress).ToString();
+					txtTargetURL.Text = sTargetHost = tURL;
+				}
+				catch(UriFormatException)
+				{
+					Wtf ("I don't think a URL is supposed to be written like THAT.", silent);
+					return;
+				}
+				catch(SocketException)
+				{
+					Wtf ("The URL you entered does not resolve to an IP!", silent);
+					return;
+				}
 			}
 			catch(Exception ex)
 			{
