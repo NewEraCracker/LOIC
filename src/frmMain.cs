@@ -655,18 +655,11 @@ namespace LOIC
 
 			foreach (string param in pars)
 			{
-				string[] sp = param.Split('=');
-				if (sp.Length > 1)
+				string[] sp = param.Split('=', 2, StringSplitOptions.RemoveEmptyEntries);
+				if (sp.Length == 2)
 				{
-					string cmd = sp[0];
-
-					// Find param value
-					string value = "";
-					for (int key = 0; key < sp.Length; ++key)
-					{
-						if(key >= 1)
-							value += sp[key] + ( (key+1 < sp.Length) ? "=" : "");
-					}
+					string cmd   = sp[0];
+					string value = sp[1];
 
 					int num;
 					bool isnum;
