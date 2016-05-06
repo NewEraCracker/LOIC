@@ -229,10 +229,9 @@ namespace LOIC
 											header += System.Text.Encoding.ASCII.GetString(rbuf);
 										}
 										string[] sp = header.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-										string[] tsp;
 										for (int i = (sp.Length - 1); i >= 0; i--)
 										{
-											tsp = sp[i].Split(':');
+											string[] tsp = sp[i].Split(new char[]{':'}, 2, StringSplitOptions.RemoveEmptyEntries);
 											if ((tsp[0] == "Content-Length") && (tsp.Length >= 2))
 											{ // checking if the content-length is long enough to work with this!
 												int sl = 0;
