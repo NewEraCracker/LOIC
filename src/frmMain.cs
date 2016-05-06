@@ -1572,7 +1572,8 @@ namespace LOIC
 					e.Handled = true;
 					break;
 				case Keys.F1:
-					System.Diagnostics.Process.Start("help.chm");
+					try { Process.Start("help.chm"); }
+					catch { Wtf("Error 404 - Help Not Found", bIsHidden); }
 					break;
 			}
 		}
