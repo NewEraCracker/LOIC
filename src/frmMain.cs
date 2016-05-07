@@ -148,8 +148,8 @@ namespace LOIC
 
 					if (protocol == Protocol.slowLOIC || protocol == Protocol.ReCoil)
 					{
-						try { iSockspThread = Convert.ToInt32(txtSLSpT.Text); }
-						catch { throw new Exception("A number is fine too!"); }
+						if (!int.TryParse(txtSLSpT.Text, out iSockspThread) || iSockspThread < 1)
+							throw new Exception("A number is fine too!");
 					}
 				}
 				catch (Exception ex)
