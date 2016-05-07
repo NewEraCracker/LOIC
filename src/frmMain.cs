@@ -465,14 +465,13 @@ namespace LOIC
 			}
 			else
 			{
-				if (OpList == null) OpList = new Dictionary<string, string>();
+				OpList = new Dictionary<string, string>();
 			}
 
 			foreach (string user in e.UserList)
 			{
 				if (user.StartsWith("@") || user.StartsWith("&") || user.StartsWith("~"))
 				{
-
 					OpList.Add(user.Substring(1), "");
 				}
 			}
