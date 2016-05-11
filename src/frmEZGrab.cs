@@ -20,7 +20,10 @@ namespace LOIC
 			this.overlord = OverLord;
 			txtOverlord.Text = OverLord;
 		}
-
+		private void frmEZGrab_FormClosed(object sender, FormClosedEventArgs e)
+		{
+			this.Dispose();
+		}
 		private void btnUpdate_Click(object sender, EventArgs e)
 		{
 			if (txtDate.Text != "")
@@ -28,7 +31,6 @@ namespace LOIC
 				txtOverlord.Text = overlord + "&@time=" + txtDate.Text + "@";
 			}
 		}
-
 		private void btnShorten_Click(object sender, EventArgs e)
 		{
 			string turl = "";
@@ -43,7 +45,6 @@ namespace LOIC
 			turl += Uri.EscapeDataString(txtOverlord.Text);
 			System.Diagnostics.Process.Start(turl);
 		}
-
 		private void btnCancel_Click(object sender, EventArgs e)
 		{
 			this.Close();

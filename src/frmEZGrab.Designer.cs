@@ -193,6 +193,7 @@ namespace LOIC
             this.Icon = global::LOIC.Properties.Resources.LOIC_ICO;
             this.Name = "frmEZGrab";
             this.Text = "HiveMind / Overlord eZGrab";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmEZGrab_FormClosed);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
