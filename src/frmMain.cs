@@ -1595,7 +1595,7 @@ namespace LOIC
 			if (cmdAttack.Text == StpFldText)
 			{
 				int num = iThreads;
-				if (int.TryParse(txtThreads.Text, out num))
+				if (int.TryParse(txtThreads.Text, out num) && num >= 1 && num <= 99)
 				{
 					iThreads = num;
 				}
