@@ -192,7 +192,7 @@ namespace LOIC
 					}
 					if (protocol == Protocol.HTTP)
 					{
-						ts = new HTTPFlooder(sTargetHost, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkAllowGzip.Checked);
+						ts = new HTTPFlooder(sTargetHost, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkUseGet.Checked, chkAllowGzip.Checked);
 					}
 					if (protocol == Protocol.TCP || protocol == Protocol.UDP)
 					{
@@ -934,7 +934,7 @@ namespace LOIC
 							}
 							if (protocol == Protocol.HTTP)
 							{
-								ts = new HTTPFlooder(sTargetHost, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkAllowGzip.Checked);
+								ts = new HTTPFlooder(sTargetHost, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkUseGet.Checked, chkAllowGzip.Checked);
 							}
 							if (protocol == Protocol.TCP || protocol == Protocol.UDP)
 							{
@@ -974,7 +974,7 @@ namespace LOIC
 						}
 						if (protocol == Protocol.HTTP)
 						{
-							ts = new HTTPFlooder(sTargetHost, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkAllowGzip.Checked);
+							ts = new HTTPFlooder(sTargetHost, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkUseGet.Checked, chkAllowGzip.Checked);
 						}
 						if (protocol == Protocol.TCP || protocol == Protocol.UDP)
 						{
@@ -1579,15 +1579,15 @@ namespace LOIC
 
 		private void cbMethod_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			chkMsgRandom.Enabled = (cbMethod.SelectedIndex <= 1) ? true : false;
-			txtData.Enabled = (cbMethod.SelectedIndex <= 1) ? true : false;
-			chkRandom.Enabled = (cbMethod.SelectedIndex >= 2) ? true : false;
-			txtSubsite.Enabled = (cbMethod.SelectedIndex >= 2) ? true : false;
+			chkMsgRandom.Enabled = (bool)(cbMethod.SelectedIndex <= 1); // TCP_UDP
+			txtData.Enabled      = (bool)(cbMethod.SelectedIndex <= 1); // TCP_UDP
+			chkRandom.Enabled    = (bool)(cbMethod.SelectedIndex >= 2); // HTTP_ReCoil_slowLoic
+			txtSubsite.Enabled   = (bool)(cbMethod.SelectedIndex >= 2); // HTTP_ReCoil_slowLoic
 
-			txtSLSpT.Enabled = (cbMethod.SelectedIndex >= 3) ? true : false;
-			chkAllowGzip.Enabled = (cbMethod.SelectedIndex >= 2) ? true : false;
-			chkWaitReply.Enabled = (cbMethod.SelectedIndex == 4) ? false : true;
-			chkUseGet.Enabled = (cbMethod.SelectedIndex == 4) ? true : false;
+			txtSLSpT.Enabled     = (bool)(cbMethod.SelectedIndex >= 3); // ReCoil_slowLoic
+			chkAllowGzip.Enabled = (bool)(cbMethod.SelectedIndex >= 2); // HTTP_ReCoil_slowLoic
+			chkWaitReply.Enabled = (bool)(cbMethod.SelectedIndex != 4); // TCP_UDP_HTTP_ReCoil
+			chkUseGet.Enabled    = (bool)(cbMethod.SelectedIndex == 2 || cbMethod.SelectedIndex == 4); // HTTP_slowLoic
 		}
 
 		private void txtThreads_Leave(object sender, EventArgs e)

