@@ -97,12 +97,12 @@ namespace LOIC
 					// Protect against race condition
 					if(tShowStats.Enabled) tShowStats.Stop();
 
-					if (!int.TryParse (txtPort.Text, out iPort) || iPort < 0 || iPort > 65535) {
+					if (!Functions.ParseInt(txtPort.Text, 0, 65535, out iPort)) {
 						Wtf ("I don't think ports are supposed to be written like THAT.", silent);
 						return;
 					}
 
-					if (!int.TryParse (txtThreads.Text, out iThreads) || iThreads < 1 || iThreads > 99) {
+					if (!Functions.ParseInt(txtThreads.Text, 1, 99, out iThreads)) {
 						Wtf ("What on earth made you put THAT in the threads field?", silent);
 						return;
 					}
@@ -666,7 +666,6 @@ namespace LOIC
 					string value = sp[1];
 
 					int num;
-					bool isnum;
 					switch (cmd.ToLowerInvariant())
 					{
 						case "targetip":
@@ -688,7 +687,7 @@ namespace LOIC
 							txtData.Text = Uri.UnescapeDataString(value);
 							break;
 						case "port":
-							if(int.TryParse(value, out num) && num >= 0 && num <= 65535)
+							if (Functions.ParseInt(value, 0, 65535, out num))
 								txtPort.Text = num.ToString();
 							break;
 						case "method":
@@ -697,7 +696,7 @@ namespace LOIC
 								cbMethod.SelectedIndex = index;
 							break;
 						case "threads":
-							if(int.TryParse(value, out num) && num >= 1 && num <= 99)
+							if (Functions.ParseInt(value, 1, 99, out num))
 								txtThreads.Text = num.ToString();
 							break;
 						case "wait":
@@ -719,21 +718,14 @@ namespace LOIC
 							}
 							break;
 						case "speed":
-							isnum = int.TryParse(value, out num);
-							if (isnum && num >= tbSpeed.Minimum && num <= tbSpeed.Maximum) //let's protect them a bit, yeah?
-							{
+							if (Functions.ParseInt(value, tbSpeed.Minimum, tbSpeed.Maximum, out num))
 								tbSpeed.Value = num;
-							}
 							break;
 						case "useget":
 							if (value.ToLowerInvariant() == "true")
-							{
 								chkUseGet.Checked = true;
-							}
 							else if (value.ToLowerInvariant() == "false")
-							{
 								chkUseGet.Checked = false;
-							}
 							break;
 						case "gzip":
 						case "usegzip":
@@ -743,11 +735,8 @@ namespace LOIC
 								chkAllowGzip.Checked = false;
 							break;
 						case "sockspthread":
-							isnum = int.TryParse(value, out num);
-							if (isnum && num < 100) //let's protect them a bit, yeah?
-							{
+							if (Functions.ParseInt(value, 1, 99, out num))
 								txtSLSpT.Text = num.ToString();
-							}
 							break;
 					}
 				}
@@ -1163,8 +1152,7 @@ namespace LOIC
 							}
 							break;
 						case "threads":
-							isnum = int.TryParse(tval, out num);
-							if (isnum) //let's protect them a bit, yeah? - no we don't!!
+							if (Functions.ParseInt(tval, 1, 99, out num))
 							{
 								if (txtThreads.Text != num.ToString())
 								{
@@ -1205,8 +1193,7 @@ namespace LOIC
 							}
 							break;
 						case "speed":
-							isnum = int.TryParse(tval, out num);
-							if (isnum && num >= tbSpeed.Minimum && num <= tbSpeed.Maximum) //let's protect them a bit, yeah?
+							if (Functions.ParseInt(tval, tbSpeed.Minimum, tbSpeed.Maximum, out num))
 							{
 								if (tbSpeed.Value != num)
 								{
@@ -1255,30 +1242,19 @@ namespace LOIC
 							break;
 						case "useget":
 							if (tval.ToLowerInvariant() == "true")
-							{
 								chkUseGet.Checked = true;
-							}
 							else if (tval.ToLowerInvariant() == "false")
-							{
 								chkUseGet.Checked = false;
-							}
 							break;
 						case "usegzip":
 							if (tval.ToLowerInvariant() == "true")
-							{
 								chkAllowGzip.Checked = true;
-							}
 							else if (tval.ToLowerInvariant() == "false")
-							{
 								chkAllowGzip.Checked = false;
-							}
 							break;
 						case "sockspthread":
-							isnum = int.TryParse(tval, out num);
-							if (isnum && num < 100) //let's protect them a bit, yeah?
-							{
+							if (Functions.ParseInt(tval, 1, 99, out num))
 								txtSLSpT.Text = num.ToString();
-							}
 							break;
 					}
 				}

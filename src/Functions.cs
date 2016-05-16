@@ -62,5 +62,15 @@ namespace LOIC
 		{
 			return Encoding.ASCII.GetBytes(String.Format("{0} {1}{2} HTTP/1.1{7}Host: {3}{7}User-Agent: {4}{7}Accept: */*{7}{5}{6}{7}", method, subsite, (subsite_random ? RandomString() : ""), host, RandomUserAgent(), (gzip ? "Accept-Encoding: gzip, deflate\r\n" : ""), (keep_alive > 0 ? String.Format("Keep-Alive: {0}\r\nConnection: keep-alive\r\n", keep_alive) : ""), "\r\n"));
 		}
+
+		public static bool ParseInt(string str, int min, int max, out int value)
+		{
+			bool res = int.TryParse(str, out value);
+
+			if (res && value >= min && value <= max)
+				return true;
+
+			return false;
+		}
 	}
 }
