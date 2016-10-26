@@ -716,7 +716,7 @@ namespace LOIC
 		/// <param name="e">EventArgs.</param>
 		private void frmMain_Load(object sender, EventArgs e)
 		{
-			this.Text = String.Format("{0} | U dun goofed | v. {1}", Application.ProductName, Application.ProductVersion);
+			this.Text = String.Format("{0} | When harpoons, air strikes and nukes fail | v. {1}", Application.ProductName, Application.ProductVersion);
 		}
 
 		/// <summary>
