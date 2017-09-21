@@ -32,10 +32,20 @@ namespace LOIC {
 		/// </summary>
 		HTTP = 3,
 
+		/// <summary>
+		/// XXX: Must be documented.
+		/// </summary>
+		slowLOIC = 4,
+
+		/// <summary>
+		/// XXX: Must be documented.
+		/// </summary>
+		ReCoil = 5,
 
         ///<summary>
-        ///Slow loris connections attack
-        ///</summary>
-        SlowLoris = 4,
+        /// SlowLoris Protocol method
+        /// </summary>
+        SlowLoris = 6,
+
 	}
 }
