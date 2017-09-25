@@ -53,11 +53,11 @@
     <Compile Include="frmEZGrab.Designer.cs">
       <DependentUpon>frmEZGrab.cs</DependentUpon>
     </Compile>
-    <Compile Include="..\..\..\..\Documents\frmMain.cs">
+    <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
       <Link>frmMain.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Documents\frmMain.Designer.cs">
+    <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
       <Link>frmMain.Designer.cs</Link>
     </Compile>
@@ -80,7 +80,7 @@
     <EmbeddedResource Include="frmEZGrab.resx">
       <DependentUpon>frmEZGrab.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\..\Documents\frmMain.resx">
+    <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
       <SubType>Designer</SubType>
       <Link>frmMain.resx</Link>
