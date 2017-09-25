@@ -1,3 +1,7 @@
+## What I'm working on
+Adding the ability to test slow loris connection style attacks, new to github, apologies for any version control errors, still finding my bearings
+
+
 ## INFO
 
 Low Orbit Ion Cannon - An open source network stress tool, written in C#.
