@@ -43,7 +43,7 @@ namespace LOIC {
 		ReCoil = 5,
 
         ///<summary>
-        /// SlowLoris Protocol method
+        /// ICMP Protocol method
         /// </summary>
         ICMP = 6,
 
