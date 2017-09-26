@@ -45,7 +45,7 @@ namespace LOIC {
         ///<summary>
         /// SlowLoris Protocol method
         /// </summary>
-        SlowLoris = 6,
+        ICMP = 6,
 
 	}
 }
