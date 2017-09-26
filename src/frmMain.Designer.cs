@@ -471,7 +471,7 @@ namespace LOIC
             "HTTP",
             "ReCoil",
             "slowLOIC",
-            "SlowLoris"});
+            "ICMP"});
             this.cbMethod.Location = new System.Drawing.Point(75, 76);
             this.cbMethod.Name = "cbMethod";
             this.cbMethod.Size = new System.Drawing.Size(75, 22);
