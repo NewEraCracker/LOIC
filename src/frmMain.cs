@@ -199,7 +199,7 @@ namespace LOIC
 						ts = new XXPFlooder(sTargetIP, iPort, (int)protocol, iDelay, bResp, sData, chkMsgRandom.Checked);
 					}
 
-                    if (protocol == Protocol.SlowLoris)
+                    if (protocol == Protocol.ICMP)
                     {
                         //add slow loris code here
                     }
