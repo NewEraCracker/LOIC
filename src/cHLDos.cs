@@ -603,6 +603,10 @@ namespace LOIC
                     b++;
                 }
             }
+            else
+            {
+                _BytesToSend = new Byte[0];
+            }
             
         
             
