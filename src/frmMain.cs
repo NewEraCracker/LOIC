@@ -1569,6 +1569,8 @@ namespace LOIC
 			chkAllowGzip.Enabled = (bool)(cbMethod.SelectedIndex >= 2); // HTTP_ReCoil_slowLoic
 			chkWaitReply.Enabled = (bool)(cbMethod.SelectedIndex != 4 && cbMethod.SelectedIndex != 5); // TCP_UDP_HTTP_ReCoil
 			chkUseGet.Enabled    = (bool)(cbMethod.SelectedIndex == 2 || cbMethod.SelectedIndex == 4); // HTTP_slowLoic
+
+            
             
 		}
 
