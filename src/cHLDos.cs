@@ -618,7 +618,7 @@ namespace LOIC
                 {
 
                     //send the data with a timeout value of 10ms 
-                    _pingSender.SendAsync(_ip + ":" + _port, 10, _BytesToSend, opt);
+                    _pingSender.SendAsync(_ip , 10, _BytesToSend, opt);
                     
                 }
                 catch (PingException)
