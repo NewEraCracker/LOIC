@@ -1,5 +1,5 @@
 ## What I'm working on
-Adding the ability to test slow loris connection style attacks, new to github, apologies for any version control errors, still finding my bearings
+Adding the ability to test ICMP ping flood style attacks, new to github, apologies for any version control errors, still finding my bearings
 
 
 ## INFO
