@@ -1560,15 +1560,16 @@ namespace LOIC
 
 		private void cbMethod_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			chkMsgRandom.Enabled = (bool)(cbMethod.SelectedIndex <= 1); // TCP_UDP
+			chkMsgRandom.Enabled = (bool)(cbMethod.SelectedIndex <= 1 || cbMethod.SelectedIndex == 5); // TCP_UDP or ICMP
 			txtData.Enabled      = (bool)(cbMethod.SelectedIndex <= 1); // TCP_UDP
-			chkRandom.Enabled    = (bool)(cbMethod.SelectedIndex >= 2); // HTTP_ReCoil_slowLoic
+			chkRandom.Enabled    = (bool)(cbMethod.SelectedIndex >= 2 && !(cbMethod.SelectedIndex == 5)); // HTTP_ReCoil_slowLoic
 			txtSubsite.Enabled   = (bool)(cbMethod.SelectedIndex >= 2); // HTTP_ReCoil_slowLoic
 
 			txtSLSpT.Enabled     = (bool)(cbMethod.SelectedIndex >= 3); // ReCoil_slowLoic
 			chkAllowGzip.Enabled = (bool)(cbMethod.SelectedIndex >= 2); // HTTP_ReCoil_slowLoic
-			chkWaitReply.Enabled = (bool)(cbMethod.SelectedIndex != 4); // TCP_UDP_HTTP_ReCoil
+			chkWaitReply.Enabled = (bool)(cbMethod.SelectedIndex != 4 && cbMethod.SelectedIndex != 5); // TCP_UDP_HTTP_ReCoil
 			chkUseGet.Enabled    = (bool)(cbMethod.SelectedIndex == 2 || cbMethod.SelectedIndex == 4); // HTTP_slowLoic
+            
 		}
 
 		private void txtThreads_Leave(object sender, EventArgs e)
