@@ -201,7 +201,7 @@ namespace LOIC
 
                     if (protocol == Protocol.ICMP)
                     {
-                        //add slow loris code here
+                        //add ICMP code here
                     }
 
 					if(ts != null)
