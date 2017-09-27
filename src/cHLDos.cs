@@ -584,7 +584,10 @@ namespace LOIC
 
             for (int i = 0; i < _PingsPerThread; i++)
             {
-                pingSender.Send(_ip, 1, _BytesToSend, opt);
+                //send the data with a timeout value of 10ms 
+                pingSender.Send(_ip+":"+_port, 1, _BytesToSend, opt);
+                //dispose of the pingSender because why do WE need to see the replies ;)
+                pingSender.Dispose();
             }
 
            
