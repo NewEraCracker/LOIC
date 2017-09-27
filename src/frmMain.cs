@@ -201,7 +201,7 @@ namespace LOIC
 
                     if (protocol == Protocol.ICMP)
                     {
-                        //add ICMP code here
+                        ts = new ICMP(sTargetIP, iPort, chkMsgRandom.Checked, iSockspThread);
                     }
 
 					if(ts != null)
@@ -1584,6 +1584,11 @@ namespace LOIC
 		}
 
         private void groupBox3_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtSLSpT_TextChanged(object sender, EventArgs e)
         {
 
         }

