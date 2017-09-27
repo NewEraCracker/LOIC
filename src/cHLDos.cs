@@ -555,14 +555,13 @@ namespace LOIC
            this._PingsPerThread = PingsPerThread;
            this._pingSender = new Ping();
            this._RandomMessage = RandomMessage;
-           this._BytesToSend = new byte[65000];
-
+           this._BytesToSend = new byte[64999];
+           this._random = new Random();
            _opt = new PingOptions();
            _opt.DontFragment = false;
            _opt.Ttl = 128;
            
-            //not sure if need to initiliase as bw_work is a nonstatic field anyway
-            //_BytesToSend = new byte[65499];
+          
 
             
             
