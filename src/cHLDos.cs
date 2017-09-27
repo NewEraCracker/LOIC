@@ -613,19 +613,27 @@ namespace LOIC
                 {
 
                     //send the data with a timeout value of 10ms 
-                    _pingSender.Send(_ip + ":" + _port, 1, _BytesToSend, opt);
-                    Requested++;
+                    _pingSender.Send(_ip + ":" + _port, 10, _BytesToSend, opt);
+                    
                 }
                 catch (PingException)
                 {
+                    
                     //if not working for whatever reason this will show this.
-                    Requested--;
+                    
+                    
+                }
+                catch(Exception){
+                    
                     Failed++;
                 }
                     //dispose of the pingSender because why do WE need to see the replies ;)
-                
-                _pingSender.Dispose();
-               
+                try
+                {
+                    _pingSender.Dispose();
+                    Requested++;
+                }
+                catch { }
             }
 
            
