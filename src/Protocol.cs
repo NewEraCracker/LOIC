@@ -41,5 +41,11 @@ namespace LOIC {
 		/// XXX: Must be documented.
 		/// </summary>
 		ReCoil = 5,
+
+        ///<summary>
+        /// ICMP Protocol method
+        /// </summary>
+        ICMP = 6,
+
 	}
 }
