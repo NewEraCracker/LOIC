@@ -534,7 +534,7 @@ namespace LOIC
     {
    
         private string _ip;
-        private int _port;
+       
         
         private Random _random;
         private int _PingsPerThread;
@@ -548,10 +548,9 @@ namespace LOIC
         /// Create the ICMP object, because we need that, for reasons
         /// </summary>
 
-        public ICMP(string ip, int port, bool RandomMessage, int PingsPerThread)
+        public ICMP(string ip, bool RandomMessage, int PingsPerThread)
         {
            this._ip = ip;
-           this._port = port;
            this._PingsPerThread = PingsPerThread;
            this._pingSender = new Ping();
            this._RandomMessage = RandomMessage;

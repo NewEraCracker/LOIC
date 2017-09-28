@@ -201,7 +201,7 @@ namespace LOIC
 
                     if (protocol == Protocol.ICMP)
                     {
-                        ts = new ICMP(sTargetIP, iPort, chkMsgRandom.Checked, Convert.ToInt32((txtSLSpT.Text)));
+                        ts = new ICMP(sTargetIP, chkMsgRandom.Checked, Convert.ToInt32((txtSLSpT.Text)));
                     }
 
 					if(ts != null)
