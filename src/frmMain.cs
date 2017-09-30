@@ -198,11 +198,10 @@ namespace LOIC
 					{
 						ts = new XXPFlooder(sTargetIP, iPort, (int)protocol, iDelay, bResp, sData, chkMsgRandom.Checked);
 					}
-
-                    if (protocol == Protocol.ICMP)
-                    {
-                        ts = new ICMP(sTargetIP, iPort, chkMsgRandom.Checked, Convert.ToInt32((txtSLSpT.Text)));
-                    }
+					if (protocol == Protocol.ICMP)
+					{
+						ts = new ICMP(sTargetIP, iPort, chkMsgRandom.Checked, Convert.ToInt32((txtSLSpT.Text)));
+					}
 
 					if(ts != null)
 					{
@@ -934,6 +933,10 @@ namespace LOIC
 							{
 								ts = new XXPFlooder(sTargetIP, iPort, (int)protocol, iDelay, bResp, sData, chkMsgRandom.Checked);
 							}
+							if (protocol == Protocol.ICMP)
+							{
+								ts = new ICMP(sTargetIP, iPort, chkMsgRandom.Checked, Convert.ToInt32((txtSLSpT.Text)));
+							}
 
 							if(ts != null)
 							{
@@ -1569,9 +1572,6 @@ namespace LOIC
 			chkAllowGzip.Enabled = (bool)(cbMethod.SelectedIndex >= 2); // HTTP_ReCoil_slowLoic
 			chkWaitReply.Enabled = (bool)(cbMethod.SelectedIndex != 4 && cbMethod.SelectedIndex != 5); // TCP_UDP_HTTP_ReCoil
 			chkUseGet.Enabled    = (bool)(cbMethod.SelectedIndex == 2 || cbMethod.SelectedIndex == 4); // HTTP_slowLoic
-
-            
-            
 		}
 
 		private void txtThreads_Leave(object sender, EventArgs e)
@@ -1585,7 +1585,5 @@ namespace LOIC
 				}
 			}
 		}
-
-       
 	}
 }

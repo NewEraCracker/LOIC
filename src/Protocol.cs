@@ -42,10 +42,9 @@ namespace LOIC {
 		/// </summary>
 		ReCoil = 5,
 
-        ///<summary>
-        /// ICMP Protocol method
-        /// </summary>
-        ICMP = 6,
-
+		///<summary>
+		/// ICMP Protocol method
+		/// </summary>
+		ICMP = 6,
 	}
 }

