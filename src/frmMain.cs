@@ -977,6 +977,10 @@ namespace LOIC
 						{
 							ts = new XXPFlooder(sTargetIP, iPort, (int)protocol, iDelay, bResp, sData, chkMsgRandom.Checked);
 						}
+						if (protocol == Protocol.ICMP)
+						{
+							ts = new ICMP(sTargetIP, iPort, chkMsgRandom.Checked, Convert.ToInt32((txtSLSpT.Text)));
+						}
 
 						if(ts != null)
 						{

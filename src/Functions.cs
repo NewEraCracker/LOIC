@@ -29,6 +29,14 @@ namespace LOIC
 			}
 		}
 
+		public static int RandomInt(int min, int max)
+		{
+			lock (rnd)
+			{
+				return rnd.Next(min, max);
+			}
+		}
+
 		public static string RandomUserAgent()
 		{
 			lock (rnd)
