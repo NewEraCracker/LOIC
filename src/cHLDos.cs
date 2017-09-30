@@ -606,7 +606,7 @@ namespace LOIC
 
                 State = ReqState.Ready;
 
-                for (int i = 0; i < _PingsPerThread; i++)
+                for (int i = 0; i < _PingsPerThread && this.IsFlooding; i++)
                 {
                     State = ReqState.Connecting;
                     try
@@ -629,7 +629,7 @@ namespace LOIC
                     State = ReqState.Completed;
                 }
 
-                if (Delay > 0)
+                if (this.IsFlooding && Delay > 0)
                 {
                     System.Threading.Thread.Sleep(Delay);
                 }
