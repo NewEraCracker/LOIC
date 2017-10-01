@@ -1,5 +1,6 @@
 #!/bin/bash
 # Copyfuck © 2010 q
+# Edited by NewEraCracker
 #
 # This script installs, updates and runs LOIC on Linux.
 #
@@ -14,7 +15,7 @@
 GIT_REPO=http://github.com/NewEraCracker/LOIC.git
 GIT_BRANCH=master
 
-DEB_MONO_PKG="monodevelop liblog4net-cil-dev"
+DEB_MONO_PKG="monodevelop liblog4net-cil-dev mono-devel"
 FED_MONO_PKG="mono-basic mono-devel monodevelop mono-tools"
 
 lower() {
@@ -72,12 +73,12 @@ compile_loic() {
     elif [[ $DISTRO = 'fedora' ]] ; then
         sudo yum install $FED_MONO_PKS
     fi
-    mdtool build
+    cd src; mdtool build
 }
 
 run_loic() {
     is_loic
-    if [[ ! -e bin/Debug/LOIC.exe ]] ; then
+    if [[ ! -e src/bin/Debug/LOIC.exe ]] ; then
         compile_loic
     fi
     if ! which mono ; then
@@ -87,7 +88,7 @@ run_loic() {
             sudo yum install mono-runtime
         fi
     fi
-    mono bin/Debug/LOIC.exe
+    mono src/bin/Debug/LOIC.exe
 }
 
 update_loic() {
