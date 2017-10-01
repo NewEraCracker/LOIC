@@ -200,7 +200,7 @@ namespace LOIC
 					}
 					if (protocol == Protocol.ICMP)
 					{
-						ts = new ICMP(sTargetIP, iPort, iDelay, chkMsgRandom.Checked, Convert.ToInt32((txtSLSpT.Text)));
+						ts = new ICMP(sTargetIP, iDelay, chkMsgRandom.Checked, iSockspThread);
 					}
 
 					if(ts != null)
@@ -935,7 +935,7 @@ namespace LOIC
 							}
 							if (protocol == Protocol.ICMP)
 							{
-								ts = new ICMP(sTargetIP, iPort, iDelay, chkMsgRandom.Checked, Convert.ToInt32((txtSLSpT.Text)));
+								ts = new ICMP(sTargetIP, iDelay, chkMsgRandom.Checked, iSockspThread);
 							}
 
 							if(ts != null)
@@ -979,7 +979,7 @@ namespace LOIC
 						}
 						if (protocol == Protocol.ICMP)
 						{
-							ts = new ICMP(sTargetIP, iPort, iDelay, chkMsgRandom.Checked, Convert.ToInt32((txtSLSpT.Text)));
+							ts = new ICMP(sTargetIP, iDelay, chkMsgRandom.Checked, iSockspThread);
 						}
 
 						if(ts != null)
