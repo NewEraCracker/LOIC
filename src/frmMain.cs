@@ -129,12 +129,12 @@ namespace LOIC
 					}
 
 					sSubsite = txtSubsite.Text;
-					if (!sSubsite.StartsWith ("/") && ((int)protocol >= (int)Protocol.HTTP)) {
+					if (!sSubsite.StartsWith("/") && (int)protocol >= (int)Protocol.HTTP && (int)protocol != (int)Protocol.ICMP) {
 						Wtf ("You have to enter a subsite (for example \"/\")", silent);
 						return;
 					}
 
-					if (!int.TryParse (txtTimeout.Text, out iTimeout) || iTimeout < 1) {
+					if (!int.TryParse(txtTimeout.Text, out iTimeout) || iTimeout < 1) {
 						Wtf ("What's up with something like that in the timeout box? =S", silent);
 						return;
 					}
