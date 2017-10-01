@@ -146,7 +146,7 @@ namespace LOIC
 
 					bResp = chkWaitReply.Checked;
 
-					if (protocol == Protocol.slowLOIC || protocol == Protocol.ReCoil)
+					if (protocol == Protocol.slowLOIC || protocol == Protocol.ReCoil || protocol == Protocol.ICMP)
 					{
 						if (!int.TryParse(txtSLSpT.Text, out iSockspThread) || iSockspThread < 1)
 							throw new Exception("A number is fine too!");
