@@ -531,9 +531,6 @@ namespace LOIC
     public class ICMP : cHLDos
     {
         private string _ip;
-        private int _port;
-
-        private Random _random;
         private int _PingsPerThread;
         private byte[] _BytesToSend;
         private Ping _pingSender;
@@ -544,12 +541,11 @@ namespace LOIC
         /// <summary>
         /// Create the ICMP object, because we need that, for reasons
         /// </summary>
-        public ICMP(string ip, int port, int delay, bool RandomMessage, int PingsPerThread)
+        public ICMP(string ip, int delay, bool RandomMessage, int PingsPerThread)
         {
             this.Delay = delay;
 
             this._ip = ip;
-            this._port = port;
             this._PingsPerThread = PingsPerThread;
             this._pingSender = new Ping();
             this._RandomMessage = RandomMessage;
