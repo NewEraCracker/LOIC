@@ -23,9 +23,10 @@ lower() {
 }
 
 what_distro() {
-    if which lsb_release ; then
-        echo lsb_release -si | lower
-    elif grep -qi ubuntu /etc/*release ; then
+#   if which lsb_release ; then
+#       echo lsb_release -si | lower
+#   el
+    if grep -qri ubuntu /etc/*-release ; then
         echo "ubuntu"
     elif [[ -e /etc/fedora-release ]] ; then
         echo "fedora"
@@ -69,9 +70,9 @@ compile_loic() {
         exit 1
     fi
     if [[ $DISTRO = 'ubuntu' || $DISTRO = 'debian' ]] ; then
-        sudo apt-get install $DEB_MONO_PKGS
+        sudo apt-get install $DEB_MONO_PKG
     elif [[ $DISTRO = 'fedora' ]] ; then
-        sudo yum install $FED_MONO_PKS
+        sudo yum install $FED_MONO_PKG
     fi
     cd src; mdtool build
 }
