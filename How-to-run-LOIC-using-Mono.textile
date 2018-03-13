@@ -1,7 +1,7 @@
 *Assuming you have Linux or Mac OS X:*
 
 # Download LOIC (with windows binaries) from download page and extract in desktop.
-# Download mono from: [[http://www.go-mono.com/mono-downloads/download.html]]
+# Download mono from: [[https://web.archive.org/web/20170103060539/http://www.go-mono.com/mono-downloads/download.html]]
 # Install mono.
 # Open terminal and type
 _mono /path_to_loic/debug/LOIC.exe_
