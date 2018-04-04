@@ -1,7 +1,7 @@
 ## INFO
 
 Low Orbit Ion Cannon (**LOIC**) is an open source network stress tool, written in C#.
-Based on Praetox's LOIC project at https://sourceforge.net/projects/loic/ .
+LOIC is based on Praetox's LOIC project at https://sourceforge.net/projects/loic/ .
 
 ## DISCLAIMER
 
