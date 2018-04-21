@@ -74,7 +74,7 @@ compile_loic() {
     elif [[ $DISTRO = 'fedora' ]] ; then
         sudo yum install $FED_MONO_PKG
     fi
-    cd src; mdtool build
+    cd src; xbuild /p:TargetFrameworkVersion="v4.0"
 }
 
 run_loic() {
