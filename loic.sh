@@ -12,7 +12,7 @@
 # Usage: bash ubuntu_loic.bash <install|update|run>
 #
 
-GIT_REPO=http://github.com/NewEraCracker/LOIC.git
+GIT_REPO=https://github.com/NewEraCracker/LOIC.git
 GIT_BRANCH=master
 
 DEB_MONO_PKG="monodevelop liblog4net-cil-dev mono-devel"
