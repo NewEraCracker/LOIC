@@ -15,7 +15,7 @@
 GIT_REPO=https://github.com/NewEraCracker/LOIC.git
 GIT_BRANCH=master
 
-DEB_MONO_PKG="monodevelop liblog4net-cil-dev mono-devel"
+DEB_MONO_PKG="monodevelop liblog4net-cil-dev mono-devel mono-runtime-common"
 FED_MONO_PKG="mono-basic mono-devel monodevelop mono-tools"
 
 lower() {
@@ -89,7 +89,8 @@ run_loic() {
             sudo yum install mono-runtime
         fi
     fi
-    mono src/bin/Debug/LOIC.exe
+    cp src/app.config src/bin/Debug/LOIC.exe.config
+    mono --runtime=v4.0.30319 src/bin/Debug/LOIC.exe
 }
 
 update_loic() {
