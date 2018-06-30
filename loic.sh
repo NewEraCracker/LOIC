@@ -89,7 +89,7 @@ run_loic() {
             sudo yum install mono-runtime
         fi
     fi
-    cp src/app.config src/bin/Debug/LOIC.exe.config
+    cp -n ./src/app.config ./src/bin/Debug/LOIC.exe.config
     mono --runtime=v4.0.30319 src/bin/Debug/LOIC.exe
 }
 
