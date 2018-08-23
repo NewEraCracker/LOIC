@@ -90,7 +90,7 @@ run_loic() {
         fi
     fi
     cp -n ./src/app.config ./src/bin/Debug/LOIC.exe.config
-    mono --runtime=v4.5 src/bin/Debug/LOIC.exe
+    mono --runtime=v4.0.30319 src/bin/Debug/LOIC.exe
 }
 
 update_loic() {
