@@ -15,7 +15,7 @@
 GIT_REPO=https://github.com/NewEraCracker/LOIC.git
 GIT_BRANCH=stable
 
-DEB_MONO_PKG="monodevelop liblog4net-cil-dev mono-devel mono-runtime-common"
+DEB_MONO_PKG="monodevelop liblog4net-cil-dev mono-devel mono-runtime-common mono-runtime libmono-system-windows-forms4.0-cil"
 FED_MONO_PKG="mono-basic mono-devel monodevelop mono-tools"
 
 lower() {
