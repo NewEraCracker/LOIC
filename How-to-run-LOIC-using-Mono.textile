@@ -1,4 +1,9 @@
-*Assuming you have Linux or Mac OS X:*
+**Linux (Ubuntu / Debian / Fedora)**
+
+* Shell script for legacy distributions with mono .net 4.0: [[https://github.com/NewEraCracker/LOIC/blob/master/loic.sh]]
+* Shell script for distributions with mono .net 4.5: [[https://github.com/NewEraCracker/LOIC/blob/master/loic-net4.5.sh]]
+
+**Mac OS X (Old instructions - Not tested on latest versions)**
 
 # Download LOIC (with windows binaries) from download page and extract in desktop.
 # Download mono from: [[http://www.mono-project.com/download/]]
@@ -6,6 +11,3 @@
 # Open terminal and type
 _mono /path_to_loic/debug/LOIC.exe_
 # LOIC should open (check tray too)
-
-Tested in Mac OS X with LOIC v1.1.1.11
-Enjoy :)
