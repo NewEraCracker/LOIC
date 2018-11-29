@@ -894,7 +894,7 @@ namespace LOIC
 				{
 					if(arr[a] != null && (arr[a] is cHLDos))
 					{
-						cHLDos c = (cHLDos)arr[a];
+						cHLDos c = arr[a] as cHLDos;
 
 						iDownloaded += c.Downloaded;
 						iRequested += c.Requested;
