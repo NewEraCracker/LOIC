@@ -11,14 +11,27 @@ namespace LOIC
 {
 	public class Settings
 	{
+		private static readonly string EulaSetting = "AcceptEULA";
+		private static readonly string KonamiSetting = "KonaniCode";
+
 		public static bool HasAcceptedEula()
 		{
-			return (false == String.IsNullOrEmpty(ReadSetting("AcceptEULA")));
+			return (false == String.IsNullOrEmpty(ReadSetting(EulaSetting)));
 		}
 
 		public static bool SaveAcceptedEula()
 		{
-			return UpdateSetting("AcceptEULA", "1");
+			return UpdateSetting(EulaSetting, "1");
+		}
+
+		public static bool HasKonamiCode()
+		{
+			return (false == String.IsNullOrEmpty(ReadSetting(KonamiSetting)));
+		}
+
+		public static bool SaveKonamiCode()
+		{
+			return UpdateSetting(KonamiSetting, "1");
 		}
 
 		public static string ReadSetting(string key, bool emptyUndefined = true)
