@@ -182,25 +182,24 @@ namespace LOIC
 				{
 					IFlooder ts = null;
 
-					if (protocol == Protocol.ReCoil)
+					switch (protocol)
 					{
-						ts = new ReCoil(sTargetHost, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, bResp, iSockspThread, chkAllowGzip.Checked);
-					}
-					if (protocol == Protocol.slowLOIC)
-					{
-						ts = new SlowLoic(sTargetHost, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked, chkAllowGzip.Checked);
-					}
-					if (protocol == Protocol.HTTP)
-					{
-						ts = new HTTPFlooder(sTargetHost, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkUseGet.Checked, chkAllowGzip.Checked);
-					}
-					if (protocol == Protocol.TCP || protocol == Protocol.UDP)
-					{
-						ts = new XXPFlooder(sTargetIP, iPort, (int)protocol, iDelay, bResp, sData, chkMsgRandom.Checked);
-					}
-					if (protocol == Protocol.ICMP)
-					{
-						ts = new ICMP(sTargetIP, iDelay, chkMsgRandom.Checked, iSockspThread);
+						case Protocol.ReCoil:
+							ts = new ReCoil(sTargetHost, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, bResp, iSockspThread, chkAllowGzip.Checked);
+							break;
+						case Protocol.slowLOIC:
+							ts = new SlowLoic(sTargetHost, sTargetIP, iPort, sSubsite, iDelay, iTimeout, chkRandom.Checked, iSockspThread, true, chkUseGet.Checked, chkAllowGzip.Checked);
+							break;
+						case Protocol.HTTP:
+							ts = new HTTPFlooder(sTargetHost, sTargetIP, iPort, sSubsite, bResp, iDelay, iTimeout, chkRandom.Checked, chkUseGet.Checked, chkAllowGzip.Checked);
+							break;
+						case Protocol.TCP:
+						case Protocol.UDP:
+							ts = new XXPFlooder(sTargetIP, iPort, (int)protocol, iDelay, bResp, sData, chkMsgRandom.Checked);
+							break;
+						case Protocol.ICMP:
+							ts = new ICMP(sTargetIP, iDelay, chkMsgRandom.Checked, iSockspThread);
+							break;
 					}
 
 					if(ts != null)
