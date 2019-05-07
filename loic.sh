@@ -9,7 +9,10 @@
 #    * Debian
 #    * Fedora
 #
-# Usage: bash ubuntu_loic.bash <install|update|run>
+# Before using you must install monodevelop from:
+# https://www.monodevelop.com/download/#fndtn-download-lin
+#
+# Usage: bash ./loic.sh <install|update|run>
 #
 
 GIT_REPO=https://github.com/NewEraCracker/LOIC.git
