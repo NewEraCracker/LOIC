@@ -9,4 +9,16 @@
 # Go to permissions tab and check the box "Allow executing this file as program".
 # Right click file again and under open application, select wine.
 
-Enjoy ;)
+*Addendum:* Please refer to this issue for more recent instructions on getting wine installed on our system: "LOIC#83":https://github.com/NewEraCracker/LOIC/issues/83
+
+bq.. Wine instructions doesnt work directly as it mentioned here it needs some improvements:
+
+There is Wine64 and Wine32 , @apt install wine@ it will install wine64 because Debian and most distros deprecating/not using by default i386 architecture, so user need to specify the wine version.
+
+Better refer the user to install wine on debian from the official website of winehq:
+
+[[https://wiki.winehq.org/Debian]]
+
+(why do we need 32bit? because loic architecture is 32bit)
+
+p. Enjoy ;)
