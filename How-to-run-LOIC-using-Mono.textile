@@ -1,8 +1,8 @@
 **Linux (Ubuntu / Debian / Fedora)**
 
 * Install monodevelop from: [[https://www.monodevelop.com/download/#fndtn-download-lin]]
-* Shell script for legacy distributions with mono .net 4.0: [[https://github.com/NewEraCracker/LOIC/blob/master/loic.sh]]
-* Shell script for distributions with mono .net 4.5: [[https://github.com/NewEraCracker/LOIC/blob/master/loic-net4.5.sh]]
+* Shell script for legacy distributions with mono .net 4.0: [[https://github.com/NewEraCracker/LOIC/blob/master/loic-net4.0.sh]]
+* Shell script for distributions with mono .net 4.5: [[https://github.com/NewEraCracker/LOIC/blob/master/loic.sh]]
 
 **Mac OS X (Old instructions - Not tested on latest versions)**
 
