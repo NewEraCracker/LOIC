@@ -12,7 +12,7 @@
 # Before using you must install monodevelop from:
 # https://www.monodevelop.com/download/#fndtn-download-lin
 #
-# Usage: bash ./loic-net4.5.sh <install|update|run>
+# Usage: bash ./loic-net4.0.sh <install|update|run>
 #
 
 GIT_REPO=https://github.com/NewEraCracker/LOIC.git
@@ -77,7 +77,7 @@ compile_loic() {
     elif [[ $DISTRO = 'fedora' ]] ; then
         sudo yum install $FED_MONO_PKG
     fi
-    cd src; xbuild /p:TargetFrameworkVersion="v4.5"
+    cd src; xbuild /p:TargetFrameworkVersion="v4.0"
 }
 
 run_loic() {
