@@ -1,5 +1,7 @@
 ## INFO
 
+> please get in touch with me via ybenson96@gmail.com, i will love to be a contributor to this project.
+
 Low Orbit Ion Cannon (**LOIC**) is an open source network stress tool, written in C#.
 LOIC is based on Praetox's LOIC project at https://sourceforge.net/projects/loic/ .
 
@@ -29,50 +31,61 @@ HIVEMIND mode will connect your client to an IRC server so it can be controlled 
 Think of this as a voluntary botnet. Please be aware that your client can potentially be
 made to do naughty things.
 
-Note: It does NOT allow remote administration of your machine; it 
+Note: It does NOT allow remote administration of your machine; it
 just providees control of LOIC itself.
 
 If you want to start up in Hivemind mode, run something such as this:
+
 ```
 	LOIC.exe /hivemind irc.server.address
 ```
+
 which will connect to irc://irc.server.adress:6667/loic
 
 You can also specify a port and channel:
+
 ```
 	LOIC.exe /hivemind irc.server.address 1234 #secret
 ```
+
 which will connect to irc://irc.server.adress:1234/secret
 
 In order to run Hivemind Hidden mode, run something such as this:
+
 ```
 	LOIC.exe /hidden /hivemind irc.server.address
 ```
+
 which will connect to irc://irc.server.adress:6667/loic without any visible GUI.
 
 ## CONTROLLING LOIC FROM IRC
 
 As an OP, Admin or Owner, set the channel topic or send a message such as the following:
+
 ```
 	!lazor targetip=127.0.0.1 message=test_test port=80 method=tcp wait=false random=true
 ```
 
 To start an attack, type:
+
 ```
 	!lazor start
 ```
 
 or append "start" to the END of the topic:
+
 ```
 	!lazor targetip=127.0.0.1 message=test_test port=80 method=tcp wait=false random=true start
 ```
 
 To reset LOIC's options back to their defaults:
+
 ```
 	!lazor default
 ```
 
 To stop an attack:
+
 ```
 	!lazor stop
 ```
